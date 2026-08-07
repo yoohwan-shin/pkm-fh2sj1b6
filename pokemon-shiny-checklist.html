@@ -1,0 +1,1901 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이로치 포켓몬 카드 체크리스트 (일본판 · 영문판)</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#fff; --line:#e2e6ef; --text:#1b1f2a; --muted:#6b7385;
+    --accent:#e8452c; --accent2:#2f6fd0; --gold:#c8951b;
+    --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
+    --have:#e6f6ec; --haveline:#1f9d55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12151c; --panel:#1a1f29; --line:#2b3240; --text:#e8ecf3; --muted:#98a1b3;
+      --accent:#ff6a4d; --accent2:#6ba4ef; --gold:#e0b445;
+      --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      --have:#163325; --haveline:#43c07a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif}
+  header{position:sticky;top:0;z-index:30;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .wrap{max-width:1500px;margin:0 auto;padding:0 16px}
+  .title-row{display:flex;align-items:center;gap:16px;padding:13px 0 9px;flex-wrap:wrap}
+  h1{font-size:19px;margin:0;letter-spacing:-.3px}
+  h1 small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:3px}
+  .stats{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  .stat{min-width:150px}
+  .stat .lab{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .stat .val{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25}
+  .stat .val i{font-style:normal;font-size:13px;font-weight:600;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;width:0;transition:width .25s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar.sh i{background:linear-gradient(90deg,var(--gold),var(--accent))}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:9px}
+  .tab{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;
+    padding:7px 12px;font-size:13px;cursor:pointer;font-weight:700;font-family:inherit;transition:.15s;
+    display:flex;align-items:center;gap:7px;line-height:1.3}
+  .tab:hover{border-color:var(--accent2)}
+  .tab.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .tab .lang{font-size:9.5px;font-weight:800;padding:1px 4px;border-radius:4px;background:var(--accent2);color:#fff;letter-spacing:.3px}
+  .tab.on .lang{background:var(--bg);color:var(--text)}
+  .tab .lang.en{background:var(--gold)}
+  .tab b{font-weight:700;font-size:11px;opacity:.72;font-variant-numeric:tabular-nums}
+
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:11px}
+  input[type=search]{flex:1;min-width:180px;max-width:300px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+  .chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;transition:.15s}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip.gold.on{background:var(--gold);border-color:var(--gold);color:#231a05}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;
+    font-size:13px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn:hover{border-color:var(--accent2)}
+  .btn.danger:hover{border-color:var(--accent);color:var(--accent)}
+
+  main{max-width:1500px;margin:0 auto;padding:18px 16px 90px}
+  section{margin-bottom:32px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  .sec-head h2{font-size:15px;margin:0}
+  .sec-head.shiny{border-bottom-color:var(--gold)}
+  .sec-head .desc{font-size:11.5px;color:var(--muted)}
+  .sec-head .cnt{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto;font-weight:600}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:11px}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:7px;
+    cursor:pointer;transition:transform .12s,border-color .12s;box-shadow:var(--shadow);user-select:none}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+  .card.have{background:var(--have);border-color:var(--haveline)}
+  .thumb{position:relative;aspect-ratio:245/342;border-radius:6px;overflow:hidden;background:var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card.have .thumb img{filter:grayscale(.85) opacity(.5)}
+  .no{position:absolute;top:4px;left:4px;background:rgba(15,18,28,.82);color:#fff;font-size:9.5px;font-weight:700;
+    padding:2px 5px;border-radius:4px;font-variant-numeric:tabular-nums}
+  .rar{position:absolute;top:4px;right:4px;font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;color:#fff;letter-spacing:.3px}
+  .r-C,.r--{background:#7b8496}.r-U{background:#3d8f4f}.r-R,.r-RH{background:#2f6fd0}
+  .r-RR{background:#9b3fbf}.r-RRR{background:#7b2fa8}.r-A{background:#0f9fa8}
+  .r-S{background:linear-gradient(135deg,#e8a020,#e05a2b)}.r-SSR{background:linear-gradient(135deg,#d33b7d,#7b2fa8)}
+  .r-AR{background:#0f9fa8}.r-SR{background:#d4820c}.r-SAR{background:#d33b7d}.r-UR,.r-HR{background:#b0842a}
+  .tick{position:absolute;right:5px;bottom:5px;width:22px;height:22px;border-radius:50%;background:var(--panel);
+    border:2px solid var(--line);display:grid;place-items:center;font-size:12px;color:transparent;font-weight:900}
+  .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff}
+  .zoom{position:absolute;left:5px;bottom:5px;width:22px;height:22px;border-radius:6px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);font-size:11px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
+  .card:hover .zoom{opacity:1}
+  .nm{margin-top:6px;font-size:12px;font-weight:700;line-height:1.25;word-break:break-word}
+  .n2{font-size:10.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .empty{color:var(--muted);font-size:14px;padding:26px 0;text-align:center}
+  dialog{border:none;border-radius:14px;padding:0;background:transparent;max-width:92vw}
+  dialog::backdrop{background:rgba(8,10,16,.78)}
+  dialog img{max-width:min(430px,86vw);max-height:82vh;border-radius:12px;display:block}
+  .note{max-width:1500px;margin:0 auto;padding:0 16px 44px;color:var(--muted);font-size:12px;line-height:1.75}
+  .note b{color:var(--text)}
+  table.sum{border-collapse:collapse;margin:8px 0 14px;font-size:12px}
+  table.sum th,table.sum td{border:1px solid var(--line);padding:4px 10px;text-align:left}
+  table.sum th{background:var(--panel);color:var(--text)}
+  @media print{ header{position:static;box-shadow:none} .tools,.tabs,.zoom,.tick{display:none}
+    .grid{grid-template-columns:repeat(8,1fr);gap:4px} .card{break-inside:avoid;box-shadow:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title-row">
+      <h1>이로치 포켓몬 카드 체크리스트 <small>색이 다른 포켓몬 수록 팩 · 일본판 3종 + 영문판 3종</small></h1>
+      <div class="stats">
+        <div class="stat">
+          <div class="lab">이로치 카드</div>
+          <div class="val"><span id="shOwn">0</span> <i>/ <span id="shTot">0</span></i></div>
+          <div class="bar sh"><i id="shBar"></i></div>
+        </div>
+        <div class="stat">
+          <div class="lab">전체 카드</div>
+          <div class="val"><span id="allOwn">0</span> <i>/ <span id="allTot">0</span></i></div>
+          <div class="bar"><i id="allBar"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="이름 · 번호 검색 (예: リザードン, Charizard, 191)">
+      <button class="chip on" data-st="all">전체</button>
+      <button class="chip" data-st="have">보유</button>
+      <button class="chip" data-st="none">미보유</button>
+      <button class="chip gold" id="shOnly">✨ 이로치만</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="lnkBtn">🔗 링크로 백업</button>
+      <button class="btn" id="expBtn">내보내기</button>
+      <button class="btn" id="impBtn">가져오기</button>
+      <button class="btn" id="prnBtn">인쇄</button>
+      <button class="btn danger" id="rstBtn">초기화</button>
+      <input type="file" id="impFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="note">
+  <p><b>사용법</b> — 카드를 클릭하면 보유(회색 처리 + 초록 체크) ↔ 미보유(컬러)로 전환됩니다. 아직 없는 카드가 컬러로 눈에 띕니다. 체크 상태는 브라우저에 자동 저장되며, <b>내보내기</b>/<b>가져오기</b>로 다른 기기에 옮길 수 있습니다. 카드 왼쪽 아래 🔍 버튼은 고해상도 이미지를 띄웁니다.</p>
+  <p><b>왜 이 6개 팩인가</b> — 「색이 다른 포켓몬(이로치)」이 정식 수록된 일본판 하이클래스팩은 <b>GX 울트라 샤이니 · 샤이니 스타 V · 샤이니 트레저 ex</b> 세 개뿐이고, 각각의 영문판 대응 팩이 <b>Hidden Fates · Shining Fates · Paldean Fates</b>입니다. 영문판은 이로치가 별도의 <b>Shiny Vault(SV번호)</b> 구간에 들어갑니다(Paldean Fates만 본편 번호에 이어서 수록).</p>
+  <table class="sum">
+    <tr><th>팩</th><th>발매</th><th>총 카드</th><th>이로치</th><th>이로치 번호대</th></tr>
+    <tr><td>GX 울트라 샤이니 (SM8b) 日</td><td>2018.11</td><td>243</td><td>83</td><td>161–205 S / 206–243 SSR</td></tr>
+    <tr><td>샤이니 스타 V (S4a) 日</td><td>2020.11</td><td>326</td><td>127</td><td>200–303 S / 304–326 SSR</td></tr>
+    <tr><td>샤이니 트레저 ex (SV4a) 日</td><td>2023.12</td><td>360</td><td>147</td><td>191–319 S / 320–337 SSR</td></tr>
+    <tr><td>Hidden Fates (HIF) EN</td><td>2019.08</td><td>163</td><td>94</td><td>SV1–SV94</td></tr>
+    <tr><td>Shining Fates (SHF) EN</td><td>2021.02</td><td>195</td><td>122</td><td>SV1–SV122</td></tr>
+    <tr><td>Paldean Fates (PAF) EN</td><td>2024.01</td><td>245</td><td>132</td><td>92–211 S / 212–223 SSR</td></tr>
+  </table>
+  <p><b>레어도 표기</b> — S = 색이 다른 포켓몬, SSR = 색이 다른 ex/GX/V, AR = 아트 레어, SR = 슈퍼 레어, SAR = 스페셜 아트 레어, UR = 울트라 레어, RR/RRR = 더블/트리플 레어, A = 어메이징 레어. 일본판 기본 수록(C·U·R) 카드는 공개 DB에 레어도 데이터가 없어 <b>-</b> 로 표시됩니다.</p>
+  <p><b>데이터·이미지 출처</b> — 카드 목록·이미지는 Limitless TCG 데이터베이스. 일본판 카드에는 일본어명과 영문명을 함께 표기했습니다. 이미지 표시에는 인터넷 연결이 필요합니다.</p>
+</div>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+
+<script>
+/* set|번호|이름|보조이름(영문, 일본판만)|레어도|구간 */
+const RAW = `
+S4a|1|モクロー|Rowlet|-|base
+S4a|2|フクスロー|Dartrix|-|base
+S4a|3|ジュナイパー|Decidueye|-|base
+S4a|4|コソクムシ|Wimpod|-|base
+S4a|5|グソクムシャ|Golisopod|-|base
+S4a|6|サルノリ|Grookey|-|base
+S4a|7|バチンキー|Thwackey|-|base
+S4a|8|ゴリランダー|Rillaboom|-|base
+S4a|9|ゴリランダーV|Rillaboom-V|RR|base
+S4a|10|ゴリランダーVMAX|Rillaboom-VMAX|RRR|base
+S4a|11|サッチムシ|Blipbug|-|base
+S4a|12|レドームシ|Dottler|-|base
+S4a|13|イオルブ|Orbeetle|-|base
+S4a|14|ヒメンカ|Gossifleur|-|base
+S4a|15|ワタシラガ|Eldegoss|-|base
+S4a|16|ワタシラガV|Eldegoss-V|RR|base
+S4a|17|カジッチュ|Applin|-|base
+S4a|18|アップリュー|Flapple|-|base
+S4a|19|タルップル|Appletun|-|base
+S4a|20|ヒードラン|Heatran|-|base
+S4a|21|レシラム|Reshiram|A|base
+S4a|22|ヒバニー|Scorbunny|-|base
+S4a|23|ラビフット|Raboot|-|base
+S4a|24|エースバーン|Cinderace|-|base
+S4a|25|ヤクデ|Sizzlipede|-|base
+S4a|26|マルヤクデ|Centiskorch|-|base
+S4a|27|マルヤクデV|Centiskorch V|RR|base
+S4a|28|マルヤクデVMAX|Centiskorch VMAX|RRR|base
+S4a|29|ガラル バリヤード|Galarian Mr. Mime|-|base
+S4a|30|ガラル バリコオル|Galarian Mr. Rime|-|base
+S4a|31|ラプラスV|Lapras-V|RR|base
+S4a|32|ラプラスVMAX|Lapras-VMAX|RRR|base
+S4a|33|スイクン|Suicune|-|base
+S4a|34|ヒンバス|Feebas|-|base
+S4a|35|ミロカロス|Milotic|-|base
+S4a|36|カイオーガ|Kyogre|A|base
+S4a|37|ガラル ダルマッカ|Galarian Darumaka|-|base
+S4a|38|ガラル ヒヒダルマ|Galarian Darmanitan|-|base
+S4a|39|メッソン|Sobble|-|base
+S4a|40|ジメレオン|Drizzile|-|base
+S4a|41|インテレオン|Inteleon|-|base
+S4a|42|カムカメ|Chewtle|-|base
+S4a|43|カジリガメ|Drednaw|-|base
+S4a|44|ウッウ|Cramorant|-|base
+S4a|45|サシカマス|Arrokuda|-|base
+S4a|46|カマスジョー|Barraskewda|-|base
+S4a|47|ユキハミ|Snom|-|base
+S4a|48|モスノウ|Frosmoth|-|base
+S4a|49|コオリッポ|Eiscue|-|base
+S4a|50|ウオノラゴン|Dracovish|-|base
+S4a|51|ウオチルドン|Arctovish|-|base
+S4a|52|ロトム|Rotom|-|base
+S4a|53|カプ・コケコ|Tapu Koko|-|base
+S4a|54|ワンパチ|Yamper|-|base
+S4a|55|パルスワン|Boltund|-|base
+S4a|56|パルスワンV|Boltund-V|RR|base
+S4a|57|エレズン|Toxel|-|base
+S4a|58|ストリンダー|Toxtricity|-|base
+S4a|59|ストリンダーV|Toxtricity-V|RR|base
+S4a|60|ストリンダーVMAX|Toxtricity-VMAX|RRR|base
+S4a|61|バチンウニ|Pincurchin|-|base
+S4a|62|モルペコ|Morpeko|-|base
+S4a|63|パッチラゴン|Dracozolt|-|base
+S4a|64|パッチルドン|Arctozolt|-|base
+S4a|65|ピッピ|Clefairy|-|base
+S4a|66|ピクシー|Clefable|-|base
+S4a|67|ガラル ポニータ|Galarian Ponyta|-|base
+S4a|68|ガラル ギャロップ|Galarian Rapidash|-|base
+S4a|69|ゴース|Gastly|-|base
+S4a|70|ゴースト|Haunter|-|base
+S4a|71|ゲンガー|Gengar|-|base
+S4a|72|ガラル サニーゴ|Galarian Corsola|-|base
+S4a|73|ガラル サニゴーン|Galarian Cursola|-|base
+S4a|74|シンボラー|Sigilyph|-|base
+S4a|75|デデンネ|Dedenne|-|base
+S4a|76|ヤバチャ|Sinistea|-|base
+S4a|77|ポットデス|Polteageist|-|base
+S4a|78|ミブリム|Hatenna|-|base
+S4a|79|テブリム|Hattrem|-|base
+S4a|80|ブリムオン|Hatterene|-|base
+S4a|81|マホミル|Milcery|-|base
+S4a|82|マホイップ|Alcremie|-|base
+S4a|83|イエッサン|Indeedee|-|base
+S4a|84|イエッサンV|Indeedee-V|RR|base
+S4a|85|ドラメシヤ|Dreepy|-|base
+S4a|86|ドロンチ|Drakloak|-|base
+S4a|87|ドラパルト|Dragapult|-|base
+S4a|88|ドラパルトV|Dragapult-V|RR|base
+S4a|89|ドラパルトVMAX|Dragapult-VMAX|RRR|base
+S4a|90|ガラル カモネギ|Galarian Farfetch'd|-|base
+S4a|91|ガラル ネギガナイト|Galarian Sirfetch'd|-|base
+S4a|92|ガラル デスマス|Galarian Yamask|-|base
+S4a|93|ガラル デスバーン|Galarian Runerigus|-|base
+S4a|94|タンドン|Rolycoly|-|base
+S4a|95|トロッゴン|Carkol|-|base
+S4a|96|セキタンザン|Coalossal|-|base
+S4a|97|スナヘビ|Silicobra|-|base
+S4a|98|サダイジャ|Sandaconda|-|base
+S4a|99|タタッコ|Clobbopus|-|base
+S4a|100|オトスパス|Grapploct|-|base
+S4a|101|タイレーツ|Falinks|-|base
+S4a|102|タイレーツV|Falinks-V|RR|base
+S4a|103|イシヘンジン|Stonjourner|-|base
+S4a|104|ドガース|Koffing|-|base
+S4a|105|ガラル マタドガス|Galarian Weezing|-|base
+S4a|106|イトマル|Spinarak|-|base
+S4a|107|アリアドス|Ariados|-|base
+S4a|108|クロバットV|Crobat V|RR|base
+S4a|109|クロバットVMAX|Crobat VMAX|RRR|base
+S4a|110|ガラル ジグザグマ|Galarian Zigzagoon|-|base
+S4a|111|ガラル マッスグマ|Galarian Linoone|-|base
+S4a|112|ガラル タチフサグマ|Galarian Obstagoon|-|base
+S4a|113|グレッグル|Croagunk|-|base
+S4a|114|ドクロッグ|Toxicroak|-|base
+S4a|115|ヤブクロン|Trubbish|-|base
+S4a|116|ダストダス|Garbodor|-|base
+S4a|117|イベルタル|Yveltal|A|base
+S4a|118|フーパ|Hoopa|-|base
+S4a|119|クスネ|Nickit|-|base
+S4a|120|フォクスライ|Thievul|-|base
+S4a|121|ベロバー|Impidimp|-|base
+S4a|122|ギモー|Morgrem|-|base
+S4a|123|オーロンゲ|Grimmsnarl|-|base
+S4a|124|ムゲンダイナV|Eternatus V|RR|base
+S4a|125|ムゲンダイナVMAX|Eternatus VMAX|RRR|base
+S4a|126|ガラル ニャース|Galarian Meowth|-|base
+S4a|127|ガラル ニャイキング|Galarian Perrserker|-|base
+S4a|128|ガラル マッギョ|Galarian Stunfisk|-|base
+S4a|129|ヒトツキ|Honedge|-|base
+S4a|130|ニダンギル|Doublade|-|base
+S4a|131|ギルガルド|Aegislash|-|base
+S4a|132|アーマーガア|Corviknight|-|base
+S4a|133|ゾウドウ|Cufant|-|base
+S4a|134|ダイオウドウ|Copperajah|-|base
+S4a|135|ジュラルドン|Duraludon|-|base
+S4a|136|ザシアン|Zacian|-|base
+S4a|137|ザシアンV|Zacian-V|RR|base
+S4a|138|ザマゼンタ|Zamazenta|-|base
+S4a|139|ザマゼンタV|Zamazenta-V|RR|base
+S4a|140|メタモンV|Ditto V|RR|base
+S4a|141|メタモンVMAX|Ditto VMAX|RRR|base
+S4a|142|チラーミィ|Minccino|-|base
+S4a|143|チラチーノ|Cinccino|-|base
+S4a|144|コアルヒー|Ducklett|-|base
+S4a|145|スワンナ|Swanna|-|base
+S4a|146|ホルビー|Bunnelby|-|base
+S4a|147|ヤレユータン|Oranguru|-|base
+S4a|148|ホシガリス|Skwovet|-|base
+S4a|149|ヨクバリス|Greedent|-|base
+S4a|150|ココガラ|Rookidee|-|base
+S4a|151|アオガラス|Corvisquire|-|base
+S4a|152|ウールー|Wooloo|-|base
+S4a|153|バイウールー|Dubwool|-|base
+S4a|154|バイウールーV|Dubwool-V|RR|base
+S4a|155|ウッウV|Cramorant-V|RR|base
+S4a|156|エール団のおうえんタオル|Team Yell's Cheer Scarf|-|base
+S4a|157|回収ネット|Scoop Up Net|-|base
+S4a|158|クイックボール|Quick Ball|-|base
+S4a|159|しんかのおこう|Evolution Incense|-|base
+S4a|160|すごいきずぐすり|Hyper Potion|-|base
+S4a|161|ターボパッチ|Turbo Patch|-|base
+S4a|162|たっぷりバケツ|Full Bucket|-|base
+S4a|163|ツールスクラッパー|Tool Scrapper|-|base
+S4a|164|ふつうのつりざお|Normal Rod|-|base
+S4a|165|めずらしい化石|Rare Fossil|-|base
+S4a|166|メタルソーサー|Metal Saucer|-|base
+S4a|167|ロトムじてんしゃ|Rotom Bike|-|base
+S4a|168|くちたけん|Rusted Sword|-|base
+S4a|169|くちたたて|Rusty Shield|-|base
+S4a|170|タフネスマント|Cape of Toughness|-|base
+S4a|171|ふうせん|Balloon|-|base
+S4a|172|とりつかい|Bird Keeper|-|base
+S4a|173|ネズ|Piers|-|base
+S4a|174|博士の研究|Professor's Research|-|base
+S4a|175|ボールガイ|Ball Guy|-|base
+S4a|176|ボスの指令|Boss's Command|-|base
+S4a|177|マリィ|Marnie|-|base
+S4a|178|ローズ|Rose|-|base
+S4a|179|ターフスタジアム|Turffield Stadium|-|base
+S4a|180|トレーニングコート|Training Court|-|base
+S4a|181|ルミナスメイズの森|Glimwood Tangle|-|base
+S4a|182|ローズタワー|Rose Tower|-|base
+S4a|183|ヒート炎エネルギー|Heat Fire Energy|-|base
+S4a|184|スピード雷エネルギー|Speed [L] Energy|-|base
+S4a|185|ホラー超エネルギー|Horror [P] Energy|-|base
+S4a|186|ハイド悪エネルギー|Hiding Darkness Energy|-|base
+S4a|187|オーロラエネルギー|Aurora Energy|-|base
+S4a|188|キャプチャーエネルギー|Capture Energy|-|base
+S4a|189|ツインエネルギー|Twin Energy|-|base
+S4a|190|パワフル無色エネルギー|Powerful Colorless Energy|-|base
+S4a|191|ウカッツ|Cara Liss|SR|special
+S4a|192|ジムトレーナー|Gym Trainer|SR|special
+S4a|193|とりつかい|Bird Keeper|SR|special
+S4a|194|ネズ|Piers|SR|special
+S4a|195|フウロ|Skyla|SR|special
+S4a|196|ボールガイ|Ball Guy|SR|special
+S4a|197|ポケモンごっこ|Poke Kid|SR|special
+S4a|198|マリィ|Marnie|SR|special
+S4a|199|ローズ|Rose|SR|special
+S4a|200|モクロー|Rowlet|S|shiny
+S4a|201|フクスロー|Dartrix|S|shiny
+S4a|202|ジュナイパー|Decidueye|S|shiny
+S4a|203|サルノリ|Grookey|S|shiny
+S4a|204|バチンキー|Thwackey|S|shiny
+S4a|205|ゴリランダー|Rillaboom|S|shiny
+S4a|206|サッチムシ|Blipbug|S|shiny
+S4a|207|レドームシ|Dottler|S|shiny
+S4a|208|イオルブ|Orbeetle|S|shiny
+S4a|209|ヒメンカ|Gossifleur|S|shiny
+S4a|210|ワタシラガ|Eldegoss|S|shiny
+S4a|211|カジッチュ|Applin|S|shiny
+S4a|212|アップリュー|Flapple|S|shiny
+S4a|213|タルップル|Appletun|S|shiny
+S4a|214|ヒバニー|Scorbunny|S|shiny
+S4a|215|ラビフット|Raboot|S|shiny
+S4a|216|エースバーン|Cinderace|S|shiny
+S4a|217|ヤクデ|Sizzlipede|S|shiny
+S4a|218|マルヤクデ|Centiskorch|S|shiny
+S4a|219|ガラル バリヤード|Galarian Mr. Mime|S|shiny
+S4a|220|ガラル バリコオル|Galarian Mr. Rime|S|shiny
+S4a|221|スイクン|Suicune|S|shiny
+S4a|222|ガラル ダルマッカ|Galarian Darumaka|S|shiny
+S4a|223|ガラル ヒヒダルマ|Galarian Darmanitan|S|shiny
+S4a|224|メッソン|Sobble|S|shiny
+S4a|225|ジメレオン|Drizzile|S|shiny
+S4a|226|インテレオン|Inteleon|S|shiny
+S4a|227|カムカメ|Chewtle|S|shiny
+S4a|228|カジリガメ|Drednaw|S|shiny
+S4a|229|ウッウ|Cramorant|S|shiny
+S4a|230|サシカマス|Arrokuda|S|shiny
+S4a|231|カマスジョー|Barraskewda|S|shiny
+S4a|232|ユキハミ|Snom|S|shiny
+S4a|233|モスノウ|Frosmoth|S|shiny
+S4a|234|コオリッポ|Eiscue|S|shiny
+S4a|235|ウオノラゴン|Dracovish|S|shiny
+S4a|236|ウオチルドン|Arctovish|S|shiny
+S4a|237|ロトム|Rotom|S|shiny
+S4a|238|ワンパチ|Yamper|S|shiny
+S4a|239|パルスワン|Boltund|S|shiny
+S4a|240|エレズン|Toxel|S|shiny
+S4a|241|ストリンダー|Toxtricity|S|shiny
+S4a|242|バチンウニ|Pincurchin|S|shiny
+S4a|243|モルペコ|Morpeko|S|shiny
+S4a|244|パッチラゴン|Dracozolt|S|shiny
+S4a|245|パッチルドン|Arctozolt|S|shiny
+S4a|246|ガラル ポニータ|Galarian Ponyta|S|shiny
+S4a|247|ガラル ギャロップ|Galarian Rapidash|S|shiny
+S4a|248|ガラル サニーゴ|Galarian Corsola|S|shiny
+S4a|249|ガラル サニゴーン|Galarian Cursola|S|shiny
+S4a|250|デデンネ|Dedenne|S|shiny
+S4a|251|ヤバチャ|Sinistea|S|shiny
+S4a|252|ポットデス|Polteageist|S|shiny
+S4a|253|ミブリム|Hatenna|S|shiny
+S4a|254|テブリム|Hattrem|S|shiny
+S4a|255|ブリムオン|Hatterene|S|shiny
+S4a|256|マホミル|Milcery|S|shiny
+S4a|257|マホイップ|Alcremie|S|shiny
+S4a|258|イエッサン|Indeedee|S|shiny
+S4a|259|ドラメシヤ|Dreepy|S|shiny
+S4a|260|ドロンチ|Drakloak|S|shiny
+S4a|261|ドラパルト|Dragapult|S|shiny
+S4a|262|ガラル カモネギ|Galarian Farfetch'd|S|shiny
+S4a|263|ガラル ネギガナイト|Galarian Sirfetch'd|S|shiny
+S4a|264|ガラル デスマス|Galarian Yamask|S|shiny
+S4a|265|ガラル デスバーン|Galarian Runerigus|S|shiny
+S4a|266|タンドン|Rolycoly|S|shiny
+S4a|267|トロッゴン|Carkol|S|shiny
+S4a|268|セキタンザン|Coalossal|S|shiny
+S4a|269|スナヘビ|Silicobra|S|shiny
+S4a|270|サダイジャ|Sandaconda|S|shiny
+S4a|271|タタッコ|Clobbopus|S|shiny
+S4a|272|オトスパス|Grapploct|S|shiny
+S4a|273|タイレーツ|Falinks|S|shiny
+S4a|274|イシヘンジン|Stonjourner|S|shiny
+S4a|275|ドガース|Koffing|S|shiny
+S4a|276|ガラル マタドガス|Galarian Weezing|S|shiny
+S4a|277|ガラル ジグザグマ|Galarian Zigzagoon|S|shiny
+S4a|278|ガラル マッスグマ|Galarian Linoone|S|shiny
+S4a|279|ガラル タチフサグマ|Galarian Obstagoon|S|shiny
+S4a|280|クスネ|Nickit|S|shiny
+S4a|281|フォクスライ|Thievul|S|shiny
+S4a|282|ベロバー|Impidimp|S|shiny
+S4a|283|ギモー|Morgrem|S|shiny
+S4a|284|オーロンゲ|Grimmsnarl|S|shiny
+S4a|285|ガラル ニャース|Galarian Meowth|S|shiny
+S4a|286|ガラル ニャイキング|Galarian Perrserker|S|shiny
+S4a|287|ガラル マッギョ|Galarian Stunfisk|S|shiny
+S4a|288|アーマーガア|Corviknight|S|shiny
+S4a|289|ゾウドウ|Cufant|S|shiny
+S4a|290|ダイオウドウ|Copperajah|S|shiny
+S4a|291|ジュラルドン|Duraludon|S|shiny
+S4a|292|チラーミィ|Minccino|S|shiny
+S4a|293|チラチーノ|Cinccino|S|shiny
+S4a|294|コアルヒー|Ducklett|S|shiny
+S4a|295|スワンナ|Swanna|S|shiny
+S4a|296|ホルビー|Bunnelby|S|shiny
+S4a|297|ヤレユータン|Oranguru|S|shiny
+S4a|298|ホシガリス|Skwovet|S|shiny
+S4a|299|ヨクバリス|Greedent|S|shiny
+S4a|300|ココガラ|Rookidee|S|shiny
+S4a|301|アオガラス|Corvisquire|S|shiny
+S4a|302|ウールー|Wooloo|S|shiny
+S4a|303|バイウールー|Dubwool|S|shiny
+S4a|304|ゴリランダーV|Rillaboom-V|SSR|shinyssr
+S4a|305|ゴリランダーVMAX|Rillaboom-VMAX|SSR|shinyssr
+S4a|306|ワタシラガV|Eldegoss-V|SSR|shinyssr
+S4a|307|リザードンV|Charizard V|SSR|shinyssr
+S4a|308|リザードンVMAX|Charizard VMAX|SSR|shinyssr
+S4a|309|マルヤクデV|Centiskorch V|SSR|shinyssr
+S4a|310|マルヤクデVMAX|Centiskorch VMAX|SSR|shinyssr
+S4a|311|ラプラスV|Lapras-V|SSR|shinyssr
+S4a|312|ラプラスVMAX|Lapras-VMAX|SSR|shinyssr
+S4a|313|パルスワンV|Boltund-V|SSR|shinyssr
+S4a|314|ストリンダーV|Toxtricity-V|SSR|shinyssr
+S4a|315|ストリンダーVMAX|Toxtricity-VMAX|SSR|shinyssr
+S4a|316|イエッサンV|Indeedee-V|SSR|shinyssr
+S4a|317|ドラパルトV|Dragapult-V|SSR|shinyssr
+S4a|318|ドラパルトVMAX|Dragapult-VMAX|SSR|shinyssr
+S4a|319|タイレーツV|Falinks-V|SSR|shinyssr
+S4a|320|クロバットVMAX|Crobat VMAX|SSR|shinyssr
+S4a|321|オーロンゲV|Grimmsnarl V|SSR|shinyssr
+S4a|322|オーロンゲVMAX|Grimmsnarl VMAX|SSR|shinyssr
+S4a|323|メタモンV|Ditto V|SSR|shinyssr
+S4a|324|メタモンVMAX|Ditto VMAX|SSR|shinyssr
+S4a|325|バイウールーV|Dubwool-V|SSR|shinyssr
+S4a|326|ウッウV|Cramorant-V|SSR|shinyssr
+SV4a|1|ナゾノクサ|Oddish|-|base
+SV4a|2|クサイハナ|Gloom|-|base
+SV4a|3|ラフレシア|Vileplume|-|base
+SV4a|4|ストライク|Scyther|-|base
+SV4a|5|ハネッコ|Hoppip|-|base
+SV4a|6|ポポッコ|Skiploom|-|base
+SV4a|7|ワタッコ|Jumpluff|-|base
+SV4a|8|クヌギダマ|Pineco|-|base
+SV4a|9|フォレトスex|Forretress ex|RR|base
+SV4a|10|ユキカブリ|Snover|-|base
+SV4a|11|ユキノオー|Abomasnow|-|base
+SV4a|12|ニャオハ|Sprigatito|-|base
+SV4a|13|ニャローテ|Floragato|-|base
+SV4a|14|マスカーニャex|Meowscarada ex|RR|base
+SV4a|15|ミニーブ|Smoliv|-|base
+SV4a|16|オリーニョ|Dolliv|-|base
+SV4a|17|オリーヴァ|Arboliva|-|base
+SV4a|18|ノノクラゲ|Toedscool|-|base
+SV4a|19|リククラゲex|Toedscruel ex|RR|base
+SV4a|20|カプサイジ|Capsakid|-|base
+SV4a|21|スコヴィラン|Scovillain|-|base
+SV4a|22|シガロコ|Rellor|-|base
+SV4a|23|クエスパトラex|Espathra ex|RR|base
+SV4a|24|チオンジェンex|Wo-Chien ex|RR|base
+SV4a|25|ヒトカゲ|Charmander|-|base
+SV4a|26|リザード|Charmeleon|-|base
+SV4a|27|パルデア ケンタロス|Paldean Tauros|-|base
+SV4a|28|エンテイ|Entei|-|base
+SV4a|29|オドリドリ|Oricorio|-|base
+SV4a|30|ホゲータ|Fuecoco|-|base
+SV4a|31|アチゲータ|Crocalor|-|base
+SV4a|32|ラウドボーンex|Skeledirge ex|RR|base
+SV4a|33|カルボウ|Charcadet|-|base
+SV4a|34|グレンアルマ|Armarouge|-|base
+SV4a|35|イーユイex|Chi-Yu ex|RR|base
+SV4a|36|ヤドン|Slowpoke|-|base
+SV4a|37|ヤドラン|Slowbro|-|base
+SV4a|38|ヒトデマン|Staryu|-|base
+SV4a|39|スターミー|Starmie|-|base
+SV4a|40|パルデア ケンタロス|Paldean Tauros|-|base
+SV4a|41|クワッス|Quaxly|-|base
+SV4a|42|ウェルカモ|Quaxwell|-|base
+SV4a|43|ウェーニバルex|Quaquaval ex|RR|base
+SV4a|44|ウミディグダ|Wiglett|-|base
+SV4a|45|ウミトリオ|Wugtrio|-|base
+SV4a|46|ナミイルカ|Finizen|-|base
+SV4a|47|イルカマン|Palafin|-|base
+SV4a|48|ミガルーサ|Veluza|-|base
+SV4a|49|ヘイラッシャ|Dondozo|-|base
+SV4a|50|シャリタツ|Tatsugiri|-|base
+SV4a|51|セビエ|Frigibax|-|base
+SV4a|52|セゴール|Arctibax|-|base
+SV4a|53|セグレイブ|Baxcalibur|-|base
+SV4a|54|パオジアンex|Chien-Pao ex|RR|base
+SV4a|55|ピカチュウ|Pikachu|-|base
+SV4a|56|ライチュウ|Raichu|-|base
+SV4a|57|ビリリダマ|Voltorb|-|base
+SV4a|58|マルマイン|Electrode|-|base
+SV4a|59|コリンク|Shinx|-|base
+SV4a|60|ルクシオ|Luxio|-|base
+SV4a|61|レントラー|Luxray|-|base
+SV4a|62|パチリス|Pachirisu|-|base
+SV4a|63|ボルトロス|Thundurus|-|base
+SV4a|64|エレズン|Toxel|-|base
+SV4a|65|ストリンダー|Toxtricity|-|base
+SV4a|66|パモ|Pawmi|-|base
+SV4a|67|パモット|Pawmo|-|base
+SV4a|68|パーモット|Pawmot|-|base
+SV4a|69|カイデン|Wattrel|-|base
+SV4a|70|タイカイデン|Kilowattrel|-|base
+SV4a|71|ミライドンex|Miraidon ex|RR|base
+SV4a|72|プクリン|Wigglytuff|-|base
+SV4a|73|ケーシィ|Abra|-|base
+SV4a|74|ユンゲラー|Kadabra|-|base
+SV4a|75|フーディンex|Alakazam ex|RR|base
+SV4a|76|ミュウex|Mew ex|RR|base
+SV4a|77|ピィ|Cleffa|-|base
+SV4a|78|ネイティ|Natu|-|base
+SV4a|79|ネイティオ|Xatu|-|base
+SV4a|80|ラルトス|Ralts|-|base
+SV4a|81|キルリア|Kirlia|-|base
+SV4a|82|サーナイトex|Gardevoir ex|RR|base
+SV4a|83|フワンテ|Drifloon|-|base
+SV4a|84|フワライド|Drifblim|-|base
+SV4a|85|マネネ|Mime Jr.|-|base
+SV4a|86|ミカルゲ|Spiritomb|-|base
+SV4a|87|クレッフィ|Klefki|-|base
+SV4a|88|ミミッキュ|Mimikyu|-|base
+SV4a|89|パピモッチ|Fidough|-|base
+SV4a|90|バウッツェル|Dachsbun|-|base
+SV4a|91|ソウブレイズ|Ceruledge|-|base
+SV4a|92|ベラカス|Rabsca|-|base
+SV4a|93|ヒラヒナ|Flittle|-|base
+SV4a|94|カヌチャン|Tinkatink|-|base
+SV4a|95|ナカヌチャン|Tinkatuff|-|base
+SV4a|96|デカヌチャン|Tinkaton|-|base
+SV4a|97|ボチ|Greavard|-|base
+SV4a|98|ハカドッグ|Houndstone|-|base
+SV4a|99|コレクレー|Gimmighoul|-|base
+SV4a|100|マンキー|Mankey|-|base
+SV4a|101|オコリザル|Primeape|-|base
+SV4a|102|コノヨザル|Annihilape|-|base
+SV4a|103|パルデア ケンタロス|Paldean Tauros|-|base
+SV4a|104|リオル|Riolu|-|base
+SV4a|105|ルカリオ|Lucario|-|base
+SV4a|106|ルチャブル|Hawlucha|-|base
+SV4a|107|コジオ|Nacli|-|base
+SV4a|108|ジオヅム|Naclstack|-|base
+SV4a|109|キョジオーン|Garganacl|-|base
+SV4a|110|キラーメ|Glimmet|-|base
+SV4a|111|キラフロルex|Glimmora ex|RR|base
+SV4a|112|イダイナキバex|Great Tusk ex|RR|base
+SV4a|113|ディンルーex|Ting-Lu ex|RR|base
+SV4a|114|コライドンex|Koraidon ex|RR|base
+SV4a|115|リザードンex|Charizard ex|RR|base
+SV4a|116|パルデア ウパー|Paldean Wooper|-|base
+SV4a|117|パルデア ドオーex|Paldean Clodsire ex|RR|base
+SV4a|118|ヤミカラス|Murkrow|-|base
+SV4a|119|ニューラ|Sneasel|-|base
+SV4a|120|マニューラ|Weavile|-|base
+SV4a|121|ヤミラミ|Sableye|-|base
+SV4a|122|コマタナ|Pawniard|-|base
+SV4a|123|キリキザン|Bisharp|-|base
+SV4a|124|ドドゲザン|Kingambit|-|base
+SV4a|125|オラチフ|Maschiff|-|base
+SV4a|126|マフィティフ|Mabosstiff|-|base
+SV4a|127|シルシュルー|Shroodle|-|base
+SV4a|128|タギングル|Grafaiai|-|base
+SV4a|129|ハッサム|Scizor|-|base
+SV4a|130|ブロロン|Varoom|-|base
+SV4a|131|ブロロローム|Revavroom|-|base
+SV4a|132|テツノワダチex|Iron Treads ex|RR|base
+SV4a|133|サーフゴー|Gholdengo|-|base
+SV4a|134|オンバット|Noibat|-|base
+SV4a|135|オンバーンex|Noivern ex|RR|base
+SV4a|136|モトトカゲ|Cyclizar|-|base
+SV4a|137|ポッポ|Pidgey|-|base
+SV4a|138|ピジョン|Pidgeotto|-|base
+SV4a|139|ピジョットex|Pidgeot ex|RR|base
+SV4a|140|プリン|Jigglypuff|-|base
+SV4a|141|プクリンex|Wigglytuff ex|RR|base
+SV4a|142|ドードー|Doduo|-|base
+SV4a|143|ドードリオ|Dodrio|-|base
+SV4a|144|メタモン|Ditto|-|base
+SV4a|145|カビゴン|Snorlax|-|base
+SV4a|146|キャモメ|Wingull|-|base
+SV4a|147|ペリッパー|Pelipper|-|base
+SV4a|148|ホシガリス|Skwovet|-|base
+SV4a|149|ヨクバリス|Greedent|-|base
+SV4a|150|グルトン|Lechonk|-|base
+SV4a|151|パフュートン|Oinkologne|-|base
+SV4a|152|ワッカネズミ|Tandemaus|-|base
+SV4a|153|イッカネズミ|Maushold|-|base
+SV4a|154|イキリンコex|Squawkabilly ex|RR|base
+SV4a|155|カラミンゴ|Flamigo|-|base
+SV4a|156|エレキジェネレーター|Electric Generator|-|base
+SV4a|157|スーパーエネルギー回収|Super Energy Retrieval|-|base
+SV4a|158|すごいつりざお|Super Rod|-|base
+SV4a|159|ネストボール|Nest Ball|-|base
+SV4a|160|ネモのリュック|Nemona's Backpack|-|base
+SV4a|161|ハイパーボール|Ultra Ball|-|base
+SV4a|162|はげましのてがみ|Letter of Encouragement|-|base
+SV4a|163|ふしぎなアメ|Rare Candy|-|base
+SV4a|164|岩のむねあて|Rock Chestplate|-|base
+SV4a|165|大きなふうせん|Big Balloon|-|base
+SV4a|166|ガチガチバンド|Rigid Band|-|base
+SV4a|167|たべのこし|Leftovers|-|base
+SV4a|168|まけんきハチマキ|Defiant Band|-|base
+SV4a|169|勇気のおまもり|Charm of Courage|-|base
+SV4a|170|ワザマシン かじばのいっぱつ|Technical Machine: Crisis Shot|-|base
+SV4a|171|オモダカ|Geeta|-|base
+SV4a|172|クラベル|Clavel|-|base
+SV4a|173|サカキのカリスマ|Giovanni's Charisma|-|base
+SV4a|174|ナンジャモ|Iono|-|base
+SV4a|175|ネルケ|Clive|-|base
+SV4a|176|博士の研究|Professor's Research|-|base
+SV4a|177|博士の研究|Professor's Research|-|base
+SV4a|178|パルデアの学生|Students of Paldea|-|base
+SV4a|179|パルデアの学生|Students of Paldea|-|base
+SV4a|180|ペパー|Arven|-|base
+SV4a|181|ボスの指令|Boss's Command|-|base
+SV4a|182|ボタン|Penny|-|base
+SV4a|183|タウンデパート|Town Department Store|-|base
+SV4a|184|ビーチコート|Beach Court|-|base
+SV4a|185|ボウルタウン|Artazon|-|base
+SV4a|186|ポケモンリーグ本部|Pokémon League Headquarters|-|base
+SV4a|187|レッスンスタジオ|Lesson Studio|-|base
+SV4a|188|セラピーエネルギー|Therapy Energy|-|base
+SV4a|189|リバーサルエネルギー|Reversal Energy|-|base
+SV4a|190|ルミナスエネルギー|Luminous Energy|-|base
+SV4a|191|ナゾノクサ|Oddish|S|shiny
+SV4a|192|クサイハナ|Gloom|S|shiny
+SV4a|193|ラフレシア|Vileplume|S|shiny
+SV4a|194|ストライク|Scyther|S|shiny
+SV4a|195|ハネッコ|Hoppip|S|shiny
+SV4a|196|ポポッコ|Skiploom|S|shiny
+SV4a|197|ワタッコ|Jumpluff|S|shiny
+SV4a|198|クヌギダマ|Pineco|S|shiny
+SV4a|199|ユキカブリ|Snover|S|shiny
+SV4a|200|ユキノオー|Abomasnow|S|shiny
+SV4a|201|ニャオハ|Sprigatito|S|shiny
+SV4a|202|ニャローテ|Floragato|S|shiny
+SV4a|203|ミニーブ|Smoliv|S|shiny
+SV4a|204|オリーニョ|Dolliv|S|shiny
+SV4a|205|オリーヴァ|Arboliva|S|shiny
+SV4a|206|ノノクラゲ|Toedscool|S|shiny
+SV4a|207|カプサイジ|Capsakid|S|shiny
+SV4a|208|スコヴィラン|Scovillain|S|shiny
+SV4a|209|シガロコ|Rellor|S|shiny
+SV4a|210|ヒトカゲ|Charmander|S|shiny
+SV4a|211|リザード|Charmeleon|S|shiny
+SV4a|212|パルデア ケンタロス|Paldean Tauros|S|shiny
+SV4a|213|エンテイ|Entei|S|shiny
+SV4a|214|オドリドリ|Oricorio|S|shiny
+SV4a|215|ホゲータ|Fuecoco|S|shiny
+SV4a|216|アチゲータ|Crocalor|S|shiny
+SV4a|217|カルボウ|Charcadet|S|shiny
+SV4a|218|グレンアルマ|Armarouge|S|shiny
+SV4a|219|ヤドン|Slowpoke|S|shiny
+SV4a|220|ヤドラン|Slowbro|S|shiny
+SV4a|221|ヒトデマン|Staryu|S|shiny
+SV4a|222|スターミー|Starmie|S|shiny
+SV4a|223|パルデア ケンタロス|Paldean Tauros|S|shiny
+SV4a|224|クワッス|Quaxly|S|shiny
+SV4a|225|ウェルカモ|Quaxwell|S|shiny
+SV4a|226|ウミディグダ|Wiglett|S|shiny
+SV4a|227|ウミトリオ|Wugtrio|S|shiny
+SV4a|228|ナミイルカ|Finizen|S|shiny
+SV4a|229|イルカマン|Palafin|S|shiny
+SV4a|230|ミガルーサ|Veluza|S|shiny
+SV4a|231|ヘイラッシャ|Dondozo|S|shiny
+SV4a|232|シャリタツ|Tatsugiri|S|shiny
+SV4a|233|セビエ|Frigibax|S|shiny
+SV4a|234|セゴール|Arctibax|S|shiny
+SV4a|235|セグレイブ|Baxcalibur|S|shiny
+SV4a|236|ピカチュウ|Pikachu|S|shiny
+SV4a|237|ライチュウ|Raichu|S|shiny
+SV4a|238|ビリリダマ|Voltorb|S|shiny
+SV4a|239|マルマイン|Electrode|S|shiny
+SV4a|240|コリンク|Shinx|S|shiny
+SV4a|241|ルクシオ|Luxio|S|shiny
+SV4a|242|レントラー|Luxray|S|shiny
+SV4a|243|パチリス|Pachirisu|S|shiny
+SV4a|244|ボルトロス|Thundurus|S|shiny
+SV4a|245|エレズン|Toxel|S|shiny
+SV4a|246|ストリンダー|Toxtricity|S|shiny
+SV4a|247|パモ|Pawmi|S|shiny
+SV4a|248|パモット|Pawmo|S|shiny
+SV4a|249|パーモット|Pawmot|S|shiny
+SV4a|250|カイデン|Wattrel|S|shiny
+SV4a|251|タイカイデン|Kilowattrel|S|shiny
+SV4a|252|プクリン|Wigglytuff|S|shiny
+SV4a|253|ケーシィ|Abra|S|shiny
+SV4a|254|ユンゲラー|Kadabra|S|shiny
+SV4a|255|ピィ|Cleffa|S|shiny
+SV4a|256|ネイティ|Natu|S|shiny
+SV4a|257|ネイティオ|Xatu|S|shiny
+SV4a|258|ラルトス|Ralts|S|shiny
+SV4a|259|キルリア|Kirlia|S|shiny
+SV4a|260|フワンテ|Drifloon|S|shiny
+SV4a|261|フワライド|Drifblim|S|shiny
+SV4a|262|マネネ|Mime Jr.|S|shiny
+SV4a|263|ミカルゲ|Spiritomb|S|shiny
+SV4a|264|クレッフィ|Klefki|S|shiny
+SV4a|265|ミミッキュ|Mimikyu|S|shiny
+SV4a|266|パピモッチ|Fidough|S|shiny
+SV4a|267|バウッツェル|Dachsbun|S|shiny
+SV4a|268|ソウブレイズ|Ceruledge|S|shiny
+SV4a|269|ベラカス|Rabsca|S|shiny
+SV4a|270|ヒラヒナ|Flittle|S|shiny
+SV4a|271|カヌチャン|Tinkatink|S|shiny
+SV4a|272|ナカヌチャン|Tinkatuff|S|shiny
+SV4a|273|デカヌチャン|Tinkaton|S|shiny
+SV4a|274|ボチ|Greavard|S|shiny
+SV4a|275|ハカドッグ|Houndstone|S|shiny
+SV4a|276|マンキー|Mankey|S|shiny
+SV4a|277|オコリザル|Primeape|S|shiny
+SV4a|278|コノヨザル|Annihilape|S|shiny
+SV4a|279|パルデア ケンタロス|Paldean Tauros|S|shiny
+SV4a|280|リオル|Riolu|S|shiny
+SV4a|281|ルカリオ|Lucario|S|shiny
+SV4a|282|ルチャブル|Hawlucha|S|shiny
+SV4a|283|コジオ|Nacli|S|shiny
+SV4a|284|ジオヅム|Naclstack|S|shiny
+SV4a|285|キョジオーン|Garganacl|S|shiny
+SV4a|286|キラーメ|Glimmet|S|shiny
+SV4a|287|パルデア ウパー|Paldean Wooper|S|shiny
+SV4a|288|ヤミカラス|Murkrow|S|shiny
+SV4a|289|ニューラ|Sneasel|S|shiny
+SV4a|290|マニューラ|Weavile|S|shiny
+SV4a|291|ヤミラミ|Sableye|S|shiny
+SV4a|292|コマタナ|Pawniard|S|shiny
+SV4a|293|キリキザン|Bisharp|S|shiny
+SV4a|294|ドドゲザン|Kingambit|S|shiny
+SV4a|295|オラチフ|Maschiff|S|shiny
+SV4a|296|マフィティフ|Mabosstiff|S|shiny
+SV4a|297|シルシュルー|Shroodle|S|shiny
+SV4a|298|タギングル|Grafaiai|S|shiny
+SV4a|299|ハッサム|Scizor|S|shiny
+SV4a|300|ブロロン|Varoom|S|shiny
+SV4a|301|ブロロローム|Revavroom|S|shiny
+SV4a|302|オンバット|Noibat|S|shiny
+SV4a|303|モトトカゲ|Cyclizar|S|shiny
+SV4a|304|ポッポ|Pidgey|S|shiny
+SV4a|305|ピジョン|Pidgeotto|S|shiny
+SV4a|306|プリン|Jigglypuff|S|shiny
+SV4a|307|ドードー|Doduo|S|shiny
+SV4a|308|ドードリオ|Dodrio|S|shiny
+SV4a|309|メタモン|Ditto|S|shiny
+SV4a|310|カビゴン|Snorlax|S|shiny
+SV4a|311|キャモメ|Wingull|S|shiny
+SV4a|312|ペリッパー|Pelipper|S|shiny
+SV4a|313|ホシガリス|Skwovet|S|shiny
+SV4a|314|ヨクバリス|Greedent|S|shiny
+SV4a|315|グルトン|Lechonk|S|shiny
+SV4a|316|パフュートン|Oinkologne|S|shiny
+SV4a|317|ワッカネズミ|Tandemaus|S|shiny
+SV4a|318|イッカネズミ|Maushold|S|shiny
+SV4a|319|カラミンゴ|Flamigo|S|shiny
+SV4a|320|フォレトスex|Forretress ex|SSR|shinyssr
+SV4a|321|マスカーニャex|Meowscarada ex|SSR|shinyssr
+SV4a|322|リククラゲex|Toedscruel ex|SSR|shinyssr
+SV4a|323|クエスパトラex|Espathra ex|SSR|shinyssr
+SV4a|324|ラウドボーンex|Skeledirge ex|SSR|shinyssr
+SV4a|325|ウェーニバルex|Quaquaval ex|SSR|shinyssr
+SV4a|326|フーディンex|Alakazam ex|SSR|shinyssr
+SV4a|327|ミュウex|Mew ex|SSR|shinyssr
+SV4a|328|サーナイトex|Gardevoir ex|SSR|shinyssr
+SV4a|329|キラフロルex|Glimmora ex|SSR|shinyssr
+SV4a|330|イダイナキバex|Great Tusk ex|SSR|shinyssr
+SV4a|331|リザードンex|Charizard ex|SSR|shinyssr
+SV4a|332|パルデア ドオーex|Paldean Clodsire ex|SSR|shinyssr
+SV4a|333|テツノワダチex|Iron Treads ex|SSR|shinyssr
+SV4a|334|オンバーンex|Noivern ex|SSR|shinyssr
+SV4a|335|ピジョットex|Pidgeot ex|SSR|shinyssr
+SV4a|336|プクリンex|Wigglytuff ex|SSR|shinyssr
+SV4a|337|イキリンコex|Squawkabilly ex|SSR|shinyssr
+SV4a|338|ウミトリオ|Wugtrio|AR|special
+SV4a|339|イルカマン|Palafin|AR|special
+SV4a|340|パモ|Pawmi|AR|special
+SV4a|341|ミミッキュ|Mimikyu|AR|special
+SV4a|342|ジャッジマン|Judge|SR|special
+SV4a|343|ネモ|Nemona|SR|special
+SV4a|344|ネルケ|Clive|SR|special
+SV4a|345|パルデアの学生|Students of Paldea|SR|special
+SV4a|346|パルデアの学生|Students of Paldea|SR|special
+SV4a|347|ミュウex|Mew ex|SAR|special
+SV4a|348|サーナイトex|Gardevoir ex|SAR|special
+SV4a|349|リザードンex|Charizard ex|SAR|special
+SV4a|350|ナンジャモ|Iono|SAR|special
+SV4a|351|ネモ|Nemona|SAR|special
+SV4a|352|ネルケ|Clive|SAR|special
+SV4a|353|ペパー|Arven|SAR|special
+SV4a|354|ボタン|Penny|SAR|special
+SV4a|355|チオンジェンex|Wo-Chien ex|UR|special
+SV4a|356|イーユイex|Chi-Yu ex|UR|special
+SV4a|357|パオジアンex|Chien-Pao ex|UR|special
+SV4a|358|ミライドンex|Miraidon ex|UR|special
+SV4a|359|ディンルーex|Ting-Lu ex|UR|special
+SV4a|360|コライドンex|Koraidon ex|UR|special
+SM8b|1|フシギダネ|Bulbasaur|-|base
+SM8b|2|フシギソウ|Ivysaur|-|base
+SM8b|3|フシギバナ|Venusaur|-|base
+SM8b|4|タマタマ|Exeggcute|-|base
+SM8b|5|カットロトム|Mow Rotom|-|base
+SM8b|6|シェイミ|Shaymin Prism Star|-|base
+SM8b|7|コソクムシ|Wimpod|-|base
+SM8b|8|グソクムシャGX|Golisopod-GX|RR|base
+SM8b|9|フェローチェ|Pheromosa|-|base
+SM8b|10|マグマッグ|Slugma|-|base
+SM8b|11|マグカルゴ|Magcargo|-|base
+SM8b|12|アチャモ|Torchic|-|base
+SM8b|13|ワカシャモ|Combusken|-|base
+SM8b|14|バシャーモ|Blaziken|-|base
+SM8b|15|ヒートロトム|Heat Rotom|-|base
+SM8b|16|クイタラン|Heatmor|-|base
+SM8b|17|レシラム|Reshiram|-|base
+SM8b|18|レシラムGX|Reshiram-GX|RR|base
+SM8b|19|フォッコ|Fennekin|-|base
+SM8b|20|テールナー|Braixen|-|base
+SM8b|21|マフォクシー|Delphox|-|base
+SM8b|22|アローラロコン|Alolan Vulpix|-|base
+SM8b|23|ウパー|Wooper|-|base
+SM8b|24|ヌオー|Quagsire|-|base
+SM8b|25|ユキカブリ|Snover|-|base
+SM8b|26|ユキノオー|Abomasnow|-|base
+SM8b|27|グレイシアGX|Glaceon-GX|RR|base
+SM8b|28|ウォッシュロトム|Wash Rotom|-|base
+SM8b|29|フロストロトム|Frost Rotom|-|base
+SM8b|30|マナフィ|Manaphy|-|base
+SM8b|31|ケロマツ|Froakie|-|base
+SM8b|32|ゲコガシラ|Frogadier|-|base
+SM8b|33|ゲッコウガGX|Greninja-GX|RR|base
+SM8b|34|ライコウ|Raikou|-|base
+SM8b|35|パチリス|Pachirisu|-|base
+SM8b|36|ロトム|Rotom|-|base
+SM8b|37|ゼクロム|Zekrom|-|base
+SM8b|38|デンジュモク|Xurkitree|-|base
+SM8b|39|デンジュモクGX|Xurkitree-GX|RR|base
+SM8b|40|アローラガラガラ|Alolan Marowak|-|base
+SM8b|41|ハブネーク|Seviper|-|base
+SM8b|42|マーイーカ|Inkay|-|base
+SM8b|43|カラマネロ|Malamar|-|base
+SM8b|44|カプ・テテフGX|Tapu Lele-GX|RR|base
+SM8b|45|コスモッグ|Cosmog|-|base
+SM8b|46|コスモウム|Cosmoem|-|base
+SM8b|47|ルナアーラ|Lunala|-|base
+SM8b|48|ネクロズマ あかつきのつばさ|Dawn Wings Necrozma|-|base
+SM8b|49|ネクロズマ あかつきのつばさGX|Dawn Wings Necrozma-GX|RR|base
+SM8b|50|マーシャドー|Marshadow|-|base
+SM8b|51|ベベノム|Poipole|-|base
+SM8b|52|アーゴヨンGX|Naganadel-GX|RR|base
+SM8b|53|カラカラ|Cubone|-|base
+SM8b|54|ウソッキー|Sudowoodo|-|base
+SM8b|55|リオル|Riolu|-|base
+SM8b|56|ルカリオ|Lucario|-|base
+SM8b|57|ジガルデ|Zygarde|-|base
+SM8b|58|ディアンシー|Diancie Prism Star|-|base
+SM8b|59|イワンコ|Rockruff|-|base
+SM8b|60|ルガルガンGX|Lycanroc-GX|RR|base
+SM8b|61|ルガルガンGX|Lycanroc-GX|RR|base
+SM8b|62|マッシブーン|Buzzwole|-|base
+SM8b|63|マッシブーンGX|Buzzwole-GX|RR|base
+SM8b|64|マーシャドーGX|Marshadow-GX|RR|base
+SM8b|65|ニューラ|Sneasel|-|base
+SM8b|66|マニューラ|Weavile|-|base
+SM8b|67|ヤミラミ|Sableye|-|base
+SM8b|68|ダークライ|Darkrai|-|base
+SM8b|69|ゾロア|Zorua|-|base
+SM8b|70|ゾロアークGX|Zoroark-GX|RR|base
+SM8b|71|モノズ|Deino|-|base
+SM8b|72|ジヘッド|Zweilous|-|base
+SM8b|73|サザンドラ|Hydreigon|-|base
+SM8b|74|フーパ|Hoopa|-|base
+SM8b|75|アクジキング|Guzzlord|-|base
+SM8b|76|アローラディグダ|Alolan Diglett|-|base
+SM8b|77|アローラダグトリオ|Alolan Dugtrio|-|base
+SM8b|78|コイル|Magnemite|-|base
+SM8b|79|レアコイル|Magneton|-|base
+SM8b|80|ジバコイル|Magnezone|-|base
+SM8b|81|ヒードラン|Heatran|-|base
+SM8b|82|ソルガレオ|Solgaleo|-|base
+SM8b|83|テッカグヤ|Celesteela|-|base
+SM8b|84|カミツルギ|Kartana|-|base
+SM8b|85|ネクロズマ たそがれのたてがみ|Dusk Mane Necrozma|-|base
+SM8b|86|ネクロズマ たそがれのたてがみGX|Dusk Mane Necrozma-GX|RR|base
+SM8b|87|マギアナ|Magearna|-|base
+SM8b|88|ツンデツンデGX|Stakataka-GX|RR|base
+SM8b|89|アローラキュウコン|Alolan Ninetales|-|base
+SM8b|90|ラルトス|Ralts|-|base
+SM8b|91|キルリア|Kirlia|-|base
+SM8b|92|サーナイトGX|Gardevoir-GX|RR|base
+SM8b|93|ゼルネアス|Xerneas|-|base
+SM8b|94|ディアンシー|Diancie|-|base
+SM8b|95|ミミッキュ|Mimikyu|-|base
+SM8b|96|アローラナッシー|Alolan Exeggutor|-|base
+SM8b|97|チルタリス|Altaria|-|base
+SM8b|98|レックウザGX|Rayquaza-GX|RR|base
+SM8b|99|フカマル|Gible|-|base
+SM8b|100|ガバイト|Gabite|-|base
+SM8b|101|ガブリアス|Garchomp|-|base
+SM8b|102|ジガルデ|Zygarde|-|base
+SM8b|103|バクガメス|Turtonator|-|base
+SM8b|104|ウルトラネクロズマGX|Ultra Necrozma-GX|RR|base
+SM8b|105|イーブイ|Eevee|-|base
+SM8b|106|ノコッチ|Dunsparce|-|base
+SM8b|107|チルット|Swablu|-|base
+SM8b|108|スピンロトム|Fan Rotom|-|base
+SM8b|109|ヤレユータン|Oranguru|-|base
+SM8b|110|タイプ：ヌル|Type: Null|-|base
+SM8b|111|シルヴァディGX|Silvally-GX|RR|base
+SM8b|112|エネくじ|Energy Loto|-|base
+SM8b|113|エネルギーリサイクル|Energy Recycler|-|base
+SM8b|114|カウンターキャッチャー|Counter Catcher|-|base
+SM8b|115|ビーストリング|Beast Ring|-|base
+SM8b|116|火打石|Flint|-|base
+SM8b|117|フィールドブロアー|Field Blower|-|base
+SM8b|118|まんたんのくすり|Max Potion|-|base
+SM8b|119|ミステリートレジャー|Mystery Treasure|-|base
+SM8b|120|レスキュータンカ|Rescue Stretcher|-|base
+SM8b|121|ウォーターメモリ|Water Memory|-|base
+SM8b|122|エスケープボード|Escape Board|-|base
+SM8b|123|グラスメモリ|Grass Memory|-|base
+SM8b|124|鋼鉄のフライパン|Metal Frying Pan|-|base
+SM8b|125|ねがいのバトン|Wishful Baton|-|base
+SM8b|126|フェアリーチャーム UB|Fairy Charm UB|-|base
+SM8b|127|ムキムキダンベル|Bodybuilding Dumbbells|-|base
+SM8b|128|アセロラ|Acerola|-|base
+SM8b|129|カルネ|Diantha|-|base
+SM8b|130|グズマ|Guzma|-|base
+SM8b|131|グラジオ|Gladion|-|base
+SM8b|132|シロナ|Cynthia|-|base
+SM8b|133|デンジ|Volkner|-|base
+SM8b|134|ノボリとクダリ|Ingo and Emmet|-|base
+SM8b|135|モノマネむすめ|Copycat|-|base
+SM8b|136|ルザミーネ|Lusamine|-|base
+SM8b|137|ルミタン|Morgan|-|base
+SM8b|138|ラジュルネ|Dana|-|base
+SM8b|139|ルスワール|Evelyn|-|base
+SM8b|140|ラニュイ|Nita|-|base
+SM8b|141|戒めの祠|Shrine of Punishment|-|base
+SM8b|142|ヴェラ火山公園|Wela Volcano Park|-|base
+SM8b|143|ウルトラスペース|Ultra Space|-|base
+SM8b|144|テンガン山|Mt. Coronet|-|base
+SM8b|145|ワンダーラビリンス|Wonder Labyrinth Prism Star|-|base
+SM8b|146|カウンターエネルギー|Counter Energy|-|base
+SM8b|147|ビーストエネルギー|Beast Energy Prism Star|-|base
+SM8b|148|ユニットエネルギー草炎水|Unit Energy GFW|-|base
+SM8b|149|ユニットエネルギー雷超鋼|Unit Energy LightningPsychicMetal|-|base
+SM8b|150|ユニットエネルギー闘悪妖|Unit Energy FDY|-|base
+SM8b|151|エーテル財団職員|Aether Foundation Employee|SR|special
+SM8b|152|グズマ|Guzma|SR|special
+SM8b|153|シロナ|Cynthia|SR|special
+SM8b|154|釣り人|Fisherman|SR|special
+SM8b|155|ノボリとクダリ|Ingo and Emmet|SR|special
+SM8b|156|やまおとこ|Hiker|SR|special
+SM8b|157|ルミタン|Morgan|SR|special
+SM8b|158|ラジュルネ|Dana|SR|special
+SM8b|159|ルスワール|Evelyn|SR|special
+SM8b|160|ラニュイ|Nita|SR|special
+SM8b|161|ストライク|Scyther|S|shiny
+SM8b|162|モクロー|Rowlet|S|shiny
+SM8b|163|フクスロー|Dartrix|S|shiny
+SM8b|164|コソクムシ|Wimpod|S|shiny
+SM8b|165|フェローチェ|Pheromosa|S|shiny
+SM8b|166|ヒトカゲ|Charmander|S|shiny
+SM8b|167|リザード|Charmeleon|S|shiny
+SM8b|168|アローラロコン|Alolan Vulpix|S|shiny
+SM8b|169|ウパー|Wooper|S|shiny
+SM8b|170|ヌオー|Quagsire|S|shiny
+SM8b|171|ケロマツ|Froakie|S|shiny
+SM8b|172|ゲコガシラ|Frogadier|S|shiny
+SM8b|173|ビリリダマ|Voltorb|S|shiny
+SM8b|174|デンジュモク|Xurkitree|S|shiny
+SM8b|175|ハブネーク|Seviper|S|shiny
+SM8b|176|カゲボウズ|Shuppet|S|shiny
+SM8b|177|マーイーカ|Inkay|S|shiny
+SM8b|178|カラマネロ|Malamar|S|shiny
+SM8b|179|ベベノム|Poipole|S|shiny
+SM8b|180|ウソッキー|Sudowoodo|S|shiny
+SM8b|181|リオル|Riolu|S|shiny
+SM8b|182|ルカリオ|Lucario|S|shiny
+SM8b|183|イワンコ|Rockruff|S|shiny
+SM8b|184|マッシブーン|Buzzwole|S|shiny
+SM8b|185|ゾロア|Zorua|S|shiny
+SM8b|186|アクジキング|Guzzlord|S|shiny
+SM8b|187|コイル|Magnemite|S|shiny
+SM8b|188|レアコイル|Magneton|S|shiny
+SM8b|189|ジバコイル|Magnezone|S|shiny
+SM8b|190|ダンバル|Beldum|S|shiny
+SM8b|191|メタング|Metang|S|shiny
+SM8b|192|テッカグヤ|Celesteela|S|shiny
+SM8b|193|カミツルギ|Kartana|S|shiny
+SM8b|194|ラルトス|Ralts|S|shiny
+SM8b|195|キルリア|Kirlia|S|shiny
+SM8b|196|ディアンシー|Diancie|S|shiny
+SM8b|197|チルタリス|Altaria|S|shiny
+SM8b|198|フカマル|Gible|S|shiny
+SM8b|199|ガバイト|Gabite|S|shiny
+SM8b|200|ガブリアス|Garchomp|S|shiny
+SM8b|201|イーブイ|Eevee|S|shiny
+SM8b|202|チルット|Swablu|S|shiny
+SM8b|203|オンバット|Noibat|S|shiny
+SM8b|204|ヤレユータン|Oranguru|S|shiny
+SM8b|205|タイプ：ヌル|Type: Null|S|shiny
+SM8b|206|リーフィアGX|Leafeon-GX|SSR|shinyssr
+SM8b|207|ジュナイパーGX|Decidueye-GX|SSR|shinyssr
+SM8b|208|グソクムシャGX|Golisopod-GX|SSR|shinyssr
+SM8b|209|リザードンGX|Charizard-GX|SSR|shinyssr
+SM8b|210|ホウオウGX|Ho-Oh-GX|SSR|shinyssr
+SM8b|211|レシラムGX|Reshiram-GX|SSR|shinyssr
+SM8b|212|バクガメスGX|Turtonator-GX|SSR|shinyssr
+SM8b|213|アローラキュウコンGX|Alolan Ninetales-GX|SSR|shinyssr
+SM8b|214|フリーザーGX|Articuno-GX|SSR|shinyssr
+SM8b|215|グレイシアGX|Glaceon-GX|SSR|shinyssr
+SM8b|216|ゲッコウガGX|Greninja-GX|SSR|shinyssr
+SM8b|217|マルマインGX|Electrode-GX|SSR|shinyssr
+SM8b|218|デンジュモクGX|Xurkitree-GX|SSR|shinyssr
+SM8b|219|ミュウツーGX|Mewtwo-GX|SSR|shinyssr
+SM8b|220|エーフィGX|Espeon-GX|SSR|shinyssr
+SM8b|221|ジュペッタGX|Banette-GX|SSR|shinyssr
+SM8b|222|ウツロイドGX|Nihilego-GX|SSR|shinyssr
+SM8b|223|アーゴヨンGX|Naganadel-GX|SSR|shinyssr
+SM8b|224|ルカリオGX|Lucario-GX|SSR|shinyssr
+SM8b|225|ジガルデGX|Zygarde-GX|SSR|shinyssr
+SM8b|226|ルガルガンGX|Lycanroc-GX|SSR|shinyssr
+SM8b|227|ルガルガンGX|Lycanroc-GX|SSR|shinyssr
+SM8b|228|マッシブーンGX|Buzzwole-GX|SSR|shinyssr
+SM8b|229|ブラッキーGX|Umbreon-GX|SSR|shinyssr
+SM8b|230|ダークライGX|Darkrai-GX|SSR|shinyssr
+SM8b|231|ゾロアークGX|Zoroark-GX|SSR|shinyssr
+SM8b|232|アクジキングGX|Guzzlord-GX|SSR|shinyssr
+SM8b|233|ハッサムGX|Scizor-GX|SSR|shinyssr
+SM8b|234|メタグロスGX|Metagross-GX|SSR|shinyssr
+SM8b|235|カミツルギGX|Kartana-GX|SSR|shinyssr
+SM8b|236|ツンデツンデGX|Stakataka-GX|SSR|shinyssr
+SM8b|237|サーナイトGX|Gardevoir-GX|SSR|shinyssr
+SM8b|238|ニンフィアGX|Sylveon-GX|SSR|shinyssr
+SM8b|239|チルタリスGX|Altaria-GX|SSR|shinyssr
+SM8b|240|レックウザGX|Rayquaza-GX|SSR|shinyssr
+SM8b|241|オンバーンGX|Noivern-GX|SSR|shinyssr
+SM8b|242|シルヴァディGX|Silvally-GX|SSR|shinyssr
+SM8b|243|ジジーロンGX|Drampa-GX|SSR|shinyssr
+HIF|1|Caterpie||C|base
+HIF|2|Metapod||U|base
+HIF|3|Butterfree||R|base
+HIF|4|Paras||C|base
+HIF|5|Scyther||U|base
+HIF|6|Pinsir-GX||RR|base
+HIF|7|Charmander||C|base
+HIF|8|Charmeleon||U|base
+HIF|9|Charizard-GX||RR|base
+HIF|10|Magmar||U|base
+HIF|11|Psyduck||C|base
+HIF|12|Slowpoke||C|base
+HIF|13|Staryu||C|base
+HIF|14|Starmie-GX||RR|base
+HIF|15|Magikarp||C|base
+HIF|16|Gyarados-GX||RR|base
+HIF|17|Lapras||R|base
+HIF|18|Vaporeon||RH|base
+HIF|19|Pikachu||C|base
+HIF|20|Raichu-GX||RR|base
+HIF|21|Voltorb||C|base
+HIF|22|Electrode||R|base
+HIF|23|Jolteon||R|base
+HIF|24|Zapdos||RH|base
+HIF|25|Ekans||C|base
+HIF|26|Ekans||C|base
+HIF|27|Arbok||R|base
+HIF|28|Koffing||C|base
+HIF|29|Weezing||R|base
+HIF|30|Jynx||U|base
+HIF|31|Mewtwo-GX||RR|base
+HIF|32|Mew||R|base
+HIF|33|Geodude||C|base
+HIF|34|Graveler||U|base
+HIF|35|Golem||R|base
+HIF|36|Onix-GX||RR|base
+HIF|37|Cubone||C|base
+HIF|38|Clefairy||C|base
+HIF|39|Clefairy||C|base
+HIF|40|Clefable||R|base
+HIF|41|Jigglypuff||C|base
+HIF|42|Wigglytuff-GX||RR|base
+HIF|43|Mr. Mime||R|base
+HIF|44|Moltres & Zapdos & Articuno-GX||RR|base
+HIF|45|Farfetch'd||U|base
+HIF|46|Chansey||U|base
+HIF|47|Kangaskhan||R|base
+HIF|48|Eevee||RH|base
+HIF|49|Eevee||C|base
+HIF|50|Snorlax||R|base
+HIF|51|Bill's Analysis||R|base
+HIF|52|Blaine's Last Stand||R|base
+HIF|53|Brock's Grit||U|base
+HIF|54|Brock's Pewter City Gym||U|base
+HIF|55|Brock's Training||RH|base
+HIF|56|Erika's Hospitality||R|base
+HIF|57|Giovanni's Exile||U|base
+HIF|58|Jessie & James||RH|base
+HIF|59|Koga's Trap||U|base
+HIF|60|Lt. Surge's Strategy||U|base
+HIF|61|Misty's Cerulean City Gym||U|base
+HIF|62|Misty's Determination||U|base
+HIF|63|Misty's Water Command||RH|base
+HIF|64|Pokémon Center Lady||U|base
+HIF|65|Sabrina's Suggestion||U|base
+HIF|66|Moltres & Zapdos & Articuno-GX||UR|base
+HIF|67|Giovanni's Exile||UR|base
+HIF|68|Jessie & James||UR|base
+HIF|69|Moltres & Zapdos & Articuno-GX||HR|base
+HIF|SV1|Scyther||S|shiny
+HIF|SV2|Rowlet||S|shiny
+HIF|SV3|Dartrix||S|shiny
+HIF|SV4|Wimpod||S|shiny
+HIF|SV5|Pheromosa||S|shiny
+HIF|SV6|Charmander||S|shiny
+HIF|SV7|Charmeleon||S|shiny
+HIF|SV8|Alolan Vulpix||S|shiny
+HIF|SV9|Wooper||S|shiny
+HIF|SV10|Quagsire||S|shiny
+HIF|SV11|Froakie||S|shiny
+HIF|SV12|Frogadier||S|shiny
+HIF|SV13|Voltorb||S|shiny
+HIF|SV14|Xurkitree||S|shiny
+HIF|SV15|Seviper||S|shiny
+HIF|SV16|Shuppet||S|shiny
+HIF|SV17|Inkay||S|shiny
+HIF|SV18|Malamar||S|shiny
+HIF|SV19|Poipole||S|shiny
+HIF|SV20|Sudowoodo||S|shiny
+HIF|SV21|Riolu||S|shiny
+HIF|SV22|Lucario||S|shiny
+HIF|SV23|Rockruff||S|shiny
+HIF|SV24|Buzzwole||S|shiny
+HIF|SV25|Zorua||S|shiny
+HIF|SV26|Guzzlord||S|shiny
+HIF|SV27|Magnemite||S|shiny
+HIF|SV28|Magneton||S|shiny
+HIF|SV29|Magnezone||S|shiny
+HIF|SV30|Beldum||S|shiny
+HIF|SV31|Metang||S|shiny
+HIF|SV32|Celesteela||S|shiny
+HIF|SV33|Kartana||S|shiny
+HIF|SV34|Ralts||S|shiny
+HIF|SV35|Kirlia||S|shiny
+HIF|SV36|Diancie||S|shiny
+HIF|SV37|Altaria||S|shiny
+HIF|SV38|Gible||S|shiny
+HIF|SV39|Gabite||S|shiny
+HIF|SV40|Garchomp||S|shiny
+HIF|SV41|Eevee||S|shiny
+HIF|SV42|Swablu||S|shiny
+HIF|SV43|Noibat||S|shiny
+HIF|SV44|Oranguru||S|shiny
+HIF|SV45|Type: Null||S|shiny
+HIF|SV46|Leafeon-GX||SSR|shinyssr
+HIF|SV47|Decidueye-GX||SSR|shinyssr
+HIF|SV48|Golisopod-GX||SSR|shinyssr
+HIF|SV49|Charizard-GX||SSR|shinyssr
+HIF|SV50|Ho-Oh-GX||SSR|shinyssr
+HIF|SV51|Reshiram-GX||SSR|shinyssr
+HIF|SV52|Turtonator-GX||SSR|shinyssr
+HIF|SV53|Alolan Ninetales-GX||SSR|shinyssr
+HIF|SV54|Articuno-GX||SSR|shinyssr
+HIF|SV55|Glaceon-GX||SSR|shinyssr
+HIF|SV56|Greninja-GX||SSR|shinyssr
+HIF|SV57|Electrode-GX||SSR|shinyssr
+HIF|SV58|Xurkitree-GX||SSR|shinyssr
+HIF|SV59|Mewtwo-GX||SSR|shinyssr
+HIF|SV60|Espeon-GX||SSR|shinyssr
+HIF|SV61|Banette-GX||SSR|shinyssr
+HIF|SV62|Nihilego-GX||SSR|shinyssr
+HIF|SV63|Naganadel-GX||SSR|shinyssr
+HIF|SV64|Lucario-GX||SSR|shinyssr
+HIF|SV65|Zygarde-GX||SSR|shinyssr
+HIF|SV66|Lycanroc-GX||SSR|shinyssr
+HIF|SV67|Lycanroc-GX||SSR|shinyssr
+HIF|SV68|Buzzwole-GX||SSR|shinyssr
+HIF|SV69|Umbreon-GX||SSR|shinyssr
+HIF|SV70|Darkrai-GX||SSR|shinyssr
+HIF|SV71|Guzzlord-GX||SSR|shinyssr
+HIF|SV72|Scizor-GX||SSR|shinyssr
+HIF|SV73|Kartana-GX||SSR|shinyssr
+HIF|SV74|Stakataka-GX||SSR|shinyssr
+HIF|SV75|Gardevoir-GX||SSR|shinyssr
+HIF|SV76|Sylveon-GX||SSR|shinyssr
+HIF|SV77|Altaria-GX||SSR|shinyssr
+HIF|SV78|Noivern-GX||SSR|shinyssr
+HIF|SV79|Silvally-GX||SSR|shinyssr
+HIF|SV80|Drampa-GX||SSR|shinyssr
+HIF|SV81|Aether Foundation Employee||SSR|shinyssr
+HIF|SV82|Cynthia||SSR|shinyssr
+HIF|SV83|Fisherman||SSR|shinyssr
+HIF|SV84|Guzma||SSR|shinyssr
+HIF|SV85|Hiker||SSR|shinyssr
+HIF|SV86|Lady||SSR|shinyssr
+HIF|SV87|Aether Paradise Conservation Area||SSR|shinyssr
+HIF|SV88|Brooklet Hill||SSR|shinyssr
+HIF|SV89|Mt. Coronet||SSR|shinyssr
+HIF|SV90|Shrine of Punishment||SSR|shinyssr
+HIF|SV91|Tapu Bulu-GX||SSR|shinyssr
+HIF|SV92|Tapu Fini-GX||SSR|shinyssr
+HIF|SV93|Tapu Koko-GX||SSR|shinyssr
+HIF|SV94|Tapu Lele-GX||SSR|shinyssr
+SHF|1|Yanma||C|base
+SHF|2|Yanmega||R|base
+SHF|3|Celebi||R|base
+SHF|4|Cacnea||C|base
+SHF|5|Tropius||U|base
+SHF|6|Rowlet||C|base
+SHF|7|Dartrix||U|base
+SHF|8|Decidueye||RH|base
+SHF|9|Dhelmise V||RR|base
+SHF|10|Dhelmise VMAX||RRR|base
+SHF|11|Grookey||C|base
+SHF|12|Thwackey||U|base
+SHF|13|Rillaboom||RH|base
+SHF|14|Gossifleur||C|base
+SHF|15|Eldegoss||U|base
+SHF|16|Zarude||R|base
+SHF|17|Reshiram||A|base
+SHF|18|Cinderace V||RR|base
+SHF|19|Cinderace VMAX||RRR|base
+SHF|20|Horsea||C|base
+SHF|21|Kyogre||A|base
+SHF|22|Buizel||C|base
+SHF|23|Floatzel||U|base
+SHF|24|Manaphy||R|base
+SHF|25|Volcanion||R|base
+SHF|26|Chewtle||C|base
+SHF|27|Drednaw||R|base
+SHF|28|Cramorant||U|base
+SHF|29|Snom||C|base
+SHF|30|Frosmoth||RH|base
+SHF|31|Shinx||C|base
+SHF|32|Luxio||U|base
+SHF|33|Luxray||RH|base
+SHF|34|Rotom||U|base
+SHF|35|Morpeko||C|base
+SHF|36|Morpeko||C|base
+SHF|37|Morpeko V||RR|base
+SHF|38|Morpeko VMAX||RRR|base
+SHF|39|Indeedee V||RR|base
+SHF|40|Trapinch||C|base
+SHF|41|Koffing||C|base
+SHF|42|Galarian Weezing||RH|base
+SHF|43|Spinarak||C|base
+SHF|44|Crobat V||RR|base
+SHF|45|Crobat VMAX||RRR|base
+SHF|46|Yveltal||A|base
+SHF|47|Nickit||C|base
+SHF|48|Thievul||RH|base
+SHF|49|Cufant||C|base
+SHF|50|Ditto V||RR|base
+SHF|51|Ditto VMAX||RRR|base
+SHF|52|Eevee||C|base
+SHF|53|Greedent V||RR|base
+SHF|54|Cramorant V||RR|base
+SHF|55|Cramorant VMAX||RR|base
+SHF|56|Indeedee||RH|base
+SHF|57|Ball Guy||U|base
+SHF|58|Boss's Orders||R|base
+SHF|59|Gym Trainer||U|base
+SHF|60|Professor's Research||R|base
+SHF|61|Rusted Shield||U|base
+SHF|62|Rusted Sword||U|base
+SHF|63|Team Yell Towel||U|base
+SHF|64|Alcremie V||UR|base
+SHF|65|Ball Guy||UR|base
+SHF|66|Bird Keeper||UR|base
+SHF|67|Cara Liss||UR|base
+SHF|68|Gym Trainer||UR|base
+SHF|69|Piers||UR|base
+SHF|70|Poké Kid||UR|base
+SHF|71|Rose||UR|base
+SHF|72|Skyla||UR|base
+SHF|73|Alcremie VMAX||UR|base
+SHF|SV1|Rowlet||S|shiny
+SHF|SV2|Dartrix||S|shiny
+SHF|SV3|Decidueye||S|shiny
+SHF|SV4|Grookey||S|shiny
+SHF|SV5|Thwackey||S|shiny
+SHF|SV6|Rillaboom||S|shiny
+SHF|SV7|Blipbug||S|shiny
+SHF|SV8|Dottler||S|shiny
+SHF|SV9|Orbeetle||S|shiny
+SHF|SV10|Gossifleur||S|shiny
+SHF|SV11|Eldegoss||S|shiny
+SHF|SV12|Applin||S|shiny
+SHF|SV13|Flapple||S|shiny
+SHF|SV14|Appletun||S|shiny
+SHF|SV15|Scorbunny||S|shiny
+SHF|SV16|Raboot||S|shiny
+SHF|SV17|Cinderace||S|shiny
+SHF|SV18|Sizzlipede||S|shiny
+SHF|SV19|Centiskorch||S|shiny
+SHF|SV20|Galarian Mr. Mime||S|shiny
+SHF|SV21|Galarian Mr. Rime||S|shiny
+SHF|SV22|Suicune||S|shiny
+SHF|SV23|Galarian Darumaka||S|shiny
+SHF|SV24|Galarian Darmanitan||S|shiny
+SHF|SV25|Sobble||S|shiny
+SHF|SV26|Drizzile||S|shiny
+SHF|SV27|Inteleon||S|shiny
+SHF|SV28|Chewtle||S|shiny
+SHF|SV29|Drednaw||S|shiny
+SHF|SV30|Cramorant||S|shiny
+SHF|SV31|Arrokuda||S|shiny
+SHF|SV32|Barraskewda||S|shiny
+SHF|SV33|Snom||S|shiny
+SHF|SV34|Frosmoth||S|shiny
+SHF|SV35|Eiscue||S|shiny
+SHF|SV36|Dracovish||S|shiny
+SHF|SV37|Arctovish||S|shiny
+SHF|SV38|Rotom||S|shiny
+SHF|SV39|Yamper||S|shiny
+SHF|SV40|Boltund||S|shiny
+SHF|SV41|Toxel||S|shiny
+SHF|SV42|Toxtricity||S|shiny
+SHF|SV43|Pincurchin||S|shiny
+SHF|SV44|Morpeko||S|shiny
+SHF|SV45|Dracozolt||S|shiny
+SHF|SV46|Arctozolt||S|shiny
+SHF|SV47|Galarian Ponyta||S|shiny
+SHF|SV48|Galarian Rapidash||S|shiny
+SHF|SV49|Galarian Corsola||S|shiny
+SHF|SV50|Galarian Cursola||S|shiny
+SHF|SV51|Dedenne||S|shiny
+SHF|SV52|Sinistea||S|shiny
+SHF|SV53|Polteageist||S|shiny
+SHF|SV54|Hatenna||S|shiny
+SHF|SV55|Hattrem||S|shiny
+SHF|SV56|Hatterene||S|shiny
+SHF|SV57|Milcery||S|shiny
+SHF|SV58|Alcremie||S|shiny
+SHF|SV59|Indeedee||S|shiny
+SHF|SV60|Dreepy||S|shiny
+SHF|SV61|Drakloak||S|shiny
+SHF|SV62|Dragapult||S|shiny
+SHF|SV63|Galarian Farfetch'd||S|shiny
+SHF|SV64|Galarian Sirfetch'd||S|shiny
+SHF|SV65|Galarian Yamask||S|shiny
+SHF|SV66|Galarian Runerigus||S|shiny
+SHF|SV67|Rolycoly||S|shiny
+SHF|SV68|Carkol||S|shiny
+SHF|SV69|Coalossal||S|shiny
+SHF|SV70|Silicobra||S|shiny
+SHF|SV71|Sandaconda||S|shiny
+SHF|SV72|Clobbopus||S|shiny
+SHF|SV73|Grapploct||S|shiny
+SHF|SV74|Falinks||S|shiny
+SHF|SV75|Stonjourner||S|shiny
+SHF|SV76|Koffing||S|shiny
+SHF|SV77|Galarian Weezing||S|shiny
+SHF|SV78|Galarian Zigzagoon||S|shiny
+SHF|SV79|Galarian Linoone||S|shiny
+SHF|SV80|Galarian Obstagoon||S|shiny
+SHF|SV81|Nickit||S|shiny
+SHF|SV82|​Thievul||S|shiny
+SHF|SV83|Impidimp||S|shiny
+SHF|SV84|Morgrem||S|shiny
+SHF|SV85|Grimmsnarl||S|shiny
+SHF|SV86|Galarian Meowth||S|shiny
+SHF|SV87|Galarian Perrserker||S|shiny
+SHF|SV88|Galarian Stunfisk||S|shiny
+SHF|SV89|Corviknight||S|shiny
+SHF|SV90|Cufant||S|shiny
+SHF|SV91|Copperajah||S|shiny
+SHF|SV92|Duraludon||S|shiny
+SHF|SV93|Minccino||S|shiny
+SHF|SV94|Cinccino||S|shiny
+SHF|SV95|Ducklett||S|shiny
+SHF|SV96|Swanna||S|shiny
+SHF|SV97|Bunnelby||S|shiny
+SHF|SV98|Oranguru||S|shiny
+SHF|SV99|Skwovet||S|shiny
+SHF|SV100|Greedent||S|shiny
+SHF|SV101|Rookidee||S|shiny
+SHF|SV102|Corvisquire||S|shiny
+SHF|SV103|Wooloo||S|shiny
+SHF|SV104|Dubwool||S|shiny
+SHF|SV105|Rillaboom V||SSR|shinyssr
+SHF|SV106|Rillaboom VMAX||SSR|shinyssr
+SHF|SV107|Charizard VMAX||SSR|shinyssr
+SHF|SV108|Centiskorch V||SSR|shinyssr
+SHF|SV109|Centiskorch VMAX||SSR|shinyssr
+SHF|SV110|Lapras V||SSR|shinyssr
+SHF|SV111|Lapras VMAX||SSR|shinyssr
+SHF|SV112|Toxtricity V||SSR|shinyssr
+SHF|SV113|Toxtricity VMAX||SSR|shinyssr
+SHF|SV114|Indeedee V||SSR|shinyssr
+SHF|SV115|Falinks V||SSR|shinyssr
+SHF|SV116|Grimmsnarl V||SSR|shinyssr
+SHF|SV117|Grimmsnarl VMAX||SSR|shinyssr
+SHF|SV118|Ditto V||SSR|shinyssr
+SHF|SV119|Ditto VMAX||SSR|shinyssr
+SHF|SV120|Dubwool V||SSR|shinyssr
+SHF|SV121|Eternatus V||SSR|shinyssr
+SHF|SV122|Eternatus VMAX||SSR|shinyssr
+PAF|1|Pineco||C|base
+PAF|2|Forretress ex||RR|base
+PAF|3|Maractus||C|base
+PAF|4|Toedscool||C|base
+PAF|5|Toedscruel ex||RR|base
+PAF|6|Espathra ex||RR|base
+PAF|7|Charmander||C|base
+PAF|8|Charmeleon||U|base
+PAF|9|Magmar||C|base
+PAF|10|Magmortar||R|base
+PAF|11|Numel||C|base
+PAF|12|Camerupt||U|base
+PAF|13|Heat Rotom||R|base
+PAF|14|Charcadet||C|base
+PAF|15|Armarouge||R|base
+PAF|16|Lapras||C|base
+PAF|17|Frigibax||C|base
+PAF|18|Pikachu||C|base
+PAF|19|Raichu||R|base
+PAF|20|Chinchou||C|base
+PAF|21|Lanturn||U|base
+PAF|22|Kilowattrel||U|base
+PAF|23|Exeggcute||C|base
+PAF|24|Exeggutor||R|base
+PAF|25|Natu||C|base
+PAF|26|Xatu||R|base
+PAF|27|Ralts||C|base
+PAF|28|Kirlia||U|base
+PAF|29|Gardevoir ex||RR|base
+PAF|30|Chimecho||C|base
+PAF|31|Mime Jr.||C|base
+PAF|32|Woobat||C|base
+PAF|33|Swoobat||U|base
+PAF|34|Cottonee||C|base
+PAF|35|Whimsicott||U|base
+PAF|36|Dedenne||C|base
+PAF|37|Mimikyu||R|base
+PAF|38|Fidough||C|base
+PAF|39|Dachsbun||U|base
+PAF|40|Ceruledge||R|base
+PAF|41|Flittle||C|base
+PAF|42|Greavard||C|base
+PAF|43|Houndstone||R|base
+PAF|44|Gimmighoul||C|base
+PAF|45|Mankey||C|base
+PAF|46|Primeape||U|base
+PAF|47|Annihilape||R|base
+PAF|48|Phanpy||C|base
+PAF|49|Donphan||U|base
+PAF|50|Barboach||C|base
+PAF|51|Clobbopus||C|base
+PAF|52|Grapploct||U|base
+PAF|53|Great Tusk ex||RR|base
+PAF|54|Charizard ex||RR|base
+PAF|55|Gastly||C|base
+PAF|56|Haunter||C|base
+PAF|57|Gengar||U|base
+PAF|58|Paldean Wooper||C|base
+PAF|59|Paldean Clodsire ex||RR|base
+PAF|60|Scraggy||C|base
+PAF|61|Scrafty||U|base
+PAF|62|Maschiff||C|base
+PAF|63|Mabosstiff||R|base
+PAF|64|Varoom||C|base
+PAF|65|Revavroom||R|base
+PAF|66|Iron Treads ex||RR|base
+PAF|67|Gholdengo||R|base
+PAF|68|Noibat||C|base
+PAF|69|Noivern ex||RR|base
+PAF|70|Cyclizar||R|base
+PAF|71|Lechonk||C|base
+PAF|72|Oinkologne||U|base
+PAF|73|Tandemaus||C|base
+PAF|74|Maushold||U|base
+PAF|75|Squawkabilly ex||RR|base
+PAF|76|Artazon||U|base
+PAF|77|Atticus||U|base
+PAF|78|Clive||U|base
+PAF|79|Electric Generator||U|base
+PAF|80|Iono||U|base
+PAF|81|Moonlit Hill||U|base
+PAF|82|Nemona||C|base
+PAF|83|Nemona's Backpack||U|base
+PAF|84|Nest Ball||U|base
+PAF|85|Paldean Student||C|base
+PAF|86|Paldean Student||C|base
+PAF|87|Professor's Research||R|base
+PAF|88|Professor's Research||R|base
+PAF|89|Rare Candy||C|base
+PAF|90|Technical Machine: Crisis Punch||U|base
+PAF|91|Ultra Ball||U|base
+PAF|92|Oddish||S|shiny
+PAF|93|Gloom||S|shiny
+PAF|94|Vileplume||S|shiny
+PAF|95|Scyther||S|shiny
+PAF|96|Hoppip||S|shiny
+PAF|97|Skiploom||S|shiny
+PAF|98|Jumpluff||S|shiny
+PAF|99|Pineco||S|shiny
+PAF|100|Snover||S|shiny
+PAF|101|Abomasnow||S|shiny
+PAF|102|Smoliv||S|shiny
+PAF|103|Dolliv||S|shiny
+PAF|104|Arboliva||S|shiny
+PAF|105|Toedscool||S|shiny
+PAF|106|Capsakid||S|shiny
+PAF|107|Scovillain||S|shiny
+PAF|108|Rellor||S|shiny
+PAF|109|Charmander||S|shiny
+PAF|110|Charmeleon||S|shiny
+PAF|111|Paldean Tauros||S|shiny
+PAF|112|Entei||S|shiny
+PAF|113|Oricorio||S|shiny
+PAF|114|Charcadet||S|shiny
+PAF|115|Armarouge||S|shiny
+PAF|116|Slowpoke||S|shiny
+PAF|117|Slowbro||S|shiny
+PAF|118|Staryu||S|shiny
+PAF|119|Starmie||S|shiny
+PAF|120|Paldean Tauros||S|shiny
+PAF|121|Wiglett||S|shiny
+PAF|122|Wugtrio||S|shiny
+PAF|123|Finizen||S|shiny
+PAF|124|Palafin||S|shiny
+PAF|125|Veluza||S|shiny
+PAF|126|Dondozo||S|shiny
+PAF|127|Tatsugiri||S|shiny
+PAF|128|Frigibax||S|shiny
+PAF|129|Arctibax||S|shiny
+PAF|130|Baxcalibur||S|shiny
+PAF|131|Pikachu||S|shiny
+PAF|132|Raichu||S|shiny
+PAF|133|Voltorb||S|shiny
+PAF|134|Electrode||S|shiny
+PAF|135|Shinx||S|shiny
+PAF|136|Luxio||S|shiny
+PAF|137|Luxray||S|shiny
+PAF|138|Pachirisu||S|shiny
+PAF|139|Thundurus||S|shiny
+PAF|140|Toxel||S|shiny
+PAF|141|Toxtricity||S|shiny
+PAF|142|Pawmi||S|shiny
+PAF|143|Pawmo||S|shiny
+PAF|144|Pawmot||S|shiny
+PAF|145|Wattrel||S|shiny
+PAF|146|Kilowattrel||S|shiny
+PAF|147|Wigglytuff||S|shiny
+PAF|148|Abra||S|shiny
+PAF|149|Kadabra||S|shiny
+PAF|150|Cleffa||S|shiny
+PAF|151|Natu||S|shiny
+PAF|152|Xatu||S|shiny
+PAF|153|Ralts||S|shiny
+PAF|154|Kirlia||S|shiny
+PAF|155|Drifloon||S|shiny
+PAF|156|Drifblim||S|shiny
+PAF|157|Mime Jr.||S|shiny
+PAF|158|Spiritomb||S|shiny
+PAF|159|Klefki||S|shiny
+PAF|160|Mimikyu||S|shiny
+PAF|161|Dachsbun||S|shiny
+PAF|162|Ceruledge||S|shiny
+PAF|163|Rabsca||S|shiny
+PAF|164|Flittle||S|shiny
+PAF|165|Tinkatink||S|shiny
+PAF|166|Tinkatuff||S|shiny
+PAF|167|Tinkaton||S|shiny
+PAF|168|Houndstone||S|shiny
+PAF|169|Mankey||S|shiny
+PAF|170|Primeape||S|shiny
+PAF|171|Annihilape||S|shiny
+PAF|172|Paldean Tauros||S|shiny
+PAF|173|Riolu||S|shiny
+PAF|174|Lucario||S|shiny
+PAF|175|Hawlucha||S|shiny
+PAF|176|Nacli||S|shiny
+PAF|177|Naclstack||S|shiny
+PAF|178|Garganacl||S|shiny
+PAF|179|Glimmet||S|shiny
+PAF|180|Paldean Wooper||S|shiny
+PAF|181|Murkrow||S|shiny
+PAF|182|Sneasel||S|shiny
+PAF|183|Weavile||S|shiny
+PAF|184|Sableye||S|shiny
+PAF|185|Pawniard||S|shiny
+PAF|186|Bisharp||S|shiny
+PAF|187|Kingambit||S|shiny
+PAF|188|Mabosstiff||S|shiny
+PAF|189|Shroodle||S|shiny
+PAF|190|Grafaiai||S|shiny
+PAF|191|Scizor||S|shiny
+PAF|192|Varoom||S|shiny
+PAF|193|Revavroom||S|shiny
+PAF|194|Noibat||S|shiny
+PAF|195|Cyclizar||S|shiny
+PAF|196|Pidgey||S|shiny
+PAF|197|Pidgeotto||S|shiny
+PAF|198|Jigglypuff||S|shiny
+PAF|199|Doduo||S|shiny
+PAF|200|Dodrio||S|shiny
+PAF|201|Ditto||S|shiny
+PAF|202|Snorlax||S|shiny
+PAF|203|Wingull||S|shiny
+PAF|204|Pelipper||S|shiny
+PAF|205|Skwovet||S|shiny
+PAF|206|Greedent||S|shiny
+PAF|207|Lechonk||S|shiny
+PAF|208|Oinkologne||S|shiny
+PAF|209|Tandemaus||S|shiny
+PAF|210|Maushold||S|shiny
+PAF|211|Flamigo||S|shiny
+PAF|212|Forretress ex||SSR|shinyssr
+PAF|213|Toedscruel ex||SSR|shinyssr
+PAF|214|Espathra ex||SSR|shinyssr
+PAF|215|Alakazam ex||SSR|shinyssr
+PAF|216|Mew ex||SSR|shinyssr
+PAF|217|Gardevoir ex||SSR|shinyssr
+PAF|218|Glimmora ex||SSR|shinyssr
+PAF|219|Paldean Clodsire ex||SSR|shinyssr
+PAF|220|Noivern ex||SSR|shinyssr
+PAF|221|Pidgeot ex||SSR|shinyssr
+PAF|222|Wigglytuff ex||SSR|shinyssr
+PAF|223|Squawkabilly ex||SSR|shinyssr
+PAF|224|Wugtrio||AR|special
+PAF|225|Palafin||AR|special
+PAF|226|Pawmi||AR|special
+PAF|227|Clive||UR|special
+PAF|228|Judge||UR|special
+PAF|229|Nemona||UR|special
+PAF|230|Paldean Student||UR|special
+PAF|231|Paldean Student||UR|special
+PAF|232|Mew ex||SAR|special
+PAF|233|Gardevoir ex||SAR|special
+PAF|234|Charizard ex||SAR|special
+PAF|235|Arven||SAR|special
+PAF|236|Clive||SAR|special
+PAF|237|Iono||SAR|special
+PAF|238|Nemona||SAR|special
+PAF|239|Penny||SAR|special
+PAF|240|Wo-Chien ex||SR|special
+PAF|241|Chi-Yu ex||SR|special
+PAF|242|Chien-Pao ex||SR|special
+PAF|243|Miraidon ex||SR|special
+PAF|244|Ting-Lu ex||SR|special
+PAF|245|Koraidon ex||SR|special
+`.trim();
+
+const SETS = [
+  {id:"SM8b", lang:"日", label:"GX 울트라 샤이니",  sub:"SM8b · 2018.11"},
+  {id:"S4a",  lang:"日", label:"샤이니 스타 V",     sub:"S4a · 2020.11"},
+  {id:"SV4a", lang:"日", label:"샤이니 트레저 ex",  sub:"SV4a · 2023.12"},
+  {id:"HIF",  lang:"EN", label:"Hidden Fates",     sub:"HIF · 2019.08"},
+  {id:"SHF",  lang:"EN", label:"Shining Fates",    sub:"SHF · 2021.02"},
+  {id:"PAF",  lang:"EN", label:"Paldean Fates",    sub:"PAF · 2024.01"},
+];
+const SECS = [
+  {id:"base",     label:"기본 수록",   desc:"이로치가 아닌 통상 카드"},
+  {id:"shiny",    label:"✨ 이로치 (S)",   desc:"색이 다른 포켓몬"},
+  {id:"shinyssr", label:"✨ 이로치 (SSR)", desc:"색이 다른 ex · GX · V"},
+  {id:"special",  label:"특수 레어",   desc:"AR · SR · SAR · UR"},
+];
+
+const CARDS = RAW.split("\n").map(l=>{
+  const [set,num,nm,n2,rar,sec] = l.split("|");
+  return {set,num,nm,n2,rar,sec,key:set+"-"+num, shiny:(sec==="shiny"||sec==="shinyssr")};
+});
+
+const pad3 = s => /^\d+$/.test(s) ? String(s).padStart(3,"0") : s;
+const CDN = "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/";
+function img(c,size){
+  return SETS.find(s=>s.id===c.set).lang==="日"
+    ? `${CDN}tpc/${c.set}/${c.set}_${c.num}_R_JP_${size}.png`
+    : `${CDN}tpci/${c.set}/${c.set}_${pad3(c.num)}_R_EN_${size}.png`;
+}
+
+const KEY = "shiny-checklist-v1";
+let own = load();
+function load(){ try{ const a=JSON.parse(localStorage.getItem(KEY)); if(Array.isArray(a)) return new Set(a); }catch(e){} return new Set(); }
+function save(){ localStorage.setItem(KEY, JSON.stringify([...own])); }
+
+let curSet = SETS[0].id, filterSt = "all", shinyOnly = false, query = "";
+
+const tabsEl = document.getElementById("tabs");
+tabsEl.innerHTML = SETS.map(s=>
+  `<button class="tab" data-set="${s.id}"><span class="lang ${s.lang==="EN"?"en":""}">${s.lang}</span>
+   <span>${s.label}<br><b id="tc-${s.id}"></b></span></button>`).join("");
+
+const main = document.getElementById("main");
+main.innerHTML = SETS.map(st=>`<div class="set-pane" id="p-${st.id}" hidden>` +
+  SECS.map(sc=>`
+    <section id="s-${st.id}-${sc.id}">
+      <div class="sec-head ${sc.id.startsWith('shiny')?'shiny':''}">
+        <h2>${sc.label}</h2><span class="desc">${sc.desc}</span>
+        <span class="cnt" id="cnt-${st.id}-${sc.id}"></span>
+      </div>
+      <div class="grid" id="g-${st.id}-${sc.id}"></div>
+      <div class="empty" id="e-${st.id}-${sc.id}" hidden>조건에 맞는 카드가 없습니다.</div>
+    </section>`).join("") + `</div>`).join("");
+
+for(const st of SETS) for(const sc of SECS){
+  const list = CARDS.filter(c=>c.set===st.id && c.sec===sc.id);
+  const host = document.getElementById(`g-${st.id}-${sc.id}`);
+  if(!list.length){ document.getElementById(`s-${st.id}-${sc.id}`).style.display="none"; continue; }
+  host.innerHTML = list.map(c=>`
+    <div class="card" data-k="${c.key}">
+      <div class="thumb">
+        <img loading="lazy" src="${img(c,'SM')}" alt="${c.nm}">
+        <span class="no">${c.num}</span>
+        <span class="rar r-${c.rar}">${c.rar}</span>
+        <button class="zoom" title="크게 보기">&#128269;</button>
+        <span class="tick">&#10003;</span>
+      </div>
+      <div class="nm">${c.nm}</div>
+      ${c.n2?`<div class="n2">${c.n2}</div>`:``}
+    </div>`).join("");
+}
+
+const byKey = new Map(CARDS.map(c=>[c.key,c]));
+const TOT_ALL = CARDS.length, TOT_SH = CARDS.filter(c=>c.shiny).length;
+document.getElementById("allTot").textContent = TOT_ALL;
+document.getElementById("shTot").textContent = TOT_SH;
+
+function render(){
+  const q = query.trim().toLowerCase();
+  for(const st of SETS){
+    document.getElementById("p-"+st.id).hidden = (st.id!==curSet);
+    let sOwn=0, sTot=0;
+    for(const sc of SECS){
+      const g = document.getElementById(`g-${st.id}-${sc.id}`);
+      if(!g) continue;
+      let shown=0, o=0, t=0;
+      for(const el of g.children){
+        const c = byKey.get(el.dataset.k), has = own.has(c.key);
+        t++; if(has) o++;
+        el.classList.toggle("have", has);
+        let ok = true;
+        if(filterSt==="have" && !has) ok=false;
+        if(filterSt==="none" && has) ok=false;
+        if(shinyOnly && !c.shiny) ok=false;
+        if(q && !(c.nm.toLowerCase().includes(q) || (c.n2||"").toLowerCase().includes(q)
+                  || String(c.num).toLowerCase().includes(q) || c.rar.toLowerCase()===q)) ok=false;
+        el.hidden = !ok; if(ok) shown++;
+      }
+      sOwn+=o; sTot+=t;
+      document.getElementById(`cnt-${st.id}-${sc.id}`).textContent = `${o} / ${t}`;
+      const sec = document.getElementById(`s-${st.id}-${sc.id}`);
+      sec.style.display = (shinyOnly && !sc.id.startsWith("shiny")) ? "none" : "";
+      document.getElementById(`e-${st.id}-${sc.id}`).hidden = shown>0;
+    }
+    document.getElementById("tc-"+st.id).textContent = `${sOwn}/${sTot}`;
+  }
+  let shOwn=0; for(const k of own){ const c=byKey.get(k); if(c&&c.shiny) shOwn++; }
+  const total = [...own].filter(k=>byKey.has(k)).length;
+  document.getElementById("allOwn").textContent = total;
+  document.getElementById("shOwn").textContent = shOwn;
+  document.getElementById("allBar").style.width = (total/TOT_ALL*100)+"%";
+  document.getElementById("shBar").style.width  = (shOwn/TOT_SH*100)+"%";
+}
+
+tabsEl.addEventListener("click", e=>{
+  const b=e.target.closest(".tab"); if(!b) return;
+  curSet=b.dataset.set;
+  [...tabsEl.children].forEach(x=>x.classList.toggle("on",x===b));
+  window.scrollTo({top:0}); render();
+});
+tabsEl.firstElementChild.classList.add("on");
+
+main.addEventListener("click", e=>{
+  if(e.target.closest(".zoom")){
+    const c = byKey.get(e.target.closest(".card").dataset.k);
+    document.getElementById("lbimg").src = img(c,"LG");
+    document.getElementById("lb").showModal(); return;
+  }
+  const card = e.target.closest(".card"); if(!card) return;
+  const k = card.dataset.k;
+  own.has(k)?own.delete(k):own.add(k);
+  save(); render();
+});
+document.getElementById("lb").addEventListener("click", e=>e.currentTarget.close());
+
+document.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{
+  filterSt=b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+}));
+document.getElementById("shOnly").addEventListener("click", e=>{
+  shinyOnly=!shinyOnly; e.currentTarget.classList.toggle("on",shinyOnly); render();
+});
+document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; render(); });
+document.getElementById("rstBtn").addEventListener("click", ()=>{
+  if(confirm("체크한 내용을 모두 지울까요?")){ own=new Set(); save(); render(); }
+});
+document.getElementById("prnBtn").addEventListener("click", ()=>window.print());
+document.getElementById("expBtn").addEventListener("click", ()=>{
+  const blob=new Blob([JSON.stringify([...own].sort(),null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="shiny-checklist.json"; a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById("impBtn").addEventListener("click", ()=>document.getElementById("impFile").click());
+document.getElementById("impFile").addEventListener("change", e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ const d=JSON.parse(rd.result); own=new Set(Array.isArray(d)?d:(d.own||[])); save(); render(); }
+                  catch(err){ alert("파일을 읽을 수 없습니다."); } };
+  rd.readAsText(f); e.target.value="";
+});
+
+/* ---- 링크(URL)로 체크 상태 백업 / 복원 ---- */
+const KEYS = CARDS.map(c=>c.key);
+function b64e(a){ let s=""; for(const b of a) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(t){ t=t.replace(/-/g,"+").replace(/_/g,"/");
+  const s=atob(t), a=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+function pack(set,keys){ const a=new Uint8Array(Math.ceil(keys.length/8));
+  keys.forEach((k,i)=>{ if(set.has(k)) a[i>>3]|=1<<(i&7); }); return b64e(a); }
+function unpack(str,keys){ const a=b64d(str), s=new Set();
+  keys.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
+
+document.getElementById("lnkBtn").addEventListener("click", async ()=>{
+  const url = location.href.split("#")[0] + "#s=1." + pack(own,KEYS);
+  try{
+    await navigator.clipboard.writeText(url);
+    alert(`체크 상태(${[...own].filter(k=>byKey.has(k)).length}장)가 담긴 링크를 복사했습니다.\n다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+  }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
+});
+
+(function applyHash(){
+  const m = location.hash.match(/^#s=1\.(.+)$/);
+  if(!m) return;
+  try{
+    const o = unpack(m[1],KEYS);
+    const cur = [...own].filter(k=>byKey.has(k)).length;
+    const same = o.size===cur && [...o].every(x=>own.has(x));
+    if(!same){
+      if(confirm(`링크에 담긴 체크 상태(${o.size}장)를 불러올까요?\n이 브라우저에 저장된 현재 상태(${cur}장)는 덮어써집니다.`)){
+        own = o; save();
+      }
+    }
+  }catch(e){}
+  history.replaceState(null,"",location.href.split("#")[0]);
+})();
+
+render();
+</script>
+</body>
+</html>

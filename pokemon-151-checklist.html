@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>포켓몬 카드 151 (sv2a) 보유 체크리스트</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --line:#e2e6ef; --text:#1b1f2a; --muted:#6b7385;
+    --accent:#e8452c; --accent2:#2f6fd0; --ok:#1f9d55; --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
+    --have:#e6f6ec; --haveline:#1f9d55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12151c; --panel:#1a1f29; --line:#2b3240; --text:#e8ecf3; --muted:#98a1b3;
+      --accent:#ff6a4d; --accent2:#6ba4ef; --ok:#43c07a; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      --have:#163325; --haveline:#43c07a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif;}
+  header{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .wrap{max-width:1400px;margin:0 auto;padding:0 16px}
+  .title-row{display:flex;align-items:center;gap:14px;padding:14px 0 10px;flex-wrap:wrap}
+  h1{font-size:20px;margin:0;letter-spacing:-.3px}
+  h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:3px}
+  .total{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .bignum{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+  .bignum span{font-size:15px;font-weight:600;color:var(--muted)}
+  .bar{width:200px;height:9px;border-radius:99px;background:var(--line);overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .25s}
+
+  .chips{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:10px}
+  .chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:13px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px;
+    font-family:inherit;transition:.15s}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip b{font-weight:700;font-size:11px;opacity:.7;font-variant-numeric:tabular-nums}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:12px}
+  input[type=search]{flex:1;min-width:180px;max-width:320px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;
+    font-size:13px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn:hover{border-color:var(--accent2)}
+  .btn.danger:hover{border-color:var(--accent);color:var(--accent)}
+  label.sw{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+
+  main{max-width:1400px;margin:0 auto;padding:18px 16px 80px}
+  section{margin-bottom:34px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  .sec-head h2{font-size:16px;margin:0}
+  .sec-head .cnt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto}
+  .sec-head .desc{font-size:12px;color:var(--muted)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;
+    cursor:pointer;transition:.15s;box-shadow:var(--shadow);user-select:none}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+  .card.have{background:var(--have);border-color:var(--haveline)}
+  .thumb{position:relative;aspect-ratio:245/342;border-radius:7px;overflow:hidden;background:var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:.2s}
+  .card.have .thumb img{filter:grayscale(.85) opacity(.55)}
+  .no{position:absolute;top:5px;left:5px;background:rgba(15,18,28,.82);color:#fff;font-size:10px;font-weight:700;
+    padding:2px 6px;border-radius:5px;font-variant-numeric:tabular-nums;letter-spacing:.3px}
+  .rar{position:absolute;top:5px;right:5px;font-size:9.5px;font-weight:800;padding:2px 5px;border-radius:5px;color:#fff;letter-spacing:.4px}
+  .r-C{background:#7b8496}.r-U{background:#3d8f4f}.r-R{background:#2f6fd0}.r-RR{background:#9b3fbf}
+  .r-AR{background:#0f9fa8}.r-SR{background:#d4820c}.r-SAR{background:#d33b7d}.r-UR{background:#b0842a}
+  .tick{position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:var(--panel);
+    border:2px solid var(--line);display:grid;place-items:center;font-size:13px;color:transparent;font-weight:900}
+  .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff}
+  .nm{margin-top:7px;font-size:12.5px;font-weight:700;line-height:1.25;word-break:keep-all}
+  .en{font-size:10.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .zoom{position:absolute;left:6px;bottom:6px;width:24px;height:24px;border-radius:7px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);font-size:12px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
+  .card:hover .zoom{opacity:1}
+  .mir{margin-top:6px;display:flex;gap:5px}
+  .mir button{flex:1;font-size:10.5px;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--muted);
+    border-radius:6px;padding:3px 0;cursor:pointer;font-family:inherit}
+  .mir button.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  body:not(.mirror-mode) .mir{display:none}
+
+  .empty{color:var(--muted);font-size:14px;padding:30px 0;text-align:center}
+  dialog{border:none;border-radius:14px;padding:0;background:transparent;max-width:92vw}
+  dialog::backdrop{background:rgba(8,10,16,.75)}
+  dialog img{max-width:min(430px,86vw);max-height:82vh;border-radius:12px;display:block}
+  .note{max-width:1400px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:12px;line-height:1.7}
+  .note b{color:var(--text)}
+  @media print{
+    header{position:static;box-shadow:none}
+    .tools,.chips,.zoom,.tick{display:none}
+    .grid{grid-template-columns:repeat(8,1fr);gap:5px}
+    .card{break-inside:avoid;box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title-row">
+      <h1>포켓몬 카드 151 <small>강화확장팩 sv2a · 전 210종 보유 체크리스트</small></h1>
+      <div class="total">
+        <div class="bar"><i id="bar"></i></div>
+        <div class="bignum"><span id="own">0</span> <span>/ 210</span></div>
+      </div>
+    </div>
+    <div class="chips" id="secChips"></div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="이름 · 번호 검색 (예: 리자몽, 006, Charizard)">
+      <button class="chip" data-st="all" id="stAll">전체</button>
+      <button class="chip" data-st="have">보유</button>
+      <button class="chip" data-st="none">미보유</button>
+      <label class="sw"><input type="checkbox" id="mirrorTgl"> 미러 카드(001–165) 함께 체크</label>
+      <span style="flex:1"></span>
+      <button class="btn" id="lnkBtn">🔗 링크로 백업</button>
+      <button class="btn" id="expBtn">내보내기</button>
+      <button class="btn" id="impBtn">가져오기</button>
+      <button class="btn" id="prnBtn">인쇄</button>
+      <button class="btn danger" id="rstBtn">전체 초기화</button>
+      <input type="file" id="impFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="note">
+  <p><b>사용법</b> — 카드를 클릭하면 보유(회색 처리 + 초록 체크) ↔ 미보유(컬러)로 전환됩니다. 아직 없는 카드가 컬러로 눈에 띕니다. 체크 상태는 이 브라우저에 자동 저장되므로 창을 닫아도 유지됩니다. 다른 기기로 옮기려면 <b>내보내기</b>로 JSON을 저장한 뒤 <b>가져오기</b> 하세요.</p>
+  <p><b>구성</b> — 001–165 기본 수록(포켓몬 151종 + 트레이너 14종), 166–183 AR(18종), 184–199 SR(16종), 200–207 SAR(8종), 208–210 UR(3종) = 총 210종. 한국판은 일본판 sv2a와 번호·구성이 동일합니다. 이와 별개로 001–165 전 카드에는 <b>미러 카드(마스터볼·몬스터볼 무늬)</b> 버전이 존재하며, 상단 체크박스를 켜면 카드마다 미러 보유 여부도 함께 관리할 수 있습니다.</p>
+  <p><b>이미지 출처</b> — TCGdex(일본판 sv2a) CDN. 한국판 카드 이미지를 제공하는 공개 API가 없어 일본판 이미지를 사용했으며, 일러스트·번호·구성은 한국판과 동일합니다. 이미지 표시에는 인터넷 연결이 필요합니다.</p>
+</div>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+
+<script>
+/* n | 한글명 | 영문명 | 레어도 */
+const RAW = `
+1|이상해씨|Bulbasaur|C
+2|이상해풀|Ivysaur|U
+3|이상해꽃ex|Venusaur ex|RR
+4|파이리|Charmander|C
+5|리자드|Charmeleon|U
+6|리자몽ex|Charizard ex|RR
+7|꼬부기|Squirtle|C
+8|어니부기|Wartortle|U
+9|거북왕ex|Blastoise ex|RR
+10|캐터피|Caterpie|C
+11|단데기|Metapod|C
+12|버터플|Butterfree|U
+13|뿔충이|Weedle|C
+14|딱충이|Kakuna|C
+15|독침붕|Beedrill|R
+16|구구|Pidgey|C
+17|피죤|Pidgeotto|C
+18|피죤투|Pidgeot|U
+19|꼬렛|Rattata|C
+20|레트라|Raticate|U
+21|깨비참|Spearow|C
+22|깨비드릴조|Fearow|U
+23|아보|Ekans|C
+24|아보크ex|Arbok ex|RR
+25|피카츄|Pikachu|C
+26|라이츄|Raichu|R
+27|모래두지|Sandshrew|C
+28|고지|Sandslash|U
+29|니드런♀|Nidoran ♀|C
+30|니드리나|Nidorina|U
+31|니드퀸|Nidoqueen|U
+32|니드런♂|Nidoran ♂|C
+33|니드리노|Nidorino|U
+34|니드킹|Nidoking|R
+35|삐삐|Clefairy|C
+36|픽시|Clefable|U
+37|식스테일|Vulpix|C
+38|나인테일ex|Ninetales ex|RR
+39|푸린|Jigglypuff|C
+40|푸크린ex|Wigglytuff ex|RR
+41|주뱃|Zubat|C
+42|골뱃|Golbat|U
+43|뚜벅쵸|Oddish|C
+44|냄새꼬|Gloom|U
+45|라플레시아|Vileplume|R
+46|파라스|Paras|C
+47|파라섹트|Parasect|U
+48|콘팡|Venonat|C
+49|도나리|Venomoth|U
+50|디그다|Diglett|C
+51|닥트리오|Dugtrio|U
+52|나옹|Meowth|C
+53|페르시온|Persian|U
+54|고라파덕|Psyduck|C
+55|골덕|Golduck|U
+56|망키|Mankey|C
+57|성원숭|Primeape|U
+58|가디|Growlithe|C
+59|윈디|Arcanine|U
+60|발챙이|Poliwag|C
+61|슈륙챙이|Poliwhirl|C
+62|강챙이|Poliwrath|U
+63|캐이시|Abra|C
+64|윤겔라|Kadabra|U
+65|후딘ex|Alakazam ex|RR
+66|알통몬|Machop|C
+67|근육몬|Machoke|U
+68|괴력몬|Machamp|R
+69|모다피|Bellsprout|C
+70|우츠동|Weepinbell|C
+71|우츠보트|Victreebel|U
+72|왕눈해|Tentacool|C
+73|독파리|Tentacruel|U
+74|꼬마돌|Geodude|C
+75|데구리|Graveler|U
+76|딱구리ex|Golem ex|RR
+77|포니타|Ponyta|C
+78|날쌩마|Rapidash|U
+79|야돈|Slowpoke|C
+80|야도란|Slowbro|U
+81|코일|Magnemite|C
+82|레어코일|Magneton|U
+83|파오리|Farfetch'd|C
+84|두두|Doduo|C
+85|두트리오|Dodrio|R
+86|쥬쥬|Seel|C
+87|쥬레곤|Dewgong|U
+88|질퍽이|Grimer|C
+89|질뻐기|Muk|U
+90|셀러|Shellder|C
+91|파르셀|Cloyster|U
+92|고오스|Gastly|C
+93|고우스트|Haunter|U
+94|팬텀|Gengar|R
+95|롱스톤|Onix|U
+96|슬리프|Drowzee|C
+97|슬리퍼|Hypno|U
+98|크랩|Krabby|C
+99|킹크랩|Kingler|U
+100|찌리리공|Voltorb|C
+101|붐볼|Electrode|R
+102|아라리|Exeggcute|C
+103|나시|Exeggutor|U
+104|탕구리|Cubone|C
+105|텅구리|Marowak|R
+106|시라소몬|Hitmonlee|U
+107|홍수몬|Hitmonchan|U
+108|내루미|Lickitung|C
+109|또가스|Koffing|C
+110|또도가스|Weezing|R
+111|뿔카노|Rhyhorn|C
+112|코뿔킹|Rhydon|U
+113|럭키|Chansey|R
+114|덩쿠리|Tangela|C
+115|캥카ex|Kangaskhan ex|RR
+116|쏘드라|Horsea|C
+117|시드라|Seadra|U
+118|콘치|Goldeen|C
+119|왕콘치|Seaking|U
+120|별가사리|Staryu|C
+121|아쿠스타|Starmie|R
+122|마임맨|Mr. Mime|R
+123|스라크|Scyther|U
+124|루주라ex|Jynx ex|RR
+125|에레브|Electabuzz|C
+126|마그마|Magmar|C
+127|쁘사이저|Pinsir|U
+128|켄타로스|Tauros|U
+129|잉어킹|Magikarp|C
+130|갸라도스|Gyarados|R
+131|라프라스|Lapras|U
+132|메타몽|Ditto|R
+133|이브이|Eevee|C
+134|샤미드|Vaporeon|R
+135|쥬피썬더|Jolteon|R
+136|부스터|Flareon|R
+137|폴리곤|Porygon|C
+138|암나이트|Omanyte|U
+139|암스타|Omastar|R
+140|투구|Kabuto|U
+141|투구푸스|Kabutops|R
+142|프테라|Aerodactyl|R
+143|잠만보|Snorlax|U
+144|프리져|Articuno|R
+145|썬더ex|Zapdos ex|RR
+146|파이어|Moltres|R
+147|미뇽|Dratini|C
+148|신뇽|Dragonair|U
+149|망나뇽|Dragonite|R
+150|뮤츠|Mewtwo|R
+151|뮤ex|Mew ex|RR
+152|에너지실|Energy Sticker|U
+153|스내치암|Grabber|U
+154|오래된 조개 화석|Antique Helix Fossil|C
+155|오래된 등껍질 화석|Antique Dome Fossil|C
+156|오래된 비밀의 호박|Antique Old Amber|C
+157|안전고글|Protective Goggles|U
+158|큰 풍선|Big Air Balloon|U
+159|딱딱밴드|Rigid Band|U
+160|먹다남은음식|Leftovers|U
+161|민화의 초대|Erika's Invitation|U
+162|비주기의 카리스마|Giovanni's Charisma|U
+163|남나리의 도움|Daisy's Help|U
+164|이수재의 전송|Bill's Transfer|U
+165|사이클링로드|Cycling Road|U
+166|이상해씨|Bulbasaur|AR
+167|이상해풀|Ivysaur|AR
+168|파이리|Charmander|AR
+169|리자드|Charmeleon|AR
+170|꼬부기|Squirtle|AR
+171|어니부기|Wartortle|AR
+172|캐터피|Caterpie|AR
+173|피카츄|Pikachu|AR
+174|니드킹|Nidoking|AR
+175|고라파덕|Psyduck|AR
+176|슈륙챙이|Poliwhirl|AR
+177|근육몬|Machoke|AR
+178|덩쿠리|Tangela|AR
+179|마임맨|Mr. Mime|AR
+180|암나이트|Omanyte|AR
+181|잠만보|Snorlax|AR
+182|신뇽|Dragonair|AR
+183|뮤츠|Mewtwo|AR
+184|이상해꽃ex|Venusaur ex|SR
+185|리자몽ex|Charizard ex|SR
+186|거북왕ex|Blastoise ex|SR
+187|아보크ex|Arbok ex|SR
+188|나인테일ex|Ninetales ex|SR
+189|푸크린ex|Wigglytuff ex|SR
+190|후딘ex|Alakazam ex|SR
+191|딱구리ex|Golem ex|SR
+192|캥카ex|Kangaskhan ex|SR
+193|루주라ex|Jynx ex|SR
+194|썬더ex|Zapdos ex|SR
+195|뮤ex|Mew ex|SR
+196|민화의 초대|Erika's Invitation|SR
+197|비주기의 카리스마|Giovanni's Charisma|SR
+198|남나리의 도움|Daisy's Help|SR
+199|이수재의 전송|Bill's Transfer|SR
+200|이상해꽃ex|Venusaur ex|SAR
+201|리자몽ex|Charizard ex|SAR
+202|거북왕ex|Blastoise ex|SAR
+203|후딘ex|Alakazam ex|SAR
+204|썬더ex|Zapdos ex|SAR
+205|뮤ex|Mew ex|SAR
+206|민화의 초대|Erika's Invitation|SAR
+207|비주기의 카리스마|Giovanni's Charisma|SAR
+208|뮤ex|Mew ex|UR
+209|포켓몬 교체|Switch|UR
+210|기본 초에너지|Basic Psychic Energy|UR
+`.trim();
+
+const CARDS = RAW.split("\n").map(l=>{
+  const [n,ko,en,r]=l.split("|");
+  return {n:+n, ko, en, r};
+});
+
+const SECTIONS = [
+  {id:"base", label:"기본 수록", desc:"001–165 · 포켓몬 151종 + 트레이너 14종", from:1,  to:165},
+  {id:"ar",   label:"AR",       desc:"166–183 · 아트 레어",                  from:166,to:183},
+  {id:"sr",   label:"SR",       desc:"184–199 · 슈퍼 레어",                  from:184,to:199},
+  {id:"sar",  label:"SAR",      desc:"200–207 · 스페셜 아트 레어",            from:200,to:207},
+  {id:"ur",   label:"UR",       desc:"208–210 · 울트라 레어",                from:208,to:210},
+];
+
+const KEY = "pkm151-checklist-v1";
+let state = load();
+function load(){
+  try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.own) return {own:new Set(s.own), mir:new Set(s.mir||[])}; }catch(e){}
+  return {own:new Set(), mir:new Set()};
+}
+function save(){
+  localStorage.setItem(KEY, JSON.stringify({own:[...state.own], mir:[...state.mir]}));
+}
+
+const pad = n => String(n).padStart(3,"0");
+const img = (n,size) => `https://assets.tcgdex.net/ja/SV/SV2a/${pad(n)}/${size}.webp`;
+
+let filterSec = "all", filterSt = "all", query = "";
+
+const main = document.getElementById("main");
+const secChips = document.getElementById("secChips");
+
+/* ---- build sections once ---- */
+secChips.innerHTML = `<button class="chip on" data-sec="all">전체 <b id="c-all"></b></button>` +
+  SECTIONS.map(s=>`<button class="chip" data-sec="${s.id}">${s.label} <b id="c-${s.id}"></b></button>`).join("");
+
+main.innerHTML = SECTIONS.map(s=>`
+  <section id="s-${s.id}">
+    <div class="sec-head">
+      <h2>${s.label}</h2><span class="desc">${s.desc}</span>
+      <span class="cnt" id="cnt-${s.id}"></span>
+    </div>
+    <div class="grid" id="g-${s.id}"></div>
+    <div class="empty" id="e-${s.id}" hidden>조건에 맞는 카드가 없습니다.</div>
+  </section>`).join("");
+
+for(const s of SECTIONS){
+  document.getElementById("g-"+s.id).innerHTML =
+    CARDS.filter(c=>c.n>=s.from && c.n<=s.to).map(c=>`
+      <div class="card" data-n="${c.n}">
+        <div class="thumb">
+          <img loading="lazy" src="${img(c.n,'low')}" alt="${c.ko} ${pad(c.n)}">
+          <span class="no">${pad(c.n)}</span>
+          <span class="rar r-${c.r}">${c.r}</span>
+          <button class="zoom" title="크게 보기">&#128269;</button>
+          <span class="tick">&#10003;</span>
+        </div>
+        <div class="nm">${c.ko}</div>
+        <div class="en">${c.en}</div>
+        ${c.n<=165?`<div class="mir"><button data-mir="${c.n}">미러</button></div>`:``}
+      </div>`).join("");
+}
+
+/* ---- render state ---- */
+function render(){
+  const q = query.trim().toLowerCase();
+  for(const s of SECTIONS){
+    const sec = document.getElementById("s-"+s.id);
+    let shown = 0, own = 0, tot = 0;
+    for(const el of document.getElementById("g-"+s.id).children){
+      const n = +el.dataset.n, c = CARDS[n-1], has = state.own.has(n);
+      tot++; if(has) own++;
+      el.classList.toggle("have", has);
+      const mb = el.querySelector("[data-mir]");
+      if(mb) mb.classList.toggle("on", state.mir.has(n));
+
+      let ok = true;
+      if(filterSt==="have" && !has) ok = false;
+      if(filterSt==="none" && has) ok = false;
+      if(q && !(c.ko.toLowerCase().includes(q) || c.en.toLowerCase().includes(q)
+                || String(n).includes(q) || pad(n).includes(q) || c.r.toLowerCase()===q)) ok = false;
+      el.hidden = !ok;
+      if(ok) shown++;
+    }
+    sec.hidden = (filterSec!=="all" && filterSec!==s.id);
+    document.getElementById("e-"+s.id).hidden = shown>0;
+    document.getElementById("cnt-"+s.id).textContent = `${own} / ${tot}`;
+    document.getElementById("c-"+s.id).textContent = `${own}/${tot}`;
+  }
+  const total = state.own.size;
+  document.getElementById("own").textContent = total;
+  document.getElementById("c-all").textContent = `${total}/210`;
+  document.getElementById("bar").style.width = (total/210*100)+"%";
+}
+
+/* ---- events ---- */
+main.addEventListener("click", e=>{
+  const mir = e.target.closest("[data-mir]");
+  if(mir){ e.stopPropagation();
+    const n=+mir.dataset.mir;
+    state.mir.has(n)?state.mir.delete(n):state.mir.add(n);
+    save(); render(); return;
+  }
+  if(e.target.closest(".zoom")){
+    const n = +e.target.closest(".card").dataset.n;
+    document.getElementById("lbimg").src = img(n,"high");
+    document.getElementById("lb").showModal(); return;
+  }
+  const card = e.target.closest(".card");
+  if(!card) return;
+  const n = +card.dataset.n;
+  state.own.has(n)?state.own.delete(n):state.own.add(n);
+  save(); render();
+});
+document.getElementById("lb").addEventListener("click", e=>e.currentTarget.close());
+
+secChips.addEventListener("click", e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  filterSec=b.dataset.sec;
+  [...secChips.children].forEach(c=>c.classList.toggle("on",c===b));
+  render();
+});
+document.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{
+  filterSt=b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+}));
+document.getElementById("stAll").classList.add("on");
+document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; render(); });
+document.getElementById("mirrorTgl").addEventListener("change", e=>{
+  document.body.classList.toggle("mirror-mode", e.target.checked);
+});
+document.getElementById("rstBtn").addEventListener("click", ()=>{
+  if(confirm("체크한 내용을 모두 지울까요?")){ state={own:new Set(),mir:new Set()}; save(); render(); }
+});
+document.getElementById("prnBtn").addEventListener("click", ()=>window.print());
+document.getElementById("expBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify({own:[...state.own].sort((a,b)=>a-b), mir:[...state.mir].sort((a,b)=>a-b)},null,1)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "pokemon-151-checklist.json"; a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById("impBtn").addEventListener("click", ()=>document.getElementById("impFile").click());
+document.getElementById("impFile").addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try{
+      const d = JSON.parse(rd.result);
+      state = {own:new Set(d.own||[]), mir:new Set(d.mir||[])};
+      save(); render();
+    }catch(err){ alert("파일을 읽을 수 없습니다."); }
+  };
+  rd.readAsText(f);
+  e.target.value = "";
+});
+
+/* ---- 링크(URL)로 체크 상태 백업 / 복원 ---- */
+const OWN_KEYS = CARDS.map(c=>c.n);
+const MIR_KEYS = CARDS.filter(c=>c.n<=165).map(c=>c.n);
+function b64e(a){ let s=""; for(const b of a) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(t){ t=t.replace(/-/g,"+").replace(/_/g,"/");
+  const s=atob(t), a=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+function pack(set,keys){ const a=new Uint8Array(Math.ceil(keys.length/8));
+  keys.forEach((k,i)=>{ if(set.has(k)) a[i>>3]|=1<<(i&7); }); return b64e(a); }
+function unpack(str,keys){ const a=b64d(str), s=new Set();
+  keys.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
+
+document.getElementById("lnkBtn").addEventListener("click", async ()=>{
+  const url = location.href.split("#")[0] + "#s=1." + pack(state.own,OWN_KEYS) + "." + pack(state.mir,MIR_KEYS);
+  try{
+    await navigator.clipboard.writeText(url);
+    alert(`체크 상태(${state.own.size}장)가 담긴 링크를 복사했습니다.\n다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+  }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
+});
+
+(function applyHash(){
+  const m = location.hash.match(/^#s=1\.([^.]*)\.([^.]*)$/);
+  if(!m) return;
+  try{
+    const o = unpack(m[1],OWN_KEYS), r = unpack(m[2],MIR_KEYS);
+    const same = o.size===state.own.size && [...o].every(x=>state.own.has(x));
+    if(!same){
+      if(confirm(`링크에 담긴 체크 상태(${o.size}장)를 불러올까요?\n이 브라우저에 저장된 현재 상태(${state.own.size}장)는 덮어써집니다.`)){
+        state = {own:o, mir:r}; save();
+      }
+    }
+  }catch(e){}
+  history.replaceState(null,"",location.href.split("#")[0]);
+})();
+
+render();
+</script>
+</body>
+</html>
