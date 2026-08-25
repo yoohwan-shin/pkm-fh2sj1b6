@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>세대별 포켓몬 도감 체크리스트 (1~9세대 · 1025마리)</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#fff; --line:#e2e6ef; --text:#1b1f2a; --muted:#6b7385;
+    --accent:#e8452c; --accent2:#2f6fd0; --gold:#c8951b;
+    --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
+    --have:#e6f6ec; --haveline:#1f9d55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12151c; --panel:#1a1f29; --line:#2b3240; --text:#e8ecf3; --muted:#98a1b3;
+      --accent:#ff6a4d; --accent2:#6ba4ef; --gold:#e0b445;
+      --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      --have:#163325; --haveline:#43c07a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif}
+  header{position:sticky;top:0;z-index:30;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .wrap{max-width:1500px;margin:0 auto;padding:0 16px}
+  .title-row{display:flex;align-items:center;gap:16px;padding:13px 0 9px;flex-wrap:wrap}
+  h1{font-size:19px;margin:0;letter-spacing:-.3px}
+  h1 small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:3px}
+  .stats{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  .stat{min-width:150px}
+  .stat .lab{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .stat .val{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25}
+  .stat .val i{font-style:normal;font-size:13px;font-weight:600;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;width:0;transition:width .25s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar.sh i{background:linear-gradient(90deg,var(--gold),var(--accent))}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:9px}
+  .tab{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;
+    padding:7px 12px;font-size:13px;cursor:pointer;font-weight:700;font-family:inherit;transition:.15s;
+    display:flex;align-items:center;gap:7px;line-height:1.3}
+  .tab:hover{border-color:var(--accent2)}
+  .tab.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .tab .gnum{font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:var(--accent2);color:#fff;letter-spacing:.3px}
+  .tab.on .gnum{background:var(--bg);color:var(--text)}
+  .tab .gnum.all{background:var(--gold)}
+  .tab b{font-weight:700;font-size:11px;opacity:.72;font-variant-numeric:tabular-nums}
+
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:11px}
+  input[type=search]{flex:1;min-width:180px;max-width:300px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+  select{padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--text);
+    font-size:13px;font-family:inherit;font-weight:600;cursor:pointer}
+  .chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;transition:.15s}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip.gold.on{background:var(--gold);border-color:var(--gold);color:#231a05}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;
+    font-size:13px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn:hover{border-color:var(--accent2)}
+  .btn.danger:hover{border-color:var(--accent);color:var(--accent)}
+
+  main{max-width:1500px;margin:0 auto;padding:18px 16px 90px}
+  section{margin-bottom:32px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  .sec-head h2{font-size:15px;margin:0}
+  .sec-head .desc{font-size:11.5px;color:var(--muted)}
+  .sec-head .cnt{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto;font-weight:600}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:11px}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:7px;
+    cursor:pointer;transition:transform .12s,border-color .12s;box-shadow:var(--shadow);user-select:none}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+  .card.have{background:var(--have);border-color:var(--haveline)}
+  .thumb{position:relative;aspect-ratio:1/1;border-radius:6px;overflow:hidden;background:var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:contain;display:block}
+  .card.have .thumb img{filter:grayscale(.9) opacity(.45)}
+  .no{position:absolute;top:4px;left:4px;background:rgba(15,18,28,.82);color:#fff;font-size:9.5px;font-weight:700;
+    padding:2px 5px;border-radius:4px;font-variant-numeric:tabular-nums}
+  .types{position:absolute;top:4px;right:4px;display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+  .ty{font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;color:#fff;letter-spacing:.2px;
+    text-shadow:0 1px 1px rgba(0,0,0,.28)}
+  .t-normal{background:#9098a1}.t-fire{background:#e8622c}.t-water{background:#3d8fdd}.t-grass{background:#3fa34a}
+  .t-electric{background:#d9a800}.t-ice{background:#4fbcc4}.t-fighting{background:#c0392b}.t-poison{background:#9247b8}
+  .t-ground{background:#b07a2e}.t-flying{background:#7b8ee0}.t-psychic{background:#e0507e}.t-bug{background:#8aa71f}
+  .t-rock{background:#a89258}.t-ghost{background:#6a5ba8}.t-dragon{background:#5b52d4}.t-dark{background:#5a4a44}
+  .t-steel{background:#6d8894}.t-fairy{background:#dd76b0}
+  .tick{position:absolute;right:5px;bottom:5px;width:22px;height:22px;border-radius:50%;background:var(--panel);
+    border:2px solid var(--line);display:grid;place-items:center;font-size:12px;color:transparent;font-weight:900}
+  .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff}
+  .zoom{position:absolute;left:5px;bottom:5px;width:22px;height:22px;border-radius:6px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);font-size:11px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
+  .card:hover .zoom{opacity:1}
+  .nm{margin-top:6px;font-size:12px;font-weight:700;line-height:1.25;word-break:break-word}
+  .n2{font-size:10.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .empty{color:var(--muted);font-size:14px;padding:26px 0;text-align:center}
+  dialog{border:none;border-radius:14px;padding:0;background:transparent;max-width:92vw}
+  dialog::backdrop{background:rgba(8,10,16,.78)}
+  dialog img{max-width:min(430px,86vw);max-height:82vh;border-radius:12px;display:block;background:#fff}
+  .note{max-width:1500px;margin:0 auto;padding:0 16px 44px;color:var(--muted);font-size:12px;line-height:1.75}
+  .note b{color:var(--text)}
+  table.sum{border-collapse:collapse;margin:8px 0 14px;font-size:12px}
+  table.sum th,table.sum td{border:1px solid var(--line);padding:4px 10px;text-align:left}
+  table.sum th{background:var(--panel);color:var(--text)}
+  @media print{ header{position:static;box-shadow:none} .tools,.tabs,.zoom,.tick{display:none}
+    .grid{grid-template-columns:repeat(8,1fr);gap:4px} .card{break-inside:avoid;box-shadow:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title-row">
+      <h1>세대별 포켓몬 도감 체크리스트 <small>전국도감 1~9세대 · 1,025마리 · 일본어명 + 영문명</small></h1>
+      <div class="stats">
+        <div class="stat">
+          <div class="lab">현재 세대</div>
+          <div class="val"><span id="genOwn">0</span> <i>/ <span id="genTot">0</span></i></div>
+          <div class="bar sh"><i id="genBar"></i></div>
+        </div>
+        <div class="stat">
+          <div class="lab">전국도감 전체</div>
+          <div class="val"><span id="allOwn">0</span> <i>/ <span id="allTot">0</span></i></div>
+          <div class="bar"><i id="allBar"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="이름 · 번호 검색 (예: リザードン, Charizard, 006)">
+      <select id="tySel"></select>
+      <button class="chip on" data-st="all">전체</button>
+      <button class="chip" data-st="have">보유</button>
+      <button class="chip" data-st="none">미보유</button>
+      <button class="chip gold" id="shBtn">✨ 이로치 모습</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="lnkBtn">🔗 링크로 백업</button>
+      <button class="btn" id="expBtn">내보내기</button>
+      <button class="btn" id="impBtn">가져오기</button>
+      <button class="btn" id="prnBtn">인쇄</button>
+      <button class="btn danger" id="rstBtn">초기화</button>
+      <input type="file" id="impFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="note">
+  <p><b>사용법</b> — 포켓몬을 클릭하면 보유(회색 처리 + 초록 체크) ↔ 미보유(컬러)로 전환됩니다. 아직 없는 포켓몬이 컬러로 눈에 띕니다. 체크 상태는 브라우저에 자동 저장되며, <b>내보내기</b>/<b>가져오기</b> 또는 <b>🔗 링크로 백업</b>으로 다른 기기에 옮길 수 있습니다. 왼쪽 아래 🔍 버튼은 큰 이미지를 띄웁니다.</p>
+  <p><b>✨ 이로치 모습</b> 버튼을 켜면 전체 일러스트가 색이 다른 포켓몬(이로치) 버전으로 바뀝니다. 체크 상태는 노말/이로치 공용입니다.</p>
+  <p><b>세대 구분</b> — 전국도감 번호 기준이며, 리전폼(알로라·가라르·히스이·팔데아)과 메가진화·별도 폼은 별개 번호가 없으므로 원종 한 칸에 포함됩니다.</p>
+  <table class="sum">
+    <tr><th>세대</th><th>지방</th><th>기준 게임</th><th>발매</th><th>도감 번호</th><th>수</th></tr>
+    <tr><td>1세대</td><td>관동 (Kanto)</td><td>적·녹 / Red·Blue</td><td>1996</td><td>001–151</td><td>151</td></tr>
+    <tr><td>2세대</td><td>성도 (Johto)</td><td>금·은 / Gold·Silver</td><td>1999</td><td>152–251</td><td>100</td></tr>
+    <tr><td>3세대</td><td>호연 (Hoenn)</td><td>루비·사파이어</td><td>2002</td><td>252–386</td><td>135</td></tr>
+    <tr><td>4세대</td><td>신오 (Sinnoh)</td><td>디아루가·펄기아 (다이아·펄)</td><td>2006</td><td>387–493</td><td>107</td></tr>
+    <tr><td>5세대</td><td>하나 (Unova)</td><td>블랙·화이트</td><td>2010</td><td>494–649</td><td>156</td></tr>
+    <tr><td>6세대</td><td>칼로스 (Kalos)</td><td>X·Y</td><td>2013</td><td>650–721</td><td>72</td></tr>
+    <tr><td>7세대</td><td>알로라 (Alola)</td><td>썬·문</td><td>2016</td><td>722–809</td><td>88</td></tr>
+    <tr><td>8세대</td><td>가라르 (Galar)</td><td>소드·실드</td><td>2019</td><td>810–905</td><td>96</td></tr>
+    <tr><td>9세대</td><td>팔데아 (Paldea)</td><td>스칼렛·바이올렛</td><td>2022</td><td>906–1025</td><td>120</td></tr>
+    <tr><td>10세대</td><td>미공개</td><td>Pokémon Winds · Waves (Switch 2)</td><td>2027 예정</td><td>—</td><td>—</td></tr>
+  </table>
+  <p><b>10세대</b>는 2026년 2월 포켓몬 프레젠츠에서 <b>Pokémon Winds / Pokémon Waves</b>로 발표되었고 2027년 발매 예정입니다. 도감이 공개되면 탭을 추가할 예정입니다.</p>
+  <p><b>데이터·이미지 출처</b> — 종족명(일본어·영문)·세대·타입은 PokéAPI, 일러스트는 PokéAPI Sprites의 공식 아트워크(Pokémon 공식 일러스트). 카드명이 아니라 <b>포켓몬 종족</b> 단위 체크리스트입니다. 이미지 표시에는 인터넷 연결이 필요합니다.</p>
+</div>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+
+<script>
+/* 전국도감번호|세대|일본어명|영문명|타입(쉼표구분) */
+const RAW = `
+1|1|フシギダネ|Bulbasaur|grass,poison
+2|1|フシギソウ|Ivysaur|grass,poison
+3|1|フシギバナ|Venusaur|grass,poison
+4|1|ヒトカゲ|Charmander|fire
+5|1|リザード|Charmeleon|fire
+6|1|リザードン|Charizard|fire,flying
+7|1|ゼニガメ|Squirtle|water
+8|1|カメール|Wartortle|water
+9|1|カメックス|Blastoise|water
+10|1|キャタピー|Caterpie|bug
+11|1|トランセル|Metapod|bug
+12|1|バタフリー|Butterfree|bug,flying
+13|1|ビードル|Weedle|bug,poison
+14|1|コクーン|Kakuna|bug,poison
+15|1|スピアー|Beedrill|bug,poison
+16|1|ポッポ|Pidgey|normal,flying
+17|1|ピジョン|Pidgeotto|normal,flying
+18|1|ピジョット|Pidgeot|normal,flying
+19|1|コラッタ|Rattata|normal
+20|1|ラッタ|Raticate|normal
+21|1|オニスズメ|Spearow|normal,flying
+22|1|オニドリル|Fearow|normal,flying
+23|1|アーボ|Ekans|poison
+24|1|アーボック|Arbok|poison
+25|1|ピカチュウ|Pikachu|electric
+26|1|ライチュウ|Raichu|electric
+27|1|サンド|Sandshrew|ground
+28|1|サンドパン|Sandslash|ground
+29|1|ニドラン♀|Nidoran♀|poison
+30|1|ニドリーナ|Nidorina|poison
+31|1|ニドクイン|Nidoqueen|poison,ground
+32|1|ニドラン♂|Nidoran♂|poison
+33|1|ニドリーノ|Nidorino|poison
+34|1|ニドキング|Nidoking|poison,ground
+35|1|ピッピ|Clefairy|fairy
+36|1|ピクシー|Clefable|fairy
+37|1|ロコン|Vulpix|fire
+38|1|キュウコン|Ninetales|fire
+39|1|プリン|Jigglypuff|normal,fairy
+40|1|プクリン|Wigglytuff|normal,fairy
+41|1|ズバット|Zubat|poison,flying
+42|1|ゴルバット|Golbat|poison,flying
+43|1|ナゾノクサ|Oddish|grass,poison
+44|1|クサイハナ|Gloom|grass,poison
+45|1|ラフレシア|Vileplume|grass,poison
+46|1|パラス|Paras|bug,grass
+47|1|パラセクト|Parasect|bug,grass
+48|1|コンパン|Venonat|bug,poison
+49|1|モルフォン|Venomoth|bug,poison
+50|1|ディグダ|Diglett|ground
+51|1|ダグトリオ|Dugtrio|ground
+52|1|ニャース|Meowth|normal
+53|1|ペルシアン|Persian|normal
+54|1|コダック|Psyduck|water
+55|1|ゴルダック|Golduck|water
+56|1|マンキー|Mankey|fighting
+57|1|オコリザル|Primeape|fighting
+58|1|ガーディ|Growlithe|fire
+59|1|ウインディ|Arcanine|fire
+60|1|ニョロモ|Poliwag|water
+61|1|ニョロゾ|Poliwhirl|water
+62|1|ニョロボン|Poliwrath|water,fighting
+63|1|ケーシィ|Abra|psychic
+64|1|ユンゲラー|Kadabra|psychic
+65|1|フーディン|Alakazam|psychic
+66|1|ワンリキー|Machop|fighting
+67|1|ゴーリキー|Machoke|fighting
+68|1|カイリキー|Machamp|fighting
+69|1|マダツボミ|Bellsprout|grass,poison
+70|1|ウツドン|Weepinbell|grass,poison
+71|1|ウツボット|Victreebel|grass,poison
+72|1|メノクラゲ|Tentacool|water,poison
+73|1|ドククラゲ|Tentacruel|water,poison
+74|1|イシツブテ|Geodude|rock,ground
+75|1|ゴローン|Graveler|rock,ground
+76|1|ゴローニャ|Golem|rock,ground
+77|1|ポニータ|Ponyta|fire
+78|1|ギャロップ|Rapidash|fire
+79|1|ヤドン|Slowpoke|water,psychic
+80|1|ヤドラン|Slowbro|water,psychic
+81|1|コイル|Magnemite|electric,steel
+82|1|レアコイル|Magneton|electric,steel
+83|1|カモネギ|Farfetch’d|normal,flying
+84|1|ドードー|Doduo|normal,flying
+85|1|ドードリオ|Dodrio|normal,flying
+86|1|パウワウ|Seel|water
+87|1|ジュゴン|Dewgong|water,ice
+88|1|ベトベター|Grimer|poison
+89|1|ベトベトン|Muk|poison
+90|1|シェルダー|Shellder|water
+91|1|パルシェン|Cloyster|water,ice
+92|1|ゴース|Gastly|ghost,poison
+93|1|ゴースト|Haunter|ghost,poison
+94|1|ゲンガー|Gengar|ghost,poison
+95|1|イワーク|Onix|rock,ground
+96|1|スリープ|Drowzee|psychic
+97|1|スリーパー|Hypno|psychic
+98|1|クラブ|Krabby|water
+99|1|キングラー|Kingler|water
+100|1|ビリリダマ|Voltorb|electric
+101|1|マルマイン|Electrode|electric
+102|1|タマタマ|Exeggcute|grass,psychic
+103|1|ナッシー|Exeggutor|grass,psychic
+104|1|カラカラ|Cubone|ground
+105|1|ガラガラ|Marowak|ground
+106|1|サワムラー|Hitmonlee|fighting
+107|1|エビワラー|Hitmonchan|fighting
+108|1|ベロリンガ|Lickitung|normal
+109|1|ドガース|Koffing|poison
+110|1|マタドガス|Weezing|poison
+111|1|サイホーン|Rhyhorn|ground,rock
+112|1|サイドン|Rhydon|ground,rock
+113|1|ラッキー|Chansey|normal
+114|1|モンジャラ|Tangela|grass
+115|1|ガルーラ|Kangaskhan|normal
+116|1|タッツー|Horsea|water
+117|1|シードラ|Seadra|water
+118|1|トサキント|Goldeen|water
+119|1|アズマオウ|Seaking|water
+120|1|ヒトデマン|Staryu|water
+121|1|スターミー|Starmie|water,psychic
+122|1|バリヤード|Mr. Mime|psychic,fairy
+123|1|ストライク|Scyther|bug,flying
+124|1|ルージュラ|Jynx|ice,psychic
+125|1|エレブー|Electabuzz|electric
+126|1|ブーバー|Magmar|fire
+127|1|カイロス|Pinsir|bug
+128|1|ケンタロス|Tauros|normal
+129|1|コイキング|Magikarp|water
+130|1|ギャラドス|Gyarados|water,flying
+131|1|ラプラス|Lapras|water,ice
+132|1|メタモン|Ditto|normal
+133|1|イーブイ|Eevee|normal
+134|1|シャワーズ|Vaporeon|water
+135|1|サンダース|Jolteon|electric
+136|1|ブースター|Flareon|fire
+137|1|ポリゴン|Porygon|normal
+138|1|オムナイト|Omanyte|rock,water
+139|1|オムスター|Omastar|rock,water
+140|1|カブト|Kabuto|rock,water
+141|1|カブトプス|Kabutops|rock,water
+142|1|プテラ|Aerodactyl|rock,flying
+143|1|カビゴン|Snorlax|normal
+144|1|フリーザー|Articuno|ice,flying
+145|1|サンダー|Zapdos|electric,flying
+146|1|ファイヤー|Moltres|fire,flying
+147|1|ミニリュウ|Dratini|dragon
+148|1|ハクリュー|Dragonair|dragon
+149|1|カイリュー|Dragonite|dragon,flying
+150|1|ミュウツー|Mewtwo|psychic
+151|1|ミュウ|Mew|psychic
+152|2|チコリータ|Chikorita|grass
+153|2|ベイリーフ|Bayleef|grass
+154|2|メガニウム|Meganium|grass
+155|2|ヒノアラシ|Cyndaquil|fire
+156|2|マグマラシ|Quilava|fire
+157|2|バクフーン|Typhlosion|fire
+158|2|ワニノコ|Totodile|water
+159|2|アリゲイツ|Croconaw|water
+160|2|オーダイル|Feraligatr|water
+161|2|オタチ|Sentret|normal
+162|2|オオタチ|Furret|normal
+163|2|ホーホー|Hoothoot|normal,flying
+164|2|ヨルノズク|Noctowl|normal,flying
+165|2|レディバ|Ledyba|bug,flying
+166|2|レディアン|Ledian|bug,flying
+167|2|イトマル|Spinarak|bug,poison
+168|2|アリアドス|Ariados|bug,poison
+169|2|クロバット|Crobat|poison,flying
+170|2|チョンチー|Chinchou|water,electric
+171|2|ランターン|Lanturn|water,electric
+172|2|ピチュー|Pichu|electric
+173|2|ピィ|Cleffa|fairy
+174|2|ププリン|Igglybuff|normal,fairy
+175|2|トゲピー|Togepi|fairy
+176|2|トゲチック|Togetic|fairy,flying
+177|2|ネイティ|Natu|psychic,flying
+178|2|ネイティオ|Xatu|psychic,flying
+179|2|メリープ|Mareep|electric
+180|2|モココ|Flaaffy|electric
+181|2|デンリュウ|Ampharos|electric
+182|2|キレイハナ|Bellossom|grass
+183|2|マリル|Marill|water,fairy
+184|2|マリルリ|Azumarill|water,fairy
+185|2|ウソッキー|Sudowoodo|rock
+186|2|ニョロトノ|Politoed|water
+187|2|ハネッコ|Hoppip|grass,flying
+188|2|ポポッコ|Skiploom|grass,flying
+189|2|ワタッコ|Jumpluff|grass,flying
+190|2|エイパム|Aipom|normal
+191|2|ヒマナッツ|Sunkern|grass
+192|2|キマワリ|Sunflora|grass
+193|2|ヤンヤンマ|Yanma|bug,flying
+194|2|ウパー|Wooper|water,ground
+195|2|ヌオー|Quagsire|water,ground
+196|2|エーフィ|Espeon|psychic
+197|2|ブラッキー|Umbreon|dark
+198|2|ヤミカラス|Murkrow|dark,flying
+199|2|ヤドキング|Slowking|water,psychic
+200|2|ムウマ|Misdreavus|ghost
+201|2|アンノーン|Unown|psychic
+202|2|ソーナンス|Wobbuffet|psychic
+203|2|キリンリキ|Girafarig|normal,psychic
+204|2|クヌギダマ|Pineco|bug
+205|2|フォレトス|Forretress|bug,steel
+206|2|ノコッチ|Dunsparce|normal
+207|2|グライガー|Gligar|ground,flying
+208|2|ハガネール|Steelix|steel,ground
+209|2|ブルー|Snubbull|fairy
+210|2|グランブル|Granbull|fairy
+211|2|ハリーセン|Qwilfish|water,poison
+212|2|ハッサム|Scizor|bug,steel
+213|2|ツボツボ|Shuckle|bug,rock
+214|2|ヘラクロス|Heracross|bug,fighting
+215|2|ニューラ|Sneasel|dark,ice
+216|2|ヒメグマ|Teddiursa|normal
+217|2|リングマ|Ursaring|normal
+218|2|マグマッグ|Slugma|fire
+219|2|マグカルゴ|Magcargo|fire,rock
+220|2|ウリムー|Swinub|ice,ground
+221|2|イノムー|Piloswine|ice,ground
+222|2|サニーゴ|Corsola|water,rock
+223|2|テッポウオ|Remoraid|water
+224|2|オクタン|Octillery|water
+225|2|デリバード|Delibird|ice,flying
+226|2|マンタイン|Mantine|water,flying
+227|2|エアームド|Skarmory|steel,flying
+228|2|デルビル|Houndour|dark,fire
+229|2|ヘルガー|Houndoom|dark,fire
+230|2|キングドラ|Kingdra|water,dragon
+231|2|ゴマゾウ|Phanpy|ground
+232|2|ドンファン|Donphan|ground
+233|2|ポリゴン２|Porygon2|normal
+234|2|オドシシ|Stantler|normal
+235|2|ドーブル|Smeargle|normal
+236|2|バルキー|Tyrogue|fighting
+237|2|カポエラー|Hitmontop|fighting
+238|2|ムチュール|Smoochum|ice,psychic
+239|2|エレキッド|Elekid|electric
+240|2|ブビィ|Magby|fire
+241|2|ミルタンク|Miltank|normal
+242|2|ハピナス|Blissey|normal
+243|2|ライコウ|Raikou|electric
+244|2|エンテイ|Entei|fire
+245|2|スイクン|Suicune|water
+246|2|ヨーギラス|Larvitar|rock,ground
+247|2|サナギラス|Pupitar|rock,ground
+248|2|バンギラス|Tyranitar|rock,dark
+249|2|ルギア|Lugia|psychic,flying
+250|2|ホウオウ|Ho-Oh|fire,flying
+251|2|セレビィ|Celebi|psychic,grass
+252|3|キモリ|Treecko|grass
+253|3|ジュプトル|Grovyle|grass
+254|3|ジュカイン|Sceptile|grass
+255|3|アチャモ|Torchic|fire
+256|3|ワカシャモ|Combusken|fire,fighting
+257|3|バシャーモ|Blaziken|fire,fighting
+258|3|ミズゴロウ|Mudkip|water
+259|3|ヌマクロー|Marshtomp|water,ground
+260|3|ラグラージ|Swampert|water,ground
+261|3|ポチエナ|Poochyena|dark
+262|3|グラエナ|Mightyena|dark
+263|3|ジグザグマ|Zigzagoon|normal
+264|3|マッスグマ|Linoone|normal
+265|3|ケムッソ|Wurmple|bug
+266|3|カラサリス|Silcoon|bug
+267|3|アゲハント|Beautifly|bug,flying
+268|3|マユルド|Cascoon|bug
+269|3|ドクケイル|Dustox|bug,poison
+270|3|ハスボー|Lotad|water,grass
+271|3|ハスブレロ|Lombre|water,grass
+272|3|ルンパッパ|Ludicolo|water,grass
+273|3|タネボー|Seedot|grass
+274|3|コノハナ|Nuzleaf|grass,dark
+275|3|ダーテング|Shiftry|grass,dark
+276|3|スバメ|Taillow|normal,flying
+277|3|オオスバメ|Swellow|normal,flying
+278|3|キャモメ|Wingull|water,flying
+279|3|ペリッパー|Pelipper|water,flying
+280|3|ラルトス|Ralts|psychic,fairy
+281|3|キルリア|Kirlia|psychic,fairy
+282|3|サーナイト|Gardevoir|psychic,fairy
+283|3|アメタマ|Surskit|bug,water
+284|3|アメモース|Masquerain|bug,flying
+285|3|キノココ|Shroomish|grass
+286|3|キノガッサ|Breloom|grass,fighting
+287|3|ナマケロ|Slakoth|normal
+288|3|ヤルキモノ|Vigoroth|normal
+289|3|ケッキング|Slaking|normal
+290|3|ツチニン|Nincada|bug,ground
+291|3|テッカニン|Ninjask|bug,flying
+292|3|ヌケニン|Shedinja|bug,ghost
+293|3|ゴニョニョ|Whismur|normal
+294|3|ドゴーム|Loudred|normal
+295|3|バクオング|Exploud|normal
+296|3|マクノシタ|Makuhita|fighting
+297|3|ハリテヤマ|Hariyama|fighting
+298|3|ルリリ|Azurill|normal,fairy
+299|3|ノズパス|Nosepass|rock
+300|3|エネコ|Skitty|normal
+301|3|エネコロロ|Delcatty|normal
+302|3|ヤミラミ|Sableye|dark,ghost
+303|3|クチート|Mawile|steel,fairy
+304|3|ココドラ|Aron|steel,rock
+305|3|コドラ|Lairon|steel,rock
+306|3|ボスゴドラ|Aggron|steel,rock
+307|3|アサナン|Meditite|fighting,psychic
+308|3|チャーレム|Medicham|fighting,psychic
+309|3|ラクライ|Electrike|electric
+310|3|ライボルト|Manectric|electric
+311|3|プラスル|Plusle|electric
+312|3|マイナン|Minun|electric
+313|3|バルビート|Volbeat|bug
+314|3|イルミーゼ|Illumise|bug
+315|3|ロゼリア|Roselia|grass,poison
+316|3|ゴクリン|Gulpin|poison
+317|3|マルノーム|Swalot|poison
+318|3|キバニア|Carvanha|water,dark
+319|3|サメハダー|Sharpedo|water,dark
+320|3|ホエルコ|Wailmer|water
+321|3|ホエルオー|Wailord|water
+322|3|ドンメル|Numel|fire,ground
+323|3|バクーダ|Camerupt|fire,ground
+324|3|コータス|Torkoal|fire
+325|3|バネブー|Spoink|psychic
+326|3|ブーピッグ|Grumpig|psychic
+327|3|パッチール|Spinda|normal
+328|3|ナックラー|Trapinch|ground
+329|3|ビブラーバ|Vibrava|ground,dragon
+330|3|フライゴン|Flygon|ground,dragon
+331|3|サボネア|Cacnea|grass
+332|3|ノクタス|Cacturne|grass,dark
+333|3|チルット|Swablu|normal,flying
+334|3|チルタリス|Altaria|dragon,flying
+335|3|ザングース|Zangoose|normal
+336|3|ハブネーク|Seviper|poison
+337|3|ルナトーン|Lunatone|rock,psychic
+338|3|ソルロック|Solrock|rock,psychic
+339|3|ドジョッチ|Barboach|water,ground
+340|3|ナマズン|Whiscash|water,ground
+341|3|ヘイガニ|Corphish|water
+342|3|シザリガー|Crawdaunt|water,dark
+343|3|ヤジロン|Baltoy|ground,psychic
+344|3|ネンドール|Claydol|ground,psychic
+345|3|リリーラ|Lileep|rock,grass
+346|3|ユレイドル|Cradily|rock,grass
+347|3|アノプス|Anorith|rock,bug
+348|3|アーマルド|Armaldo|rock,bug
+349|3|ヒンバス|Feebas|water
+350|3|ミロカロス|Milotic|water
+351|3|ポワルン|Castform|normal
+352|3|カクレオン|Kecleon|normal
+353|3|カゲボウズ|Shuppet|ghost
+354|3|ジュペッタ|Banette|ghost
+355|3|ヨマワル|Duskull|ghost
+356|3|サマヨール|Dusclops|ghost
+357|3|トロピウス|Tropius|grass,flying
+358|3|チリーン|Chimecho|psychic
+359|3|アブソル|Absol|dark
+360|3|ソーナノ|Wynaut|psychic
+361|3|ユキワラシ|Snorunt|ice
+362|3|オニゴーリ|Glalie|ice
+363|3|タマザラシ|Spheal|ice,water
+364|3|トドグラー|Sealeo|ice,water
+365|3|トドゼルガ|Walrein|ice,water
+366|3|パールル|Clamperl|water
+367|3|ハンテール|Huntail|water
+368|3|サクラビス|Gorebyss|water
+369|3|ジーランス|Relicanth|water,rock
+370|3|ラブカス|Luvdisc|water
+371|3|タツベイ|Bagon|dragon
+372|3|コモルー|Shelgon|dragon
+373|3|ボーマンダ|Salamence|dragon,flying
+374|3|ダンバル|Beldum|steel,psychic
+375|3|メタング|Metang|steel,psychic
+376|3|メタグロス|Metagross|steel,psychic
+377|3|レジロック|Regirock|rock
+378|3|レジアイス|Regice|ice
+379|3|レジスチル|Registeel|steel
+380|3|ラティアス|Latias|dragon,psychic
+381|3|ラティオス|Latios|dragon,psychic
+382|3|カイオーガ|Kyogre|water
+383|3|グラードン|Groudon|ground
+384|3|レックウザ|Rayquaza|dragon,flying
+385|3|ジラーチ|Jirachi|steel,psychic
+386|3|デオキシス|Deoxys|psychic
+387|4|ナエトル|Turtwig|grass
+388|4|ハヤシガメ|Grotle|grass
+389|4|ドダイトス|Torterra|grass,ground
+390|4|ヒコザル|Chimchar|fire
+391|4|モウカザル|Monferno|fire,fighting
+392|4|ゴウカザル|Infernape|fire,fighting
+393|4|ポッチャマ|Piplup|water
+394|4|ポッタイシ|Prinplup|water
+395|4|エンペルト|Empoleon|water,steel
+396|4|ムックル|Starly|normal,flying
+397|4|ムクバード|Staravia|normal,flying
+398|4|ムクホーク|Staraptor|normal,flying
+399|4|ビッパ|Bidoof|normal
+400|4|ビーダル|Bibarel|normal,water
+401|4|コロボーシ|Kricketot|bug
+402|4|コロトック|Kricketune|bug
+403|4|コリンク|Shinx|electric
+404|4|ルクシオ|Luxio|electric
+405|4|レントラー|Luxray|electric
+406|4|スボミー|Budew|grass,poison
+407|4|ロズレイド|Roserade|grass,poison
+408|4|ズガイドス|Cranidos|rock
+409|4|ラムパルド|Rampardos|rock
+410|4|タテトプス|Shieldon|rock,steel
+411|4|トリデプス|Bastiodon|rock,steel
+412|4|ミノムッチ|Burmy|bug
+413|4|ミノマダム|Wormadam|bug,grass
+414|4|ガーメイル|Mothim|bug,flying
+415|4|ミツハニー|Combee|bug,flying
+416|4|ビークイン|Vespiquen|bug,flying
+417|4|パチリス|Pachirisu|electric
+418|4|ブイゼル|Buizel|water
+419|4|フローゼル|Floatzel|water
+420|4|チェリンボ|Cherubi|grass
+421|4|チェリム|Cherrim|grass
+422|4|カラナクシ|Shellos|water
+423|4|トリトドン|Gastrodon|water,ground
+424|4|エテボース|Ambipom|normal
+425|4|フワンテ|Drifloon|ghost,flying
+426|4|フワライド|Drifblim|ghost,flying
+427|4|ミミロル|Buneary|normal
+428|4|ミミロップ|Lopunny|normal
+429|4|ムウマージ|Mismagius|ghost
+430|4|ドンカラス|Honchkrow|dark,flying
+431|4|ニャルマー|Glameow|normal
+432|4|ブニャット|Purugly|normal
+433|4|リーシャン|Chingling|psychic
+434|4|スカンプー|Stunky|poison,dark
+435|4|スカタンク|Skuntank|poison,dark
+436|4|ドーミラー|Bronzor|steel,psychic
+437|4|ドータクン|Bronzong|steel,psychic
+438|4|ウソハチ|Bonsly|rock
+439|4|マネネ|Mime Jr.|psychic,fairy
+440|4|ピンプク|Happiny|normal
+441|4|ペラップ|Chatot|normal,flying
+442|4|ミカルゲ|Spiritomb|ghost,dark
+443|4|フカマル|Gible|dragon,ground
+444|4|ガバイト|Gabite|dragon,ground
+445|4|ガブリアス|Garchomp|dragon,ground
+446|4|ゴンベ|Munchlax|normal
+447|4|リオル|Riolu|fighting
+448|4|ルカリオ|Lucario|fighting,steel
+449|4|ヒポポタス|Hippopotas|ground
+450|4|カバルドン|Hippowdon|ground
+451|4|スコルピ|Skorupi|poison,bug
+452|4|ドラピオン|Drapion|poison,dark
+453|4|グレッグル|Croagunk|poison,fighting
+454|4|ドクロッグ|Toxicroak|poison,fighting
+455|4|マスキッパ|Carnivine|grass
+456|4|ケイコウオ|Finneon|water
+457|4|ネオラント|Lumineon|water
+458|4|タマンタ|Mantyke|water,flying
+459|4|ユキカブリ|Snover|grass,ice
+460|4|ユキノオー|Abomasnow|grass,ice
+461|4|マニューラ|Weavile|dark,ice
+462|4|ジバコイル|Magnezone|electric,steel
+463|4|ベロベルト|Lickilicky|normal
+464|4|ドサイドン|Rhyperior|ground,rock
+465|4|モジャンボ|Tangrowth|grass
+466|4|エレキブル|Electivire|electric
+467|4|ブーバーン|Magmortar|fire
+468|4|トゲキッス|Togekiss|fairy,flying
+469|4|メガヤンマ|Yanmega|bug,flying
+470|4|リーフィア|Leafeon|grass
+471|4|グレイシア|Glaceon|ice
+472|4|グライオン|Gliscor|ground,flying
+473|4|マンムー|Mamoswine|ice,ground
+474|4|ポリゴンＺ|Porygon-Z|normal
+475|4|エルレイド|Gallade|psychic,fighting
+476|4|ダイノーズ|Probopass|rock,steel
+477|4|ヨノワール|Dusknoir|ghost
+478|4|ユキメノコ|Froslass|ice,ghost
+479|4|ロトム|Rotom|electric,ghost
+480|4|ユクシー|Uxie|psychic
+481|4|エムリット|Mesprit|psychic
+482|4|アグノム|Azelf|psychic
+483|4|ディアルガ|Dialga|steel,dragon
+484|4|パルキア|Palkia|water,dragon
+485|4|ヒードラン|Heatran|fire,steel
+486|4|レジギガス|Regigigas|normal
+487|4|ギラティナ|Giratina|ghost,dragon
+488|4|クレセリア|Cresselia|psychic
+489|4|フィオネ|Phione|water
+490|4|マナフィ|Manaphy|water
+491|4|ダークライ|Darkrai|dark
+492|4|シェイミ|Shaymin|grass
+493|4|アルセウス|Arceus|normal
+494|5|ビクティニ|Victini|psychic,fire
+495|5|ツタージャ|Snivy|grass
+496|5|ジャノビー|Servine|grass
+497|5|ジャローダ|Serperior|grass
+498|5|ポカブ|Tepig|fire
+499|5|チャオブー|Pignite|fire,fighting
+500|5|エンブオー|Emboar|fire,fighting
+501|5|ミジュマル|Oshawott|water
+502|5|フタチマル|Dewott|water
+503|5|ダイケンキ|Samurott|water
+504|5|ミネズミ|Patrat|normal
+505|5|ミルホッグ|Watchog|normal
+506|5|ヨーテリー|Lillipup|normal
+507|5|ハーデリア|Herdier|normal
+508|5|ムーランド|Stoutland|normal
+509|5|チョロネコ|Purrloin|dark
+510|5|レパルダス|Liepard|dark
+511|5|ヤナップ|Pansage|grass
+512|5|ヤナッキー|Simisage|grass
+513|5|バオップ|Pansear|fire
+514|5|バオッキー|Simisear|fire
+515|5|ヒヤップ|Panpour|water
+516|5|ヒヤッキー|Simipour|water
+517|5|ムンナ|Munna|psychic
+518|5|ムシャーナ|Musharna|psychic
+519|5|マメパト|Pidove|normal,flying
+520|5|ハトーボー|Tranquill|normal,flying
+521|5|ケンホロウ|Unfezant|normal,flying
+522|5|シママ|Blitzle|electric
+523|5|ゼブライカ|Zebstrika|electric
+524|5|ダンゴロ|Roggenrola|rock
+525|5|ガントル|Boldore|rock
+526|5|ギガイアス|Gigalith|rock
+527|5|コロモリ|Woobat|psychic,flying
+528|5|ココロモリ|Swoobat|psychic,flying
+529|5|モグリュー|Drilbur|ground
+530|5|ドリュウズ|Excadrill|ground,steel
+531|5|タブンネ|Audino|normal
+532|5|ドッコラー|Timburr|fighting
+533|5|ドテッコツ|Gurdurr|fighting
+534|5|ローブシン|Conkeldurr|fighting
+535|5|オタマロ|Tympole|water
+536|5|ガマガル|Palpitoad|water,ground
+537|5|ガマゲロゲ|Seismitoad|water,ground
+538|5|ナゲキ|Throh|fighting
+539|5|ダゲキ|Sawk|fighting
+540|5|クルミル|Sewaddle|bug,grass
+541|5|クルマユ|Swadloon|bug,grass
+542|5|ハハコモリ|Leavanny|bug,grass
+543|5|フシデ|Venipede|bug,poison
+544|5|ホイーガ|Whirlipede|bug,poison
+545|5|ペンドラー|Scolipede|bug,poison
+546|5|モンメン|Cottonee|grass,fairy
+547|5|エルフーン|Whimsicott|grass,fairy
+548|5|チュリネ|Petilil|grass
+549|5|ドレディア|Lilligant|grass
+550|5|バスラオ|Basculin|water
+551|5|メグロコ|Sandile|ground,dark
+552|5|ワルビル|Krokorok|ground,dark
+553|5|ワルビアル|Krookodile|ground,dark
+554|5|ダルマッカ|Darumaka|fire
+555|5|ヒヒダルマ|Darmanitan|fire
+556|5|マラカッチ|Maractus|grass
+557|5|イシズマイ|Dwebble|bug,rock
+558|5|イワパレス|Crustle|bug,rock
+559|5|ズルッグ|Scraggy|dark,fighting
+560|5|ズルズキン|Scrafty|dark,fighting
+561|5|シンボラー|Sigilyph|psychic,flying
+562|5|デスマス|Yamask|ghost
+563|5|デスカーン|Cofagrigus|ghost
+564|5|プロトーガ|Tirtouga|water,rock
+565|5|アバゴーラ|Carracosta|water,rock
+566|5|アーケン|Archen|rock,flying
+567|5|アーケオス|Archeops|rock,flying
+568|5|ヤブクロン|Trubbish|poison
+569|5|ダストダス|Garbodor|poison
+570|5|ゾロア|Zorua|dark
+571|5|ゾロアーク|Zoroark|dark
+572|5|チラーミィ|Minccino|normal
+573|5|チラチーノ|Cinccino|normal
+574|5|ゴチム|Gothita|psychic
+575|5|ゴチミル|Gothorita|psychic
+576|5|ゴチルゼル|Gothitelle|psychic
+577|5|ユニラン|Solosis|psychic
+578|5|ダブラン|Duosion|psychic
+579|5|ランクルス|Reuniclus|psychic
+580|5|コアルヒー|Ducklett|water,flying
+581|5|スワンナ|Swanna|water,flying
+582|5|バニプッチ|Vanillite|ice
+583|5|バニリッチ|Vanillish|ice
+584|5|バイバニラ|Vanilluxe|ice
+585|5|シキジカ|Deerling|normal,grass
+586|5|メブキジカ|Sawsbuck|normal,grass
+587|5|エモンガ|Emolga|electric,flying
+588|5|カブルモ|Karrablast|bug
+589|5|シュバルゴ|Escavalier|bug,steel
+590|5|タマゲタケ|Foongus|grass,poison
+591|5|モロバレル|Amoonguss|grass,poison
+592|5|プルリル|Frillish|water,ghost
+593|5|ブルンゲル|Jellicent|water,ghost
+594|5|ママンボウ|Alomomola|water
+595|5|バチュル|Joltik|bug,electric
+596|5|デンチュラ|Galvantula|bug,electric
+597|5|テッシード|Ferroseed|grass,steel
+598|5|ナットレイ|Ferrothorn|grass,steel
+599|5|ギアル|Klink|steel
+600|5|ギギアル|Klang|steel
+601|5|ギギギアル|Klinklang|steel
+602|5|シビシラス|Tynamo|electric
+603|5|シビビール|Eelektrik|electric
+604|5|シビルドン|Eelektross|electric
+605|5|リグレー|Elgyem|psychic
+606|5|オーベム|Beheeyem|psychic
+607|5|ヒトモシ|Litwick|ghost,fire
+608|5|ランプラー|Lampent|ghost,fire
+609|5|シャンデラ|Chandelure|ghost,fire
+610|5|キバゴ|Axew|dragon
+611|5|オノンド|Fraxure|dragon
+612|5|オノノクス|Haxorus|dragon
+613|5|クマシュン|Cubchoo|ice
+614|5|ツンベアー|Beartic|ice
+615|5|フリージオ|Cryogonal|ice
+616|5|チョボマキ|Shelmet|bug
+617|5|アギルダー|Accelgor|bug
+618|5|マッギョ|Stunfisk|ground,electric
+619|5|コジョフー|Mienfoo|fighting
+620|5|コジョンド|Mienshao|fighting
+621|5|クリムガン|Druddigon|dragon
+622|5|ゴビット|Golett|ground,ghost
+623|5|ゴルーグ|Golurk|ground,ghost
+624|5|コマタナ|Pawniard|dark,steel
+625|5|キリキザン|Bisharp|dark,steel
+626|5|バッフロン|Bouffalant|normal
+627|5|ワシボン|Rufflet|normal,flying
+628|5|ウォーグル|Braviary|normal,flying
+629|5|バルチャイ|Vullaby|dark,flying
+630|5|バルジーナ|Mandibuzz|dark,flying
+631|5|クイタラン|Heatmor|fire
+632|5|アイアント|Durant|bug,steel
+633|5|モノズ|Deino|dark,dragon
+634|5|ジヘッド|Zweilous|dark,dragon
+635|5|サザンドラ|Hydreigon|dark,dragon
+636|5|メラルバ|Larvesta|bug,fire
+637|5|ウルガモス|Volcarona|bug,fire
+638|5|コバルオン|Cobalion|steel,fighting
+639|5|テラキオン|Terrakion|rock,fighting
+640|5|ビリジオン|Virizion|grass,fighting
+641|5|トルネロス|Tornadus|flying
+642|5|ボルトロス|Thundurus|electric,flying
+643|5|レシラム|Reshiram|dragon,fire
+644|5|ゼクロム|Zekrom|dragon,electric
+645|5|ランドロス|Landorus|ground,flying
+646|5|キュレム|Kyurem|dragon,ice
+647|5|ケルディオ|Keldeo|water,fighting
+648|5|メロエッタ|Meloetta|normal,psychic
+649|5|ゲノセクト|Genesect|bug,steel
+650|6|ハリマロン|Chespin|grass
+651|6|ハリボーグ|Quilladin|grass
+652|6|ブリガロン|Chesnaught|grass,fighting
+653|6|フォッコ|Fennekin|fire
+654|6|テールナー|Braixen|fire
+655|6|マフォクシー|Delphox|fire,psychic
+656|6|ケロマツ|Froakie|water
+657|6|ゲコガシラ|Frogadier|water
+658|6|ゲッコウガ|Greninja|water,dark
+659|6|ホルビー|Bunnelby|normal
+660|6|ホルード|Diggersby|normal,ground
+661|6|ヤヤコマ|Fletchling|normal,flying
+662|6|ヒノヤコマ|Fletchinder|fire,flying
+663|6|ファイアロー|Talonflame|fire,flying
+664|6|コフキムシ|Scatterbug|bug
+665|6|コフーライ|Spewpa|bug
+666|6|ビビヨン|Vivillon|bug,flying
+667|6|シシコ|Litleo|fire,normal
+668|6|カエンジシ|Pyroar|fire,normal
+669|6|フラベベ|Flabébé|fairy
+670|6|フラエッテ|Floette|fairy
+671|6|フラージェス|Florges|fairy
+672|6|メェークル|Skiddo|grass
+673|6|ゴーゴート|Gogoat|grass
+674|6|ヤンチャム|Pancham|fighting
+675|6|ゴロンダ|Pangoro|fighting,dark
+676|6|トリミアン|Furfrou|normal
+677|6|ニャスパー|Espurr|psychic
+678|6|ニャオニクス|Meowstic|psychic
+679|6|ヒトツキ|Honedge|steel,ghost
+680|6|ニダンギル|Doublade|steel,ghost
+681|6|ギルガルド|Aegislash|steel,ghost
+682|6|シュシュプ|Spritzee|fairy
+683|6|フレフワン|Aromatisse|fairy
+684|6|ペロッパフ|Swirlix|fairy
+685|6|ペロリーム|Slurpuff|fairy
+686|6|マーイーカ|Inkay|dark,psychic
+687|6|カラマネロ|Malamar|dark,psychic
+688|6|カメテテ|Binacle|rock,water
+689|6|ガメノデス|Barbaracle|rock,water
+690|6|クズモー|Skrelp|poison,water
+691|6|ドラミドロ|Dragalge|poison,dragon
+692|6|ウデッポウ|Clauncher|water
+693|6|ブロスター|Clawitzer|water
+694|6|エリキテル|Helioptile|electric,normal
+695|6|エレザード|Heliolisk|electric,normal
+696|6|チゴラス|Tyrunt|rock,dragon
+697|6|ガチゴラス|Tyrantrum|rock,dragon
+698|6|アマルス|Amaura|rock,ice
+699|6|アマルルガ|Aurorus|rock,ice
+700|6|ニンフィア|Sylveon|fairy
+701|6|ルチャブル|Hawlucha|fighting,flying
+702|6|デデンネ|Dedenne|electric,fairy
+703|6|メレシー|Carbink|rock,fairy
+704|6|ヌメラ|Goomy|dragon
+705|6|ヌメイル|Sliggoo|dragon
+706|6|ヌメルゴン|Goodra|dragon
+707|6|クレッフィ|Klefki|steel,fairy
+708|6|ボクレー|Phantump|ghost,grass
+709|6|オーロット|Trevenant|ghost,grass
+710|6|バケッチャ|Pumpkaboo|ghost,grass
+711|6|パンプジン|Gourgeist|ghost,grass
+712|6|カチコール|Bergmite|ice
+713|6|クレベース|Avalugg|ice
+714|6|オンバット|Noibat|flying,dragon
+715|6|オンバーン|Noivern|flying,dragon
+716|6|ゼルネアス|Xerneas|fairy
+717|6|イベルタル|Yveltal|dark,flying
+718|6|ジガルデ|Zygarde|dragon,ground
+719|6|ディアンシー|Diancie|rock,fairy
+720|6|フーパ|Hoopa|psychic,ghost
+721|6|ボルケニオン|Volcanion|fire,water
+722|7|モクロー|Rowlet|grass,flying
+723|7|フクスロー|Dartrix|grass,flying
+724|7|ジュナイパー|Decidueye|grass,ghost
+725|7|ニャビー|Litten|fire
+726|7|ニャヒート|Torracat|fire
+727|7|ガオガエン|Incineroar|fire,dark
+728|7|アシマリ|Popplio|water
+729|7|オシャマリ|Brionne|water
+730|7|アシレーヌ|Primarina|water,fairy
+731|7|ツツケラ|Pikipek|normal,flying
+732|7|ケララッパ|Trumbeak|normal,flying
+733|7|ドデカバシ|Toucannon|normal,flying
+734|7|ヤングース|Yungoos|normal
+735|7|デカグース|Gumshoos|normal
+736|7|アゴジムシ|Grubbin|bug
+737|7|デンヂムシ|Charjabug|bug,electric
+738|7|クワガノン|Vikavolt|bug,electric
+739|7|マケンカニ|Crabrawler|fighting
+740|7|ケケンカニ|Crabominable|fighting,ice
+741|7|オドリドリ|Oricorio|fire,flying
+742|7|アブリー|Cutiefly|bug,fairy
+743|7|アブリボン|Ribombee|bug,fairy
+744|7|イワンコ|Rockruff|rock
+745|7|ルガルガン|Lycanroc|rock
+746|7|ヨワシ|Wishiwashi|water
+747|7|ヒドイデ|Mareanie|poison,water
+748|7|ドヒドイデ|Toxapex|poison,water
+749|7|ドロバンコ|Mudbray|ground
+750|7|バンバドロ|Mudsdale|ground
+751|7|シズクモ|Dewpider|water,bug
+752|7|オニシズクモ|Araquanid|water,bug
+753|7|カリキリ|Fomantis|grass
+754|7|ラランテス|Lurantis|grass
+755|7|ネマシュ|Morelull|grass,fairy
+756|7|マシェード|Shiinotic|grass,fairy
+757|7|ヤトウモリ|Salandit|poison,fire
+758|7|エンニュート|Salazzle|poison,fire
+759|7|ヌイコグマ|Stufful|normal,fighting
+760|7|キテルグマ|Bewear|normal,fighting
+761|7|アマカジ|Bounsweet|grass
+762|7|アママイコ|Steenee|grass
+763|7|アマージョ|Tsareena|grass
+764|7|キュワワー|Comfey|fairy
+765|7|ヤレユータン|Oranguru|normal,psychic
+766|7|ナゲツケサル|Passimian|fighting
+767|7|コソクムシ|Wimpod|bug,water
+768|7|グソクムシャ|Golisopod|bug,water
+769|7|スナバァ|Sandygast|ghost,ground
+770|7|シロデスナ|Palossand|ghost,ground
+771|7|ナマコブシ|Pyukumuku|water
+772|7|タイプ：ヌル|Type: Null|normal
+773|7|シルヴァディ|Silvally|normal
+774|7|メテノ|Minior|rock,flying
+775|7|ネッコアラ|Komala|normal
+776|7|バクガメス|Turtonator|fire,dragon
+777|7|トゲデマル|Togedemaru|electric,steel
+778|7|ミミッキュ|Mimikyu|ghost,fairy
+779|7|ハギギシリ|Bruxish|water,psychic
+780|7|ジジーロン|Drampa|normal,dragon
+781|7|ダダリン|Dhelmise|ghost,grass
+782|7|ジャラコ|Jangmo-o|dragon
+783|7|ジャランゴ|Hakamo-o|dragon,fighting
+784|7|ジャラランガ|Kommo-o|dragon,fighting
+785|7|カプ・コケコ|Tapu Koko|electric,fairy
+786|7|カプ・テテフ|Tapu Lele|psychic,fairy
+787|7|カプ・ブルル|Tapu Bulu|grass,fairy
+788|7|カプ・レヒレ|Tapu Fini|water,fairy
+789|7|コスモッグ|Cosmog|psychic
+790|7|コスモウム|Cosmoem|psychic
+791|7|ソルガレオ|Solgaleo|psychic,steel
+792|7|ルナアーラ|Lunala|psychic,ghost
+793|7|ウツロイド|Nihilego|rock,poison
+794|7|マッシブーン|Buzzwole|bug,fighting
+795|7|フェローチェ|Pheromosa|bug,fighting
+796|7|デンジュモク|Xurkitree|electric
+797|7|テッカグヤ|Celesteela|steel,flying
+798|7|カミツルギ|Kartana|grass,steel
+799|7|アクジキング|Guzzlord|dark,dragon
+800|7|ネクロズマ|Necrozma|psychic
+801|7|マギアナ|Magearna|steel,fairy
+802|7|マーシャドー|Marshadow|fighting,ghost
+803|7|ベベノム|Poipole|poison
+804|7|アーゴヨン|Naganadel|poison,dragon
+805|7|ツンデツンデ|Stakataka|rock,steel
+806|7|ズガドーン|Blacephalon|fire,ghost
+807|7|ゼラオラ|Zeraora|electric
+808|7|メルタン|Meltan|steel
+809|7|メルメタル|Melmetal|steel
+810|8|サルノリ|Grookey|grass
+811|8|バチンキー|Thwackey|grass
+812|8|ゴリランダー|Rillaboom|grass
+813|8|ヒバニー|Scorbunny|fire
+814|8|ラビフット|Raboot|fire
+815|8|エースバーン|Cinderace|fire
+816|8|メッソン|Sobble|water
+817|8|ジメレオン|Drizzile|water
+818|8|インテレオン|Inteleon|water
+819|8|ホシガリス|Skwovet|normal
+820|8|ヨクバリス|Greedent|normal
+821|8|ココガラ|Rookidee|flying
+822|8|アオガラス|Corvisquire|flying
+823|8|アーマーガア|Corviknight|flying,steel
+824|8|サッチムシ|Blipbug|bug
+825|8|レドームシ|Dottler|bug,psychic
+826|8|イオルブ|Orbeetle|bug,psychic
+827|8|クスネ|Nickit|dark
+828|8|フォクスライ|Thievul|dark
+829|8|ヒメンカ|Gossifleur|grass
+830|8|ワタシラガ|Eldegoss|grass
+831|8|ウールー|Wooloo|normal
+832|8|バイウールー|Dubwool|normal
+833|8|カムカメ|Chewtle|water
+834|8|カジリガメ|Drednaw|water,rock
+835|8|ワンパチ|Yamper|electric
+836|8|パルスワン|Boltund|electric
+837|8|タンドン|Rolycoly|rock
+838|8|トロッゴン|Carkol|rock,fire
+839|8|セキタンザン|Coalossal|rock,fire
+840|8|カジッチュ|Applin|grass,dragon
+841|8|アップリュー|Flapple|grass,dragon
+842|8|タルップル|Appletun|grass,dragon
+843|8|スナヘビ|Silicobra|ground
+844|8|サダイジャ|Sandaconda|ground
+845|8|ウッウ|Cramorant|flying,water
+846|8|サシカマス|Arrokuda|water
+847|8|カマスジョー|Barraskewda|water
+848|8|エレズン|Toxel|electric,poison
+849|8|ストリンダー|Toxtricity|electric,poison
+850|8|ヤクデ|Sizzlipede|fire,bug
+851|8|マルヤクデ|Centiskorch|fire,bug
+852|8|タタッコ|Clobbopus|fighting
+853|8|オトスパス|Grapploct|fighting
+854|8|ヤバチャ|Sinistea|ghost
+855|8|ポットデス|Polteageist|ghost
+856|8|ミブリム|Hatenna|psychic
+857|8|テブリム|Hattrem|psychic
+858|8|ブリムオン|Hatterene|psychic,fairy
+859|8|ベロバー|Impidimp|dark,fairy
+860|8|ギモー|Morgrem|dark,fairy
+861|8|オーロンゲ|Grimmsnarl|dark,fairy
+862|8|タチフサグマ|Obstagoon|dark,normal
+863|8|ニャイキング|Perrserker|steel
+864|8|サニゴーン|Cursola|ghost
+865|8|ネギガナイト|Sirfetch’d|fighting
+866|8|バリコオル|Mr. Rime|ice,psychic
+867|8|デスバーン|Runerigus|ground,ghost
+868|8|マホミル|Milcery|fairy
+869|8|マホイップ|Alcremie|fairy
+870|8|タイレーツ|Falinks|fighting
+871|8|バチンウニ|Pincurchin|electric
+872|8|ユキハミ|Snom|ice,bug
+873|8|モスノウ|Frosmoth|ice,bug
+874|8|イシヘンジン|Stonjourner|rock
+875|8|コオリッポ|Eiscue|ice
+876|8|イエッサン|Indeedee|psychic,normal
+877|8|モルペコ|Morpeko|electric,dark
+878|8|ゾウドウ|Cufant|steel
+879|8|ダイオウドウ|Copperajah|steel
+880|8|パッチラゴン|Dracozolt|electric,dragon
+881|8|パッチルドン|Arctozolt|electric,ice
+882|8|ウオノラゴン|Dracovish|water,dragon
+883|8|ウオチルドン|Arctovish|water,ice
+884|8|ジュラルドン|Duraludon|steel,dragon
+885|8|ドラメシヤ|Dreepy|dragon,ghost
+886|8|ドロンチ|Drakloak|dragon,ghost
+887|8|ドラパルト|Dragapult|dragon,ghost
+888|8|ザシアン|Zacian|fairy
+889|8|ザマゼンタ|Zamazenta|fighting
+890|8|ムゲンダイナ|Eternatus|poison,dragon
+891|8|ダクマ|Kubfu|fighting
+892|8|ウーラオス|Urshifu|fighting,dark
+893|8|ザルード|Zarude|dark,grass
+894|8|レジエレキ|Regieleki|electric
+895|8|レジドラゴ|Regidrago|dragon
+896|8|ブリザポス|Glastrier|ice
+897|8|レイスポス|Spectrier|ghost
+898|8|バドレックス|Calyrex|psychic,grass
+899|8|アヤシシ|Wyrdeer|normal,psychic
+900|8|バサギリ|Kleavor|bug,rock
+901|8|ガチグマ|Ursaluna|ground,normal
+902|8|イダイトウ|Basculegion|water,ghost
+903|8|オオニューラ|Sneasler|fighting,poison
+904|8|ハリーマン|Overqwil|dark,poison
+905|8|ラブトロス|Enamorus|fairy,flying
+906|9|ニャオハ|Sprigatito|grass
+907|9|ニャローテ|Floragato|grass
+908|9|マスカーニャ|Meowscarada|grass,dark
+909|9|ホゲータ|Fuecoco|fire
+910|9|アチゲータ|Crocalor|fire
+911|9|ラウドボーン|Skeledirge|fire,ghost
+912|9|クワッス|Quaxly|water
+913|9|ウェルカモ|Quaxwell|water
+914|9|ウェーニバル|Quaquaval|water,fighting
+915|9|グルトン|Lechonk|normal
+916|9|パフュートン|Oinkologne|normal
+917|9|タマンチュラ|Tarountula|bug
+918|9|ワナイダー|Spidops|bug
+919|9|マメバッタ|Nymble|bug
+920|9|エクスレッグ|Lokix|bug,dark
+921|9|パモ|Pawmi|electric
+922|9|パモット|Pawmo|electric,fighting
+923|9|パーモット|Pawmot|electric,fighting
+924|9|ワッカネズミ|Tandemaus|normal
+925|9|イッカネズミ|Maushold|normal
+926|9|パピモッチ|Fidough|fairy
+927|9|バウッツェル|Dachsbun|fairy
+928|9|ミニーブ|Smoliv|grass,normal
+929|9|オリーニョ|Dolliv|grass,normal
+930|9|オリーヴァ|Arboliva|grass,normal
+931|9|イキリンコ|Squawkabilly|normal,flying
+932|9|コジオ|Nacli|rock
+933|9|ジオヅム|Naclstack|rock
+934|9|キョジオーン|Garganacl|rock
+935|9|カルボウ|Charcadet|fire
+936|9|グレンアルマ|Armarouge|fire,psychic
+937|9|ソウブレイズ|Ceruledge|fire,ghost
+938|9|ズピカ|Tadbulb|electric
+939|9|ハラバリー|Bellibolt|electric
+940|9|カイデン|Wattrel|electric,flying
+941|9|タイカイデン|Kilowattrel|electric,flying
+942|9|オラチフ|Maschiff|dark
+943|9|マフィティフ|Mabosstiff|dark
+944|9|シルシュルー|Shroodle|poison,normal
+945|9|タギングル|Grafaiai|poison,normal
+946|9|アノクサ|Bramblin|grass,ghost
+947|9|アノホラグサ|Brambleghast|grass,ghost
+948|9|ノノクラゲ|Toedscool|ground,grass
+949|9|リククラゲ|Toedscruel|ground,grass
+950|9|ガケガニ|Klawf|rock
+951|9|カプサイジ|Capsakid|grass
+952|9|スコヴィラン|Scovillain|grass,fire
+953|9|シガロコ|Rellor|bug
+954|9|ベラカス|Rabsca|bug,psychic
+955|9|ヒラヒナ|Flittle|psychic
+956|9|クエスパトラ|Espathra|psychic
+957|9|カヌチャン|Tinkatink|fairy,steel
+958|9|ナカヌチャン|Tinkatuff|fairy,steel
+959|9|デカヌチャン|Tinkaton|fairy,steel
+960|9|ウミディグダ|Wiglett|water
+961|9|ウミトリオ|Wugtrio|water
+962|9|オトシドリ|Bombirdier|flying,dark
+963|9|ナミイルカ|Finizen|water
+964|9|イルカマン|Palafin|water
+965|9|ブロロン|Varoom|steel,poison
+966|9|ブロロローム|Revavroom|steel,poison
+967|9|モトトカゲ|Cyclizar|dragon,normal
+968|9|ミミズズ|Orthworm|steel
+969|9|キラーメ|Glimmet|rock,poison
+970|9|キラフロル|Glimmora|rock,poison
+971|9|ボチ|Greavard|ghost
+972|9|ハカドッグ|Houndstone|ghost
+973|9|カラミンゴ|Flamigo|flying,fighting
+974|9|アルクジラ|Cetoddle|ice
+975|9|ハルクジラ|Cetitan|ice
+976|9|ミガルーサ|Veluza|water,psychic
+977|9|ヘイラッシャ|Dondozo|water
+978|9|シャリタツ|Tatsugiri|dragon,water
+979|9|コノヨザル|Annihilape|fighting,ghost
+980|9|ドオー|Clodsire|poison,ground
+981|9|リキキリン|Farigiraf|normal,psychic
+982|9|ノココッチ|Dudunsparce|normal
+983|9|ドドゲザン|Kingambit|dark,steel
+984|9|イダイナキバ|Great Tusk|ground,fighting
+985|9|サケブシッポ|Scream Tail|fairy,psychic
+986|9|アラブルタケ|Brute Bonnet|grass,dark
+987|9|ハバタクカミ|Flutter Mane|ghost,fairy
+988|9|チヲハウハネ|Slither Wing|bug,fighting
+989|9|スナノケガワ|Sandy Shocks|electric,ground
+990|9|テツノワダチ|Iron Treads|ground,steel
+991|9|テツノツツミ|Iron Bundle|ice,water
+992|9|テツノカイナ|Iron Hands|fighting,electric
+993|9|テツノコウベ|Iron Jugulis|dark,flying
+994|9|テツノドクガ|Iron Moth|fire,poison
+995|9|テツノイバラ|Iron Thorns|rock,electric
+996|9|セビエ|Frigibax|dragon,ice
+997|9|セゴール|Arctibax|dragon,ice
+998|9|セグレイブ|Baxcalibur|dragon,ice
+999|9|コレクレー|Gimmighoul|ghost
+1000|9|サーフゴー|Gholdengo|steel,ghost
+1001|9|チオンジェン|Wo-Chien|dark,grass
+1002|9|パオジアン|Chien-Pao|dark,ice
+1003|9|ディンルー|Ting-Lu|dark,ground
+1004|9|イーユイ|Chi-Yu|dark,fire
+1005|9|トドロクツキ|Roaring Moon|dragon,dark
+1006|9|テツノブジン|Iron Valiant|fairy,fighting
+1007|9|コライドン|Koraidon|fighting,dragon
+1008|9|ミライドン|Miraidon|electric,dragon
+1009|9|ウネルミナモ|Walking Wake|water,dragon
+1010|9|テツノイサハ|Iron Leaves|grass,psychic
+1011|9|カミッチュ|Dipplin|grass,dragon
+1012|9|チャデス|Poltchageist|grass,ghost
+1013|9|ヤバソチャ|Sinistcha|grass,ghost
+1014|9|イイネイヌ|Okidogi|poison,fighting
+1015|9|マシマシラ|Munkidori|poison,psychic
+1016|9|キチキギス|Fezandipiti|poison,fairy
+1017|9|オーガポン|Ogerpon|grass
+1018|9|ブリジュラス|Archaludon|steel,dragon
+1019|9|カミツオロチ|Hydrapple|grass,dragon
+1020|9|ウガツホムラ|Gouging Fire|fire,dragon
+1021|9|タケルライコ|Raging Bolt|electric,dragon
+1022|9|テツノイワオ|Iron Boulder|rock,psychic
+1023|9|テツノカシラ|Iron Crown|steel,psychic
+1024|9|テラパゴス|Terapagos|normal
+1025|9|モモワロウ|Pecharunt|poison,ghost
+`.trim();
+
+const GENS = [
+  {id:1, label:"1세대", region:"관동",  sub:"001–151"},
+  {id:2, label:"2세대", region:"성도",  sub:"152–251"},
+  {id:3, label:"3세대", region:"호연",  sub:"252–386"},
+  {id:4, label:"4세대", region:"신오",  sub:"387–493"},
+  {id:5, label:"5세대", region:"하나",  sub:"494–649"},
+  {id:6, label:"6세대", region:"칼로스", sub:"650–721"},
+  {id:7, label:"7세대", region:"알로라", sub:"722–809"},
+  {id:8, label:"8세대", region:"가라르", sub:"810–905"},
+  {id:9, label:"9세대", region:"팔데아", sub:"906–1025"},
+];
+const TYPES = [
+  ["normal","노말"],["fire","불꽃"],["water","물"],["grass","풀"],["electric","전기"],["ice","얼음"],
+  ["fighting","격투"],["poison","독"],["ground","땅"],["flying","비행"],["psychic","에스퍼"],["bug","벌레"],
+  ["rock","바위"],["ghost","고스트"],["dragon","드래곤"],["dark","악"],["steel","강철"],["fairy","페어리"],
+];
+const TYNAME = Object.fromEntries(TYPES);
+
+const MONS = RAW.split("\n").map(l=>{
+  const [id,gen,ja,en,ty] = l.split("|");
+  return {id:+id, gen:+gen, ja, en, ty:ty?ty.split(","):[], key:String(id)};
+});
+
+const ART = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
+const img = (m,shiny) => ART + (shiny?"shiny/":"") + m.id + ".png";
+const pad3 = n => String(n).padStart(3,"0");
+
+const KEY = "pkmdex-checklist-v1";
+let own = load();
+function load(){ try{ const a=JSON.parse(localStorage.getItem(KEY)); if(Array.isArray(a)) return new Set(a.map(String)); }catch(e){} return new Set(); }
+function save(){ localStorage.setItem(KEY, JSON.stringify([...own])); }
+
+let curGen = 1, filterSt = "all", shinyArt = false, query = "", tyFilter = "";
+
+const tabsEl = document.getElementById("tabs");
+tabsEl.innerHTML =
+  `<button class="tab" data-gen="0"><span class="gnum all">全</span><span>전체 도감<br><b id="tc-0"></b></span></button>` +
+  GENS.map(g=>
+  `<button class="tab" data-gen="${g.id}"><span class="gnum">${g.id}</span>
+   <span>${g.region}<br><b id="tc-${g.id}"></b></span></button>`).join("");
+
+const tySel = document.getElementById("tySel");
+tySel.innerHTML = `<option value="">타입 전체</option>` +
+  TYPES.map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+
+const main = document.getElementById("main");
+main.innerHTML = GENS.map(g=>`
+  <div class="gen-pane" id="p-${g.id}" hidden>
+    <section id="s-${g.id}">
+      <div class="sec-head">
+        <h2>${g.label} · ${g.region}</h2><span class="desc">전국도감 ${g.sub}</span>
+        <span class="cnt" id="cnt-${g.id}"></span>
+      </div>
+      <div class="grid" id="g-${g.id}"></div>
+      <div class="empty" id="e-${g.id}" hidden>조건에 맞는 포켓몬이 없습니다.</div>
+    </section>
+  </div>`).join("");
+
+for(const g of GENS){
+  const list = MONS.filter(m=>m.gen===g.id);
+  document.getElementById("g-"+g.id).innerHTML = list.map(m=>`
+    <div class="card" data-k="${m.key}">
+      <div class="thumb">
+        <img loading="lazy" decoding="async" src="${img(m,false)}" alt="${m.ja}">
+        <span class="no">${pad3(m.id)}</span>
+        <span class="types">${m.ty.map(t=>`<span class="ty t-${t}">${TYNAME[t]||t}</span>`).join("")}</span>
+        <button class="zoom" title="크게 보기">&#128269;</button>
+        <span class="tick">&#10003;</span>
+      </div>
+      <div class="nm">${m.ja}</div>
+      <div class="n2">${m.en}</div>
+    </div>`).join("");
+}
+
+const byKey = new Map(MONS.map(m=>[m.key,m]));
+const TOT_ALL = MONS.length;
+document.getElementById("allTot").textContent = TOT_ALL;
+
+function render(){
+  const q = query.trim().toLowerCase();
+  let genOwn=0, genTot=0;
+  for(const g of GENS){
+    document.getElementById("p-"+g.id).hidden = !(curGen===0 || g.id===curGen);
+    const grid = document.getElementById("g-"+g.id);
+    let shown=0, o=0, t=0;
+    for(const el of grid.children){
+      const m = byKey.get(el.dataset.k), has = own.has(m.key);
+      t++; if(has) o++;
+      el.classList.toggle("have", has);
+      let ok = true;
+      if(filterSt==="have" && !has) ok=false;
+      if(filterSt==="none" && has) ok=false;
+      if(tyFilter && !m.ty.includes(tyFilter)) ok=false;
+      if(q && !(m.ja.toLowerCase().includes(q) || m.en.toLowerCase().includes(q)
+                || String(m.id).includes(q) || pad3(m.id).includes(q))) ok=false;
+      el.hidden = !ok; if(ok) shown++;
+    }
+    document.getElementById("cnt-"+g.id).textContent = `${o} / ${t}`;
+    document.getElementById("e-"+g.id).hidden = shown>0;
+    document.getElementById("tc-"+g.id).textContent = `${o}/${t}`;
+    if(curGen===0 || g.id===curGen){ genOwn+=o; genTot+=t; }
+  }
+  const total = [...own].filter(k=>byKey.has(k)).length;
+  document.getElementById("tc-0").textContent = `${total}/${TOT_ALL}`;
+  document.getElementById("allOwn").textContent = total;
+  document.getElementById("genOwn").textContent = genOwn;
+  document.getElementById("genTot").textContent = genTot;
+  document.getElementById("allBar").style.width = (total/TOT_ALL*100)+"%";
+  document.getElementById("genBar").style.width = (genTot?genOwn/genTot*100:0)+"%";
+}
+
+tabsEl.addEventListener("click", e=>{
+  const b=e.target.closest(".tab"); if(!b) return;
+  curGen=+b.dataset.gen;
+  [...tabsEl.children].forEach(x=>x.classList.toggle("on",x===b));
+  window.scrollTo({top:0}); render();
+});
+tabsEl.children[1].classList.add("on");
+
+main.addEventListener("click", e=>{
+  if(e.target.closest(".zoom")){
+    const m = byKey.get(e.target.closest(".card").dataset.k);
+    document.getElementById("lbimg").src = img(m,shinyArt);
+    document.getElementById("lb").showModal(); return;
+  }
+  const card = e.target.closest(".card"); if(!card) return;
+  const k = card.dataset.k;
+  own.has(k)?own.delete(k):own.add(k);
+  save(); render();
+});
+document.getElementById("lb").addEventListener("click", e=>e.currentTarget.close());
+
+document.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{
+  filterSt=b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+}));
+document.getElementById("shBtn").addEventListener("click", e=>{
+  shinyArt=!shinyArt; e.currentTarget.classList.toggle("on",shinyArt);
+  for(const card of main.querySelectorAll(".card")){
+    const m = byKey.get(card.dataset.k);
+    card.querySelector("img").src = img(m,shinyArt);
+  }
+});
+tySel.addEventListener("change", e=>{ tyFilter=e.target.value; render(); });
+document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; render(); });
+document.getElementById("rstBtn").addEventListener("click", ()=>{
+  if(confirm("체크한 내용을 모두 지울까요?")){ own=new Set(); save(); render(); }
+});
+document.getElementById("prnBtn").addEventListener("click", ()=>window.print());
+document.getElementById("expBtn").addEventListener("click", ()=>{
+  const blob=new Blob([JSON.stringify([...own].map(Number).sort((a,b)=>a-b),null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="pokedex-checklist.json"; a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById("impBtn").addEventListener("click", ()=>document.getElementById("impFile").click());
+document.getElementById("impFile").addEventListener("change", e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ const d=JSON.parse(rd.result);
+                       own=new Set((Array.isArray(d)?d:(d.own||[])).map(String)); save(); render(); }
+                  catch(err){ alert("파일을 읽을 수 없습니다."); } };
+  rd.readAsText(f); e.target.value="";
+});
+
+/* ---- 링크(URL)로 체크 상태 백업 / 복원 ---- */
+const KEYS = MONS.map(m=>m.key);
+function b64e(a){ let s=""; for(const b of a) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(t){ t=t.replace(/-/g,"+").replace(/_/g,"/");
+  const s=atob(t), a=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+function pack(set,keys){ const a=new Uint8Array(Math.ceil(keys.length/8));
+  keys.forEach((k,i)=>{ if(set.has(k)) a[i>>3]|=1<<(i&7); }); return b64e(a); }
+function unpack(str,keys){ const a=b64d(str), s=new Set();
+  keys.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
+
+document.getElementById("lnkBtn").addEventListener("click", async ()=>{
+  const url = location.href.split("#")[0] + "#s=1." + pack(own,KEYS);
+  try{
+    await navigator.clipboard.writeText(url);
+    alert(`체크 상태(${[...own].filter(k=>byKey.has(k)).length}마리)가 담긴 링크를 복사했습니다.\n다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+  }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
+});
+
+(function applyHash(){
+  const m = location.hash.match(/^#s=1\.(.+)$/);
+  if(!m) return;
+  try{
+    const o = unpack(m[1],KEYS);
+    const cur = [...own].filter(k=>byKey.has(k)).length;
+    const same = o.size===cur && [...o].every(x=>own.has(x));
+    if(!same){
+      if(confirm(`링크에 담긴 체크 상태(${o.size}마리)를 불러올까요?\n이 브라우저에 저장된 현재 상태(${cur}마리)는 덮어써집니다.`)){
+        own = o; save();
+      }
+    }
+  }catch(e){}
+  history.replaceState(null,"",location.href.split("#")[0]);
+})();
+
+render();
+</script>
+</body>
+</html>

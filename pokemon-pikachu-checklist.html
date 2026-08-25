@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>피카츄 카드 전량 체크리스트 — 출시일 순</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#fff; --line:#e2e6ef; --text:#1b1f2a; --muted:#6b7385;
+    --accent:#e8452c; --accent2:#2f6fd0; --gold:#c8951b; --violet:#9247b8;
+    --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
+    --have:#e8f7ee; --haveline:#1f9d55;
+    --skip:#f1f2f6; --skipline:#98a1b3;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12151c; --panel:#1a1f29; --line:#2b3240; --text:#e8ecf3; --muted:#98a1b3;
+      --accent:#ff6a4d; --accent2:#6ba4ef; --gold:#e0b445; --violet:#c58ee8;
+      --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      --have:#15321f; --haveline:#43c07a;
+      --skip:#1c2029; --skipline:#767f92;
+    }
+  }
+  *{box-sizing:border-box}
+  /* .card / .ydiv 가 display 를 직접 잡고 있어서 hidden 속성만으로는 안 숨는다 */
+  [hidden]{display:none !important}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif}
+  header{position:sticky;top:0;z-index:30;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .wrap{max-width:1500px;margin:0 auto;padding:0 16px}
+  .title-row{display:flex;align-items:center;gap:16px;padding:13px 0 9px;flex-wrap:wrap}
+  h1{font-size:19px;margin:0;letter-spacing:-.3px}
+  h1 small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:3px}
+  .stats{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  .stat{min-width:150px}
+  .stat .lab{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .stat .val{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25}
+  .stat .val i{font-style:normal;font-size:13px;font-weight:600;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;width:0;transition:width .25s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar.sh i{background:linear-gradient(90deg,var(--gold),var(--accent))}
+  .bar.sk i{background:linear-gradient(90deg,var(--skipline),var(--muted))}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:9px}
+  .tab{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;
+    padding:7px 12px;font-size:13px;cursor:pointer;font-weight:700;font-family:inherit;transition:.15s;
+    display:flex;align-items:center;gap:7px;line-height:1.3}
+  .tab:hover{border-color:var(--accent2)}
+  .tab.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .tab .gnum{font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:var(--accent2);color:#fff;letter-spacing:.3px}
+  .tab.on .gnum{background:var(--bg);color:var(--text)}
+  .tab .gnum.all{background:var(--gold)}
+  .tab b{font-weight:700;font-size:11px;opacity:.72;font-variant-numeric:tabular-nums}
+
+  /* 시대 바 — 누르면 그 시대의 첫 카드로 이동 */
+  .eras{display:flex;gap:5px;flex-wrap:wrap;padding-bottom:9px;align-items:center}
+  .eras .lbl{font-size:10.5px;font-weight:700;color:var(--muted);margin-right:2px;letter-spacing:.2px}
+  .era{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:7px;padding:4px 8px;
+    font-size:11px;cursor:pointer;font-family:inherit;font-weight:700;line-height:1.3;transition:.15s;white-space:nowrap}
+  .era:hover{border-color:var(--accent2);color:var(--accent2)}
+  .era i{font-style:normal;font-weight:600;opacity:.6;font-variant-numeric:tabular-nums;margin-left:4px}
+
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:11px}
+  input[type=search]{flex:1;min-width:180px;max-width:280px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+  select{max-width:320px;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);
+    color:var(--text);font-size:13px;font-family:inherit;font-weight:600;cursor:pointer}
+  .chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;transition:.15s}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip.gold.on{background:var(--gold);border-color:var(--gold);color:#231a05}
+  .chip.ko-chip.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  body.no-ko .ko{display:none !important}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;
+    font-size:13px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn:hover{border-color:var(--accent2)}
+  .btn.danger:hover{border-color:var(--accent);color:var(--accent)}
+
+  main{max-width:1500px;margin:0 auto;padding:18px 16px 90px}
+
+  /* 한 줄로 죽 이어지는 연표 — 연도 구분선만 사이에 끼워 넣는다 */
+  .stream{display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:11px}
+  .ydiv{grid-column:1/-1;display:flex;align-items:baseline;gap:10px;margin:16px 0 2px;padding-bottom:7px;
+    border-bottom:2px solid var(--line);scroll-margin-top:210px}
+  .ydiv:first-child{margin-top:0}
+  .ydiv b{font-size:20px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .ydiv .ename{font-size:11.5px;font-weight:700;color:var(--muted)}
+  .ydiv .ycnt{margin-left:auto;font-size:12px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+  .ydiv.extra{border-bottom-color:var(--violet);margin-top:28px}
+  .ydiv.extra b{color:var(--violet)}
+  .ydiv.extra .ename{color:var(--violet)}
+
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:7px;
+    cursor:pointer;transition:transform .12s,border-color .12s;box-shadow:var(--shadow);user-select:none;
+    display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+  /* 카드 그림은 언제나 원본 컬러 그대로 두고, 상태는 테두리 · 윗줄 · 배지로만 알린다 */
+  .card::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:4px;
+    border-radius:11px 11px 0 0;background:transparent;transition:background .15s}
+  .card.have{background:var(--have);border-color:var(--haveline)}
+  .card.have::before{background:var(--haveline)}
+  /* 수집 목록에서 뺀 카드 — 점선 테두리로 「여기 있긴 하지만 내 라인은 아니다」를 보인다 */
+  .card.skip{background:var(--skip);border-color:var(--skipline);border-style:dashed;opacity:.6}
+  .card.skip::before{background:var(--skipline)}
+  .card.skip:hover{opacity:1}
+  .thumb{position:relative;aspect-ratio:245/342;border-radius:6px;overflow:hidden;background:var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .tags{position:absolute;top:4px;left:4px;display:flex;gap:3px;flex-wrap:wrap;max-width:calc(100% - 36px)}
+  .no{background:rgba(15,18,28,.82);color:#fff;font-size:9px;font-weight:700;
+    padding:2px 5px;border-radius:4px;font-variant-numeric:tabular-nums;max-width:100%;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .boxmark{position:absolute;top:4px;right:4px;font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;
+    background:linear-gradient(135deg,#9247b8,#2f6fd0);color:#fff;letter-spacing:.2px;
+    border:none;font-family:inherit;cursor:zoom-in}
+  .boxmark:hover{filter:brightness(1.15)}
+  .mine{position:absolute;bottom:4px;left:4px;font-size:10px;font-weight:900;width:16px;height:16px;
+    border-radius:4px;background:var(--accent);color:#fff;display:grid;place-items:center;line-height:1}
+  .card:hover .mine{opacity:0}
+  .rar{background:rgba(15,18,28,.82);color:#fff;font-size:8.5px;font-weight:800;padding:2px 5px;
+    border-radius:4px;letter-spacing:.2px}
+  /* 빼기 ✕ · 보유 ✓ — 두 개를 따로 누른다 */
+  .acts{position:absolute;right:5px;bottom:5px;display:flex;gap:4px}
+  .drop,.tick{width:22px;height:22px;border-radius:50%;background:var(--panel);border:2px solid var(--line);
+    display:grid;place-items:center;font-size:12px;font-weight:900;line-height:1;padding:0;
+    font-family:inherit;cursor:pointer;color:var(--muted);opacity:.5;transition:.15s}
+  .card:hover .drop,.card:hover .tick{opacity:.95}
+  .card.skip .drop{background:var(--skipline);border-color:var(--skipline);color:#fff;opacity:1}
+  .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff;opacity:1}
+  /* 한 장도 안 고른 카드에서도 버튼이 보이도록 — 다만 눈에 거슬리지 않게 */
+  .card.skip .drop,.card.have .tick{opacity:1}
+  .zoom{position:absolute;left:5px;bottom:5px;width:22px;height:22px;border-radius:6px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);font-size:11px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
+  .card:hover .zoom{opacity:1}
+
+  /* 카드 아래 정보 — 예전에는 섹션 머리에 있던 「출처」가 카드마다 붙는다 */
+  .dt{margin-top:6px;font-size:10px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.2px}
+  .dt.est{opacity:.8;font-weight:700}
+  .nm{margin-top:2px;font-size:11.5px;font-weight:700;line-height:1.3;word-break:break-word}
+  .n2{font-size:10.5px;color:var(--accent2);margin-top:2px;font-weight:600;line-height:1.35;word-break:break-word}
+  .n3{font-size:9.5px;color:var(--muted);margin-top:3px;line-height:1.35;word-break:break-word}
+  .src{margin-top:6px;display:flex;align-items:flex-start;gap:4px;width:100%;text-align:left;
+    border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:7px;padding:4px 5px;
+    font-family:inherit;font-size:9.5px;font-weight:700;line-height:1.35;cursor:pointer;transition:.15s}
+  .src:hover{border-color:var(--accent2);color:var(--accent2)}
+  .src .k{flex:0 0 auto;font-size:8px;font-weight:800;padding:1px 4px;border-radius:3px;background:var(--accent2);
+    color:#fff;letter-spacing:.3px;margin-top:.5px}
+  .src .k.p{background:var(--gold);color:#231a05}
+  .src .k.d{background:var(--violet);color:#fff}
+  .src span{min-width:0;word-break:break-word}
+  .n4{font-size:9.5px;color:var(--violet);margin-top:3px;font-weight:700;line-height:1.35;word-break:break-word}
+  .n5{font-size:9.5px;color:var(--haveline);margin-top:3px;font-weight:700;line-height:1.35;word-break:break-word}
+  .n5.ko{color:var(--muted);font-weight:600;margin-top:1px}
+  .pr{font-size:10px;color:var(--gold);margin-top:4px;font-weight:800;font-variant-numeric:tabular-nums}
+  .pr i{font-style:normal;font-size:8.5px;font-weight:600;color:var(--muted);margin-left:2px}
+
+  .empty{color:var(--muted);font-size:14px;padding:40px 0;text-align:center}
+  dialog{border:none;border-radius:14px;padding:0;background:transparent;max-width:92vw}
+  dialog::backdrop{background:rgba(8,10,16,.78)}
+  dialog img{max-width:min(430px,86vw);max-height:82vh;border-radius:12px;display:block;background:#fff}
+
+  /* 출처 상세 — 카드의 출처 버튼을 누르면 뜬다 */
+  #srcDlg{background:var(--panel);color:var(--text);max-width:min(760px,94vw);padding:20px 22px 22px;
+    box-shadow:var(--shadow);max-height:86vh;overflow:auto}
+  #srcDlg h3{margin:0 0 4px;font-size:17px;letter-spacing:-.3px}
+  #srcDlg .meta{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:14px}
+  #srcDlg .meta b{color:var(--text)}
+  #srcDlg .prodrow{display:flex;gap:9px;flex-wrap:wrap}
+  #srcDlg .prod{flex:0 0 138px;border:1px solid var(--line);border-radius:9px;background:var(--bg);padding:6px;
+    cursor:zoom-in;font-family:inherit;text-align:center;transition:border-color .15s}
+  #srcDlg .prod:hover{border-color:var(--accent2)}
+  #srcDlg .prod img{width:100%;height:84px;object-fit:contain;display:block;background:#fff;border-radius:5px}
+  #srcDlg .prod span{display:block;margin-top:5px;font-size:9.5px;font-weight:600;color:var(--muted);line-height:1.35;
+    max-height:2.7em;overflow:hidden}
+  #srcDlg .noprod{font-size:12px;color:var(--muted);padding:11px 12px;border-radius:8px;border:1px dashed var(--line);line-height:1.7}
+  #srcDlg .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+
+  .note{max-width:1500px;margin:0 auto;padding:0 16px 44px;color:var(--muted);font-size:12px;line-height:1.75}
+  .note b{color:var(--text)}
+  .note h3{font-size:13px;color:var(--text);margin:20px 0 6px}
+  .note a{color:var(--accent2)}
+  @media print{ header{position:static;box-shadow:none} .tools,.tabs,.eras,.zoom{display:none}
+    .drop,.tick{opacity:1 !important}
+    .stream{grid-template-columns:repeat(8,1fr);gap:4px} .card{break-inside:avoid;box-shadow:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title-row">
+      <h1>피카츄 카드 전량 체크리스트 <small>일본판 · artofpkm 수록 394장 + 직접 보강 4장 = <b>398장</b>을 <b>출시일 순</b>으로 · 출처와 배포처는 카드마다</small></h1>
+      <div class="stats">
+        <div class="stat">
+          <div class="lab">🚫 목록에서 뺌</div>
+          <div class="val"><span id="xOut">0</span> <i>장 · 남은 <span id="xLeft">0</span></i></div>
+          <div class="bar sk"><i id="xBar"></i></div>
+        </div>
+        <div class="stat">
+          <div class="lab">프로모 계열</div>
+          <div class="val"><span id="pOwn">0</span> <i>/ <span id="pTot">0</span></i></div>
+          <div class="bar sh"><i id="pBar"></i></div>
+        </div>
+        <div class="stat">
+          <div class="lab">전체</div>
+          <div class="val"><span id="allOwn">0</span> <i>/ <span id="allTot">0</span></i></div>
+          <div class="bar"><i id="allBar"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="eras" id="eras"></div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="카드명 · 번호 · 출처 · 배포처 · 연도 검색 (예: Poncho, 230/XY-P, 2017)">
+      <select id="srcSel"></select>
+      <button class="chip" id="sortBtn">↓ 최신순</button>
+      <button class="chip" data-view="year">📅 연도별</button>
+      <button class="chip" data-view="flow">📃 구분 없이</button>
+      <button class="chip on" data-st="all">전체</button>
+      <button class="chip" data-st="have">보유</button>
+      <button class="chip" data-st="none">미보유</button>
+      <button class="chip" data-st="skip">🚫 뺀 카드</button>
+      <button class="chip gold" id="boxOnly">📦 상품에서 나온 것</button>
+      <button class="chip" id="pocketBtn">📱 Pocket 제외</button>
+      <button class="chip ko-chip on" id="koBtn">한국어 번역</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="lnkBtn">🔗 링크로 백업</button>
+      <button class="btn" id="expBtn">내보내기</button>
+      <button class="btn" id="impBtn">가져오기</button>
+      <button class="btn" id="prnBtn">인쇄</button>
+      <button class="btn danger" id="rstBtn">초기화</button>
+      <input type="file" id="impFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stream" id="stream"></div>
+  <div class="empty" id="empty" hidden>조건에 맞는 카드가 없습니다.</div>
+</main>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+<dialog id="srcDlg"><div id="srcBody"></div></dialog>
+
+<div class="note">
+  <p><b>사용법</b> — 카드는 <b>나온 순서대로 한 줄로 죽 이어져</b> 있고, 연도가 바뀌는 자리에만 구분선이 들어갑니다. 버튼 <b>📅 연도별</b> · <b>📃 구분 없이</b> 로 두 가지 뷰를 고릅니다. <b>📃 구분 없이</b> 를 고르면 구분선 없이 전체를 한 덩어리로 봅니다 — 카드마다 발매일이 붙어 있으니 연도 정보가 사라지지는 않습니다. 선택은 다음에 열 때도 그대로입니다. 위쪽 <b>시대 바</b>를 누르면 그 시대의 첫 카드로 바로 이동합니다(구분 없이 볼 때도 됩니다). 카드 왼쪽 아래 🔍 는 고해상도 이미지를 띄웁니다. 연표가 끝나면 맨 아래에 <b>artofpkm 미수록 · 직접 보강</b> 섹션이 따로 붙습니다. 안 모을 카드는 카드 오른쪽 아래 <b>✕</b> 로 연표에서 빼 둘 수 있습니다.</p>
+
+  <h3>보유 ✓ 와 목록에서 빼기 ✕</h3>
+  <p>카드 오른쪽 아래에 동그란 버튼이 <b>두 개</b> 있습니다.</p>
+  <ul style="margin:6px 0 10px;padding-left:18px">
+    <li><b>✓ 보유</b> — 이미 가진 카드를 체크합니다. 체크하면 테두리와 윗줄이 <b>초록</b>이 됩니다. <b>카드 아무 데나 눌러도</b> 보유가 켜집니다(✕ 버튼만 예외).</li>
+    <li><b>✕ 목록에서 빼기</b> — <b>안 모으기로 한 카드</b>를 수집 목록에서 뺍니다. 누르면 그 자리에서 <b>연표에서 사라집니다.</b></li>
+  </ul>
+  <p><b>뺀 카드는 장수 계산에서도 빠집니다</b> — 분자(보유)뿐 아니라 <b>분모(전체)도 함께 줄어듭니다.</b> 안 모을 카드까지 분모에 남아 있으면 진행률이 영영 100%가 되지 않으니까요. 위쪽 <b>전체 · 프로모 계열</b> 게이지, 탭 옆 숫자, 연도 구분선의 <code>N / M장</code> 이 전부 뺀 카드를 제외한 값입니다. <b>🚫 목록에서 뺌</b> 게이지가 몇 장을 뺐고 몇 장이 남았는지 보여줍니다.</p>
+  <p><b>지우는 게 아닙니다.</b> 뺀 카드는 필터 칩 <b>🚫 뺀 카드</b>를 누르면 점선 테두리로 그대로 나오고, 거기서 <b>✕ 를 한 번 더 누르면 되돌아옵니다.</b> 「초기화」에서 <b>뺀 카드만 한꺼번에 되돌리기</b>도 할 수 있습니다.</p>
+  <p>Pokémon TCG Pocket 30장처럼 <b>애초에 실물이 없는 카드</b>나 트로피 카드를 아예 빼 두면, 남은 장수가 곧 <b>실제로 모을 수 있는 장수</b>가 됩니다.</p>
+  <p><b>카드 그림은 어느 상태에서도 원본 컬러 그대로</b> 둡니다. 흑백으로 바꾸면 일러스트를 못 보게 되니까요. 상태는 테두리 · 윗줄 · 배지 색으로만 알립니다.</p>
+  <p><b>내보내기 · 🔗 링크 백업 · 초기화</b>는 보유와 뺀 카드를 <b>둘 다</b> 다룹니다. 예전에 만들어 둔 백업 파일이나 링크도 그대로 열립니다 — 다만 <b>거기 들어 있던 위시는 없앤 기능이라 버려집니다.</b></p>
+
+  <h3>출처는 카드마다 붙어 있습니다</h3>
+  <p>예전에는 출처(수록처)별로 섹션을 나눠 놨지만, 그렇게 하면 <b>같은 해에 나온 카드가 여기저기 흩어집니다.</b> 프로모 시리즈 하나가 몇 년에 걸쳐 있기 때문입니다. 그래서 지금은 카드를 <b>출시일 순 한 줄</b>로 세우고, 출처는 카드 밑에 <b>버튼</b>으로 붙였습니다. 누르면 그 출처의 발매일 · 시대 · 카드 수와 <b>팩 · 박스 사진</b>이 뜨고, 「이 출처만 보기」로 걸러낼 수도 있습니다.</p>
+  <p>배지는 <b><span style="background:var(--accent2);color:#fff;padding:0 4px;border-radius:3px;font-weight:800">SET</span></b> 확장팩 · 상품, <b><span style="background:var(--gold);color:#231a05;padding:0 4px;border-radius:3px;font-weight:800">PROMO</span></b> 프로모 계열, <b><span style="background:var(--violet);color:#fff;padding:0 4px;border-radius:3px;font-weight:800">POCKET</span></b> Pokémon TCG Pocket(디지털 전용)입니다.</p>
+
+  <h3>발매일은 어디까지 정확한가</h3>
+  <p>확장팩 · 상품에서 나온 카드는 <b>그 세트의 발매일</b>을 그대로 씁니다(<b>187장</b>, 날짜까지 표시). 출처는 artofpkm 의 세트 페이지에서 긁었습니다.</p>
+  <p>프로모 카드 <b>211장</b>은 날짜 앞에 <b>≈</b> 가 붙고 연도만 나옵니다. 「Sun &amp; Moon Promos」 같은 프로모 시리즈는 <b>몇 년에 걸쳐 번호만 이어 붙이는 이름</b>이라 시리즈 발매일이 개별 카드의 발매일이 아니기 때문입니다. artofpkm 이 이미 카드 단위 발매일 순으로 세워 둔 <b>위치</b>를 이용해, 앞뒤에 있는 확장팩 카드(발매일이 확실한 카드) 사이를 <b>보간해서 추정</b>한 값입니다. 시리즈 시작일보다 앞으로는 내려가지 않게 막아 뒀습니다.</p>
+  <p><b>≈ 가 붙은 연도는 참고용입니다.</b> 앞뒤 기준점이 같은 해면 그 해가 맞지만, 기준점이 1~2년 떨어져 있으면 한 해 정도 어긋날 수 있습니다. 정확한 날짜가 필요하면 카드 밑 🎁 배포처를 보세요 — 실제로 배포된 캠페인 이름이 적혀 있습니다.</p>
+  <p>재판(再版) 상품은 <b>상품이 나온 해</b>에 놓았습니다. 예를 들어 <b>Pikachu World Collection 2010</b> 은 1999년 카드의 재판이지만 2010년 자리에 있습니다.</p>
+
+  <h3>프로모는 카드마다 「실제 배포처」가 있습니다</h3>
+  <p>프로모 시리즈 이름만으로는 그 카드를 실제로 어디서 받았는지 알 수 없어서, <b>🎁 로 배포처를 카드마다 따로</b> 적었습니다. <b>ポケブーン</b>의 프로모 일람(2,118장)을 번호로 대조해 붙인 것으로, 프로모 <b>211장 중 171장(81%)</b>에 배포처가 들어갔습니다. <b>일본어 원문 바로 밑에 한국어</b>를 같이 적었고, 실제로 쓰이는 <b>116종을 전부</b> 번역했습니다.</p>
+  <p>예를 들어 <b>218/SV-P ピカチュウ</b>는 「Scarlet &amp; Violet Promos」에 들어 있지만, 실제로는 <b>「ポケカの夏がキタ！プロモカードGetキャンペーン！」</b>(2024.08.10~ 10팩 구매 시 프로모팩 1개)로 배포된 카드입니다. 한국에서는 같은 일러스트가 <b>160/SV-P</b>로 <b>Pikachu Present Box</b>에 들어갔습니다 — 한국판과 일본판은 프로모 번호 체계가 달라 번호로는 이어지지 않습니다.</p>
+  <p>번호 자체가 없어서 대조가 안 되는 카드 중 <b>XY-P 9장</b>은 <b>카드 이미지를 직접 확인해서</b> 배포처를 채웠습니다 — 일러스트 안에 출처 로고가 인쇄돼 있어서 읽을 수 있었습니다. 여전히 배포처가 없는 40장은 <b>PMCG Promos</b>(21장)처럼 번호도 로고도 없는 1996~2000년대 초 카드이거나, 대회 트로피 카드입니다.</p>
+
+  <h3>📦 상품 사진 · 📱 Pokémon TCG Pocket</h3>
+  <p><b>📦 상품에서 나온 것</b> 버튼을 켜면 <b>박스 · 팩 · 세트 같은 상품에서 나온 카드</b>만 남습니다. 카드 오른쪽 위 <b>📦 배지</b>를 누르면 그 상품 사진이 뜹니다. 스페셜 BOX 체크리스트와 이 페이지의 체크 상태는 서로 <b>독립</b>입니다 — 같은 카드라도 각각 체크해야 합니다.</p>
+  <p>목록에는 <b>Pokémon TCG Pocket 카드 30장</b>이 섞여 있습니다. 「Genetic Apex」 · 「Mythical Island」 · 「Promo-A」 처럼 <b>스마트폰 앱 전용 디지털 카드</b>라 실물로는 존재하지 않습니다. 원본 데이터에 들어 있어 그대로 두되 <b>POCKET 배지</b>로 구분했고, <b>📱 Pocket 제외</b> 버튼으로 한 번에 숨길 수 있습니다.</p>
+
+  <h3>레어도 · 한국어명 · 시세 (collectory.cc)</h3>
+  <p>일부 카드에는 <b>레어도 배지</b>(카드 오른쪽 아래)와 <b>한국어 카드명</b>, <b>한국판 시세</b>가 붙어 있습니다. 한국 카드 DB인 <a href="https://collectory.cc/cards?q=%ED%94%BC%EC%B9%B4%EC%B8%84" target="_blank" rel="noopener">collectory.cc</a>의 피카츄 176장을 카드 번호로 대조해 붙인 것으로, <b>83장</b>이 매칭됐습니다(그중 시세는 <b>67장</b>).</p>
+  <p><b>시세는 「한국판」 가격입니다.</b> 이 체크리스트는 일본판 기준인데 시세는 한국 시장에서 거래되는 <b>한국판 프린트</b>의 가격이라, 일본판 가격과 다를 수 있습니다. 정적 페이지라 값이 갱신되지 않습니다 — <b>2026-08-19 조사 시점</b> 기준으로 박제된 값입니다. 번호만으로 대조했기 때문에 같은 번호의 다른 프린트·변형이 있으면 같은 레어도·시세가 함께 붙습니다.</p>
+  <p>매칭되지 않은 카드 중 <b>33장은 「한국 프로모」</b>입니다. <b>한국 전용 프로모는 일본판·영문판 수집 대상이 아니라 목록에 넣지 않았습니다.</b></p>
+
+  <h3>알려진 한계</h3>
+  <p>카드명은 기본이 <b>영문</b>입니다. 출처 데이터가 영문 기준이라 그렇습니다. 일본어명(165장)·한국어명(120장)은 ポケブーン · collectory.cc 대조로 채웠습니다.</p>
+  <p>카드명이 「Pikachu」가 아닌 것도 13장 섞여 있습니다 — <b>Victory Medal · Victory Ring · No.1~3 Trainer</b> 같은 트로피 카드로, 일러스트에 피카츄가 그려진 카드입니다. 출처 정리 관점에서 의미가 있어 남겼습니다.</p>
+  <p><b>원본 목록이 완전하지 않습니다.</b> 스페셜 BOX를 조사하며 확인한 피카츄 중 <b>4장</b>(150 · 151/XY-P 잉어킹·갸라도스 흉내, 037 · 038/SM-P 알로라 식스테일·식스테일 판초)이 artofpkm 목록에 없어 <b>직접 채워 넣었고 빨간 <span style="background:var(--accent);color:#fff;padding:0 4px;border-radius:3px;font-weight:800">+</span> 배지</b>로 구분했습니다. 이미지도 이 4장만 Limitless TCG에서 가져옵니다.</p>
+  <p>이 4장은 연표에 섞지 않고 <b>맨 아래 「artofpkm 미수록 · 직접 보강」 섹션</b>에 따로 모아 뒀습니다. 연표에 보이는 <b>394장이 곧 artofpkm 목록 그대로</b>가 되도록 한 것으로, 검색 · 필터 · 통계 · 백업에는 4장이 그대로 함께 들어갑니다.</p>
+  <p><b>번호가 없는 카드가 41장</b> 있습니다. 원본 DB에 번호가 기록되지 않은 오래된 프로모·트로피 카드들입니다. <b>018/066 Pikachu ex</b> 는 원본에 세트가 비어 있었지만 artofpkm 카드 설명에 「Battle Academy · 2024년 3월 8일 발매」라고 적혀 있어 그쪽으로 붙였습니다 — 같은 번호의 카드가 하나 더 있어 <b>목록에 두 번 나옵니다</b>(이미지 파일이 서로 다른 채로 원본에 중복 등록돼 있습니다).</p>
+  <p>이 목록은 <b>일본판 기준</b>이며 영문판 프린트는 포함하지 않습니다.</p>
+
+  <h3>데이터 출처</h3>
+  <p>카드 목록 · 번호 · 출처 · 이미지 · 세트 발매일 전부 <a href="https://www.artofpkm.com/pokemon/25" target="_blank" rel="noopener">artofpkm.com</a>의 피카츄 카드 데이터입니다. 이미지는 같은 사이트 CDN을 그대로 참조하므로 표시에 인터넷 연결이 필요합니다.</p>
+  <p><b>마지막 대조 2026-08-25</b> — 그 시점 artofpkm 의 <b>TCG 364장 + Pocket 30장 = 394장</b>과 번호 · 카드명 · 출처 · 이미지를 전부 맞췄습니다. 직전 대조 뒤 <b>30th CELEBRATION 3장</b>(037 · 126 · 127/103)이 늘어 반영했고, artofpkm 이 그 세트 안에서 카드 번호를 다시 매기며 밀린 <b>22장의 내부 key</b>도 함께 고쳤습니다 — 예전에 저장해 둔 보유 체크는 페이지를 열 때 자동으로 옮겨 붙습니다.</p>
+</div>
+
+<script>
+/* key|번호|카드명(영문)|출처|썸네일해시|원본해시|일본어명|한국어명 */
+const RAW = `
+cards/556|018/066|Pikachu ex|Battle Academy|bixok2ti9bcumo2qcw9atj1pzzmn|cf9srahhrrpcg78amlnqtrp8fk2d||
+sets/592/card/7|017/103|Pikachu|30th CELEBRATION|ofa60471yi16la9p8tubt66w8u7v|5g54f8x0rpfam7tbeicrve8z138u||
+sets/592/card/8|019/103|Pikachu|30th CELEBRATION|g9stwzrky21ekdx4zux32ztpz17l|n6gmgr43iioz56m99y1i70pd24gu||
+sets/592/card/9|020/103|Pikachu|30th CELEBRATION|eflnwb4fhdlbw3yqgn7f9407clnn|nof7kffb7y84nvpcopq13n3vg9rh||
+sets/592/card/10|022/103|Pikachu|30th CELEBRATION|n50nm1yhqz5xvyn69iojju0yxjtd|dgd8b1x2vu6goqj88m4okithpg3t||
+sets/592/card/11|024/103|Pikachu|30th CELEBRATION|e1928mi06tdf509jhckhpj7tf1g7|ho2z85kvh6smmt5ucrm8qvgf42p7||
+sets/592/card/12|026/103|Pikachu|30th CELEBRATION|h7vwsalhl96d311i0a73u1x4mkj1|bgmrkwfgfjo1ztsll9l0s2r6mp8s||
+sets/592/card/13|027/103|Pikachu|30th CELEBRATION|2vaelwf2g3nfmq0b3aooo60m5psm|cq44wfgs17kxhqu6sqot3a0a0r19||
+sets/592/card/14|028/103|Pikachu|30th CELEBRATION|k8lf8z524gmjgxc3vpck11oqtjzr|im75cc4i9tf5kq6rw4l5mlipel9l||
+sets/592/card/15|030/103|Pikachu|30th CELEBRATION|monngafg6im6mu1nzy16g2trm51g|5m07d1r80takcr98gma86qf01qfe||
+sets/592/card/16|031/103|Pikachu|30th CELEBRATION|1hbbfzc7jkh9uagtffwmofjdo6gd|c6claqdgnncbq1jivjkn4xbd5o19||
+sets/592/card/17|032/103|Pikachu|30th CELEBRATION|7ve25hc2w472tl7twfvo9pdhkfiu|g4rvxlf99ezljibrsb84jvaz15cp||
+sets/592/card/18|033/103|Pikachu|30th CELEBRATION|mh7pbbwqs1nwbh3u0p2xtqq88zhx|l2mylb24kiwvsmcyemd5pbdpyw6c||
+sets/592/card/19|034/103|Pikachu|30th CELEBRATION|67ei7yaygslfp4osyzwuv2nyggf6|w8n6iun9ulnbdv53jl8yw469u6d9||
+sets/592/card/20|035/103|Pikachu|30th CELEBRATION|qp8v0uov085sv18zjmokh3xcx32f|s8fwvtix2mqpkhm018xpdg067sdz||
+sets/592/card/21|036/103|Pikachu|30th CELEBRATION|7fnvao7jhaeai3775e1po8xa74p8|2w7tnbsy5jbyx652xr96dmcqfdqm||
+sets/592/card/23|038/103|Pikachu|30th CELEBRATION|rqxam9wpf67dbzaoe776tge97ocm|mqyn9theqst9x0dza5q9z78fy9x3||
+sets/592/card/24|041/103|Pikachu|30th CELEBRATION|zbfpv0uxnfbfdxanmrh8vrt3trdb|ald473ts18qphx41ctwsdmgl5w46||
+sets/592/card/25|043/103|Pikachu|30th CELEBRATION|tn2gyzfrenapo7y1twtcuaou1lh7|orfzi4gdox1c2f5g0a4h92uz0uni||
+sets/592/card/26|044/103|Pikachu|30th CELEBRATION|il7xr7yjxg8rn4cp90djxzh9w56n|dr4903773wgp32wu3ypf91xaa0vr||
+sets/592/card/27|047/103|Pikachu ex|30th CELEBRATION|2bx8ihqcm7rhey4bzokfvrrfwetx|563wy0knambcxwmbn6igy7rhs6jj||
+sets/592/card/28|048/103|Pikachu ex|30th CELEBRATION|km5a6v6isr8bg4tn624eo69q2sfm|kg89z3pxg8nu9a0vplktoir9ihoc||
+sets/573/card/118|131/M-P|Pikachu|MEGA Promos|8mq1wdhseppdxmvmbcna4ybcq9q5|v3up9k33y3inr5ifiwknsknmtlsu||
+sets/573/card/119|132/M-P|Pikachu ex|MEGA Promos|5997o7qx9p3xi722bg59janvqeb5|q2oqjw6u7dz4s90s2fhnp4eb0y8e||
+sets/592/card/58|160/103|Pikachu & Zekrom|30th CELEBRATION|3cgzej0mjox2oh9jx0gfhjvulae9|1854wrt2t8oht3z6bcpux6h5oipt||
+sets/620/card/82|082/086|Pikachu|Promo-B|qfkd7mnmpvsoph6zalq8q10re17g|eejj99uxrjp5ieem1o1myzquq7gf||
+sets/618/card/49|049/233|Pikachu|Ruler of the Skies|8w9hitqrepgwvq8mes5qrmf5bmp6|42uo8jar9ky0e2ck4w37ocmrud0n||
+sets/617/card/21|021/106|Pikachu|Everyday Wonders|9y8lt1bmcxpplpigho5rm96gu98h|hpbcho1y396krrqpsgwm38ozgzi9||
+sets/617/card/72|072/106|Pikachu|Everyday Wonders|nd16ur74cqf0d2xbqgh4onbxfmw4|7i9zgmh72zi4bxgr2ywgwbvvvzqu||
+sets/573/card/120|133/M-P|Pikachu|MEGA Promos|fmlasyy8ms3wbm9kezgr09hnseon|9uv8wxsdmpqh6n9xpykvn64figez||
+sets/614/card/22|022/117|Pikachu|Mega Shine|bihop0kw4onn1f2kkpwi848yd4h1|mupq2phc1jkahh1opkn0wstpjbp8||
+sets/614/card/96|096/117|Pikachu|Mega Shine|pq160zejrmxp7f84s2e94h3xvdxx|bj45ltnii9ylr86o2d9yk905zw8q||
+sets/612/card/49|049/234|Pikachu|Fantastical Parade|baw0cjc3er022mbgt690gib6h2ud|wq2bb0ppd6l3g5wd8in1q2ipat9m||
+sets/582/card/6|006/023|Pikachu ex|Start Deck 100 Battle Collection - CoroCiào Ver.|dcq2ve3g78zd9pc1by5m6p7d4vrb|xaf6cm8e39sliohulqjfjfkfv7it||
+sets/581/card/267|225/742|Pikachu|Start Deck 100 Battle Collection|8hfushq0hhpx7qwgolg5jurm35tt|html480t75vjlp3xvgq1dztrnzmm||
+sets/581/card/268|225/742|Pikachu|Start Deck 100 Battle Collection|lhn2dzq3m3ygrghmcf8584p4lxek|c0zp7sckrudjxzgqw947z4gjtyoa||
+sets/581/card/271|227/742|Pikachu ex|Start Deck 100 Battle Collection|vgd8hzxat8k6jysx84xb3uxq87vc|frek4tuvu8xz0l6xs30p76a0ywwd||
+sets/581/card/272|227/742|Pikachu ex|Start Deck 100 Battle Collection|yomnz9omczzwh93qen8d0s5i5mbd|lxaypxfknmaikhyh112d66mxuuvl||
+sets/581/card/884|764/742|Pikachu ex|Start Deck 100 Battle Collection|ax1ki9qq8xftkhp21teia2l6pccm|tys6yg6glmnzyhzuxn9kwpd163ky||
+sets/579/card/45|044/193|Pikachu ex|Mega Dream ex|psadt3fxtsii4lpt8h6bu3esv70h|0e4vbddpuy73g1nyrbwcxmpsfg5b||
+sets/579/card/236|234/193|Pikachu ex|Mega Dream ex|wpeyi8r2a1nhgzk9m5ofex1w5qkk|1nwnai584m6d57glme7hw54urw2n||
+sets/620/card/1|001/086|Pikachu|Promo-B|s37rq826lkfqo1ghhn3vm90f064a|dzv395w0wbarrwlkt58ok5pio755||
+sets/610/card/321|321/331|Pikachu ex|Mega Rising|sbydm6ckn68y5sofwdnr51ed28td|twjekizwse0ql44jox7ce7z568wk||
+sets/619/card/111|111/117|Pikachu|Promo-A|276vpegc3re3oqtxqeef2gw1vtwm|jj0j38c5roda8ntwm1a2m8i9fblm||
+sets/609/card/128|128/353|Pikachu|Deluxe Pack: ex|g8ocarhncmjd45wfrqhay3yaumkz|49ancixqwih9prbtj765t2qdh1jd||
+sets/609/card/129|129/353|Pikachu|Deluxe Pack: ex|hmk5v003x7x1f18uw53trehoau1s|ly6k30x4afhz504ctx07liwct78d||
+sets/609/card/131|131/353|Pikachu ex|Deluxe Pack: ex|vjq3dl7dek55rl7jcwqgdjqpuszw|6d7us3uk967kjteqb2vthnv4t488||
+sets/609/card/132|132/353|Pikachu ex|Deluxe Pack: ex|d8j2j47cj9xkz4n70d00s0iy4i4c|71s01klwcg3pckb9wwkzin2a7rod||
+sets/609/card/364|364/353|Pikachu ex|Deluxe Pack: ex|6ymcwnwkmdhq95prcnlb9fgvlgb8|hhnjcwd3o48e0ywptjmkxenmlw2t||
+sets/609/card/376|376/353|Pikachu ex|Deluxe Pack: ex|53hwkioc1kghh7vuox4lcfvxm5rf|dsm7q9vf87du296wq5n46zt1qtmb||
+sets/573/card/20|020/M-P|Pikachu|MEGA Promos|7pntousgjw9ugbzgtibmadb126g0|x4963oo9fep826m5hy4ahpd10hyg||
+sets/604/card/57|057/155|Pikachu|Celestial Guardians|eteyve8657ikd0gqljvr0fbeinrp|3sb6hkrheyoun6rm8n6umxqcwbmn||
+sets/603/card/22|022/072|Pikachu ex|Shining Revelry|y5ccnzpq9vrpj4wv5qaypvp5wzdx|eiej76mzyg863xgeo2h9oi5betvw||
+sets/603/card/82|082/072|Pikachu ex|Shining Revelry|tcihzsh2b20ui6ja6tf3vpxupcte|p4x1djsa7gibz4eyqs1t8yqdb1yf||
+sets/603/card/92|092/072|Pikachu ex|Shining Revelry|cap9df9cc803ahu99wtg7a0te0qw|loocg2pmkxzex9t6rmse26n10xdr||
+sets/478/card/242|242/SV-P|Pikachu|Scarlet & Violet Promos|oo5wtex6vvy1h7et479uad8kx89m|mcge46y142uh48gw5na9k8x5go5d||
+sets/602/card/25|025/075|Pikachu|Triumphant Light|m2bn58fgpe056l5kemvxssr8klim|kcijv2hxdw354kkclo12128fg731||
+sets/619/card/26|026/117|Pikachu|Promo-A|nchg82zhxzgitblpocp5ky7dq5jm|cqlhrevvb5inn7wpjkndff6yk87w||
+sets/600/card/25|025/068|Pikachu|Mythical Island|0fvb005bu76v713pufptq95apniu|1h5at9tmv23p32gmy3abyvl4c6hh||
+sets/552/card/380|236/187|Pikachu ex|Terastal Festival ex|k24dqi5sd0fpm76l32i6p25ey8vy|gszslngtaf2pscgm2g785fzznwfm||
+sets/554/card/38|038/175|Pikachu ex|Start Deck Generations|j8yx5glr444cf54ivhabkpxcfwj4|hhht448okdh01117h273h3zajctv||
+sets/619/card/15|015/117|Pikachu|Promo-A|cpc9o7iqu1p80m2qjdwhwok469zi|zm0mimmkolyfx3og8h3crbjd2oku||
+sets/619/card/9|009/117|Pikachu|Promo-A|mc8m9f5kogbfjces3xzrgrxxcgfk|d3t8t8btrkxnlva04hjp1l0jwmnn||
+sets/599/card/94|094/226|Pikachu|Genetic Apex|omxp00euytxpm3c9bvczytdrho6j|fxhqlzuh84dcjrrc2ydfdlve6ftf||
+sets/599/card/96|096/226|Pikachu ex|Genetic Apex|5xg2oyxcyhcyu5654vy0v8emnprj|qdzxo6c2tgb07wpd95dameuiubt1||
+sets/599/card/259|259/226|Pikachu ex|Genetic Apex|tjbvcqtljg063uf7wax2htsqd2a2|du7bjndeskemkvn9pzzzxwwcqptk||
+sets/599/card/281|281/226|Pikachu ex|Genetic Apex|eaym674atzodhr8c62ji2oei0mny|r5ebcwcuqpxaz7vfj0yq3jzms4xg||
+sets/599/card/285|285/226|Pikachu ex|Genetic Apex|sgv52a68eykw20vj8sfeia1fel9v|0sybvjvcs8c8zw5qie57fi2vy92h||
+sets/551/card/33|033/106|Pikachu ex|Electric Breaker|fxczdt2tmd0kfnuaaotrgarbt1cx|kjnwa3gzx90hiaia4h9mwbm0zgkl||
+sets/551/card/122|122/106|Pikachu ex|Electric Breaker|27ij5hvg20dect30i253ncogrpci|tlg4c4o6t8f40pb794fid1ejzhq8||
+sets/551/card/132|132/106|Pikachu ex|Electric Breaker|1egfjhiv1u1x2xh5kdxefexojvlw|4emx348bhuhmoblgx2hpkjd5wym8||
+sets/551/card/136|136/106|Pikachu ex|Electric Breaker|lms4mykjyxlnhfu91xf0aylkfprj|rqi22jjs2zcmkpp4p6rfgcuao9jl||
+sets/478/card/197|197/SV-P|Pikachu|Scarlet & Violet Promos|33efokzfhtns1ysatwpn1j2fcjuk|c03vjmmgcgjnlu2enqf25s8r7fc3||
+sets/478/card/216|216/SV-P|Pikachu|Scarlet & Violet Promos|xfasjkb9hyalj6nr6s9t40onpua6|w7z7vb27kbjhnny3y86y9n5fk7z0||
+sets/478/card/218|218/SV-P|Pikachu|Scarlet & Violet Promos|uee5eyrqsjzj06ln5geos0rfprju|sr38a3dbqqyu9dvxzgarghzzrwig||
+sets/512/card/18|018/066|Pikachu ex|Battle Academy|bfghkzv3gzd2i13vkxan7njmm9ns|kden7uyhmgg6kotys9ayfzncwpox||
+sets/509/card/23|023/071|Pikachu|Cyber Judge|7l6vvgdoji2laj44e2mfjuwb2pvj|d22j8truzh9s39xfmc1ke42b18tm||
+sets/506/card/86|055/190|Pikachu|Shiny Treasure ex|gud4jebi4dw45b6nr0e5yib3hg54|3q7zwqdcg4ycm9jlmuycv803piwh||
+sets/506/card/87|055/190|Pikachu|Shiny Treasure ex|xw6rf702u4hybdv0wscsd4iknv4e|buauzzvdxe934f0yuigk90di8obj||
+sets/506/card/360|236/190|Pikachu|Shiny Treasure ex|93od76twu8t4bvg2b6j71vm9kpdi|zfwixpcdvxwanqps9qroa59q18dl||
+sets/545/card/30|008/032|Pikachu|Pokémon Card Game Classic|ubefnh9gewqrdty1lzgts0hmhn4p|hvpm9bok2703ukyeg0w2x2eixgwj||
+sets/478/card/120|120/SV-P|Pikachu|Scarlet & Violet Promos|0ays7jo863khvprshsxle7wgpj3j|l3owqfbqvleg398tez3433vzzy4o||
+sets/478/card/74|074/SV-P|Pikachu|Scarlet & Violet Promos|uj2q22024jrdix4f21e1afmyxqki|fblufhv4axpxypv0monxq02azayq||
+sets/495/card/1|001/030|Pikachu ex|Pokémon World Championship 2023 Yokohama Memorial Deck Pikachu|0wcu5zzagpfelwk187lqtn47w3wi|gle3cfli5dgmbnas6blf7b4x20h7||
+sets/491/card/34|034/139|Pikachu|ex Start Decks|y1euk68c1a3mght7dva0dxoqpe0d|aj4u4i5uoeutpngdj9uvi78qo78u||
+sets/490/card/46|025/165|Pikachu|Pokémon Card 151|42wiqsgjrjo02sbawmck1mo2rlok|l1p0sry5zdd2bv7l6wlmvh1jjf5t||
+sets/490/card/45|025/165|Pikachu|Pokémon Card 151|jbyh122zv1hx1crnhfy3nogsj4be|aglqoq3ei4uozn39a3c4e2a0gfke||
+sets/490/card/326|173/165|Pikachu|Pokémon Card 151|6lal6cz7fqg8257bj5ydly24asm7|0e4xh91h16jy5tohwwyv1s8y3nz2||
+sets/486/card/17|017/071|Pikachu|Clay Burst|28zwivyqhm61sm3nfoex085msku9|revaifo92rsu7u0pri7va74m7fmj||
+sets/483/card/1|001/021|Pikachu ex|Scarlet & Violet Starter set ex Pikachu ex & Pawmot|902smlnzbsk0odle1gxr40vw7ga0|qr7l6ico53dbzjoml3vhs8haxrae||
+sets/479/card/294|205/172|Pikachu|VSTAR Universe|y0ltqmpic2jwpd71ywl4kwuj7oik|weo0zupkg7dwzsge7no051ivzm7i||
+sets/397/card/296|323/S-P|Pikachu|Sword & Shield Promos|0cjdfkg9cv2fucddycsjlkvinz5r|u0bss1jk07j3tnbkdmokyn2to4eu||
+sets/478/card/1|001/SV-P|Pikachu|Scarlet & Violet Promos|d7qdmv88dtzwe8hj1yo19097n1b3|vkdltr78yfvmz5xfy6v1bl2e6koc||
+sets/478/card/260|260/SV-P|Tohoku's Pikachu|Scarlet & Violet Promos|mvw42f2c1s2s70ogoalon1v9hpiy|vhk8ta7azs5a8wzvzwhuwzff51kz|トウホクのピカチュウ|도호쿠의 피카츄
+sets/478/card/261|261/SV-P|Hiroshima's Pikachu|Scarlet & Violet Promos|8r0mmespxy42ndpxvfzlqb5f7jjb|awsrsnvfcnztvcpc0i7i6va3sk18|ヒロシマのピカチュウ|히로시마의 피카츄
+sets/478/card/280|289/SV-P|Fukuoka's Pikachu|Scarlet & Violet Promos|jw5foumjo5v9xw0xtc7z5aebz5q1|i6cpvwvk17ickhgl8mlbtcb7a07e|フクオカのピカチュウ|후쿠오카의 피카츄
+sets/476/card/24|024/098|Pikachu|Paradigm Trigger|2s37cp435ywngeqbjk8dcl3z1erl|masfwvuerx518rt4ml3zq40qrrsr||
+sets/464/card/27|027/071|Pikachu|Pokémon GO|992u8ghgp7kts6nnu3hidbvjf0c6|nlfx6ynmgg5twad8x592vy61gdwo||
+sets/464/card/28|028/071|Pikachu|Pokémon GO|bde8t1zw9dl3r4ngwgdctzcb5rol|pe9r40qone06i8suhmga4cbhsb33||
+sets/462/card/24|014/071|Pikachu|Dark Fantasma|oguuwk6txvmq4xgzfmlzlhp78o7j|cwy6oy1tshk6qteiljxq0qaaq1gz||
+sets/462/card/25|014/071|Pikachu|Dark Fantasma|py0x9inbj74orxbgo183hx03p7od|i838y08hoza22gxuwyk5yovnm7th||
+sets/462/card/122|073/071|Pikachu|Dark Fantasma|bg8jy280fmdn2j7b7syr43nobsxg|iu0e0yfvctx0k8s8aqjbkibrq39s||
+sets/455/card/1|001/024|Pikachu V|Start Deck 100 (Corocoro Version)|7dex1sm4xqkv7cdlq3d4qug3qcos|twb779kwwxklsahn59x5wryo1576||
+sets/397/card/239|265/S-P|Pikachu V MAX|Sword & Shield Promos|jw51y16b6aev0iwxuao5dwvokd33|wbdwpbuajltuiy48s9qe79br0ujp||
+sets/452/card/160|127/414|Pikachu|Start Deck 100|qt1gdftlcvqw9nu3yz4la4ojwa9w|2lyp8ijyoz6mrr3033rr1ugxq8s8||
+sets/452/card/161|127/414|Pikachu|Start Deck 100|nzdvxkq4382pob4gvqg64of6xvpt|65p2028ekg1b6b6n7ete7eg8gtn4||
+sets/452/card/164|129/414|Pikachu V|Start Deck 100|w9ihkjxw44zc5cg4spn0ym40vorp|5v2ae7qtdu3sdp1nqedkvle9khd8||
+sets/452/card/165|129/414|Pikachu V|Start Deck 100|owb5oygbk094j6kdscb23rpxi779|m0ddsoo7sc5w9lgiakxkgvac20e1||
+sets/452/card/541|415/414|Pikachu V|Start Deck 100|p1154nqst9yzovvytpq8g52rk9c6|79a9wsa9vzy22txuu47kzmy9uuoy||
+sets/451/card/45|045/184|Pikachu V|VMAX Climax|a2m81w609r7zs8r05k4w7kpp47f5|x6lggndt1zf2h5tvuooed97v7kwn||
+sets/451/card/46|046/184|Pikachu VMAX|VMAX Climax|08gpt9yjqxzlgxwqrbgfqwlo0eej|30gemaipgb84fvwrnbbhl6i1w0ec||
+sets/451/card/219|222/184|Pikachu V|VMAX Climax|ha89gmoen8o0qresh6z6t8tgfcuo|diyt29qepczd2lhxndxz10k3f85d||
+sets/451/card/220|223/184|Pikachu VMAX|VMAX Climax|bq4wg51hkc2rv57uspl4nahe8qvo|0ywwvcazxt4wrkpybdvdtdzwmdee||
+sets/451/card/273|279/184|Pikachu VMAX|VMAX Climax|5cusoytuueu02pnm5mlte01a4kvm|v6vssjauc1h3iqjfmrwg0zj43y21||
+sets/448/card/1|001/015|Pikachu V|25th Anniversary Golden Box|s8d97bq16f47wtmp2wujzjuu4xfa|co0u9q5u1p79kk28wze1yt918icp||
+sets/446/card/1|001/028|Pikachu|25th Anniversary Collection|ff6gvf1fn9btma6v79o6b1ebr30e|keggi9kohr7sf0pbvz19ebcc16de||
+sets/448/card/3|003/015|Pikachu|25th Anniversary Golden Box|ury8winarov8f75khcdog5uodvvx|97zkd9d240bi491bisbiaokniyu2||
+sets/448/card/5|005/015|Pikachu V|25th Anniversary Golden Box|6t8h9gmdarrfnye38t1u0gvainoc|jwmm4px1tglh0lqnt87ng9k1743j||
+sets/448/card/6|006/015|Pikachu V MAX|25th Anniversary Golden Box|gp1ttzntcf2fez8toxxyx77r9ivp|5kkez53pnvrubl0vstn67xbtwtnr||
+sets/447/card/7|007/025|_'s Pikachu|25th Anniversary Promo Pack|9bkoa5mzbine96v3jc85nh7mw9uf|1fv0e3ax9kwprz2z0v37n4so5gjw||
+sets/446/card/20|020/028|Pikachu V|25th Anniversary Collection|sdv6c38oswevj9v5mfwu2ca4fj0r|0n8gghw3kd5bb3zuil0vgsokzqud||
+sets/446/card/25|025/028(左上)026/028(右上)027/028(左下)028/028(右下)|Pikachu V-Union|25th Anniversary Collection|k498r0exknfhtbszecusr732j1ox|6hd4zei9f9xxk9rsdu6zs2ltv4wg||
+sets/445/card/24|031/095|Pikachu & Zekrom GX|Creatures 25th Anniversary Deck|7jzd60lyuasm762jaddkfc5ajwff|vasnleihkzupzh2lo46em7ihreln||
+sets/397/card/202|227/S-P|Pikachu|Sword & Shield Promos|lift2gfdw8mt6zohsoekkkr5lswb|lmjhyqdiggdkxm72s0653fjtf8nh|ピカチュウ|피카츄
+sets/397/card/184|208/S-P|Pikachu|Sword & Shield Promos|q2m9sezx1fdgruo0in9e2fpqsexo|i0lbsuvnextqchtgvxfj4qati69e|ピカチュウ|피카츄
+sets/432/card/26|026/069|Pikachu|Eevee Heroes|4x9dfdhajeo3w724gvh0h0j43ei8|5cjzn84llhqfu90bxtt2v7a7pkwp||
+sets/397/card/134|144/S-P|Kanazawa's Pikachu|Sword & Shield Promos|xwhpdyppko3fgh7n6rsagki2i2s1|qlvtbr2xvtku62v82iinnbpifooq|カナザワのピカチュウ|카나자와의 피카츄
+sets/397/card/137|147/S-P|Kanazawa's Pikachu|Sword & Shield Promos|qi68dpymfc4asko82wm3hwnxoh5o|17w42o9l3gpgv9kyqs8f6ss8jqtq|カナザワのピカチュウ|카나자와의 피카츄
+sets/415/card/30|030/100|Pikachu V|Astonishing Volt Tackle|kf1853jtssu11xzd2slkxycu1vnm|f4jtoqc8m4peuaied1vnwy1jsf85||
+sets/415/card/31|031/100|Pikachu V MAX|Astonishing Volt Tackle|tmakdyc77ei8gtbootighoojf4aw|dw62jd2wawyzx51dtgsubp0be115||
+sets/415/card/104|104/100|Pikachu V|Astonishing Volt Tackle|imfpp59xbix0py9rtoptz7ff6yn6|0wkmpyrdnp3xh4gv1z94y8igljvk||
+sets/415/card/114|114/100|Pikachu VMAX|Astonishing Volt Tackle|pt2wz885dhkdqjri1qrrdxeuw3x7|waewbcwh0fdgl5axsxzb5ooystot||
+sets/397/card/112|121/S-P|Pikachu V|Sword & Shield Promos|i3iam37bmp4jxvkpbwm7pqi2tpb7|4wfthpettelt48x5y9on5dqu0g7l||
+sets/397/card/113|122/S-P|Pikachu V|Sword & Shield Promos|u6qzw9g4ztxh2740lodpraj9fecu|6hxzl9vv8fhqv53gp37idoz752iz||
+sets/397/card/114|123/S-P|Pikachu V MAX|Sword & Shield Promos|ov4478us5puunbjnn6rzep96614x|clqjntp7u93aaz8gj19l1vrekskm||
+sets/397/card/115|124/S-P|Pikachu|Sword & Shield Promos|w8eg32nysrsy5ub2fvwubwoegb9p|5solxl18213zpv6f3rarfhn87i8i||
+sets/397/card/116|125/S-P|Pikachu|Sword & Shield Promos|cs9tk5fx9e0tbibcu8zmijdvx11l|yn9fjvpwnqg5nkynihsjxemos3mi||
+sets/397/card/117|126/S-P|Pikachu|Sword & Shield Promos|1e2pgdpb06uvzez392ggbs8th8q4|0yfo43rxyzgfehxnzc9ehbn2ny1k||
+sets/397/card/123|132/S-P|Pikachu|Sword & Shield Promos|k4rt4d23d6608xwwqv7s9dm37v4n|234ahx9o3gknyssufqcqslqbnbbm||
+sets/397/card/96|105/S-P|Swallowed Up Pikachu|Sword & Shield Promos|00ymkp1gn1gz8uhin0do579dpabm|yfic18tywa00a0lsn4ypcrqxnu0i||
+sets/412/card/28|028/127|Pikachu V|V Start Deck|0qor0l0oyillcx49mj7n6dvbg3e6|9wupduegn98gqntwqa8tq0qqoec0||
+sets/397/card/35|036/S-P|Rescue Team DX's Pikachu|Sword & Shield Promos|ci50pmj9zssu4scsm6p5zsrfduym|zpilmw13mswg362tj4htcfvb4wud||
+sets/397/card/23|024/S-P|Pikachu|Sword & Shield Promos|4s884lo2wddpqdlif0nxlqwnhjri|hskp2nqldzp5smhm0bbqaylbo6td||
+sets/324/card/400|400/SM-P|Pikachu|Sun & Moon Promos|5t2brllhqbefjtqep9lw1p7308es|2aw1jx57p78zkuno99cncmrw74xo||
+sets/398/card/70|001/024|Pikachu|Starter Set V|pkcl6wcjqkk789xffh25roh74pdc|6jxstuna40vlpxuoyazjcolitdm2||
+sets/397/card/2|002/S-P|Shibuya's Pikachu|Sword & Shield Promos|nvpad350ddphubq2nw1bjl1dthkm|2ki1cn74ob0hx334woot7m7g0exx|シブヤのピカチュウ|시부야의 피카츄
+sets/397/card/1|001/S-P|Pikachu|Sword & Shield Promos|tmuuoap7vddw7z9sersoj5lkdh2f|0vekl2n01hiocr7j8am0vxmscsoz||
+sets/392/card/41|041/173|Pikachu & Zekrom-GX|Tag Team GX All Stars|ru5ufclxmsurjec629y299q04dp1|8wwkypzfxh4toje681e2litkbzzy||
+sets/392/card/221|221/173|Pikachu & Zekrom-GX|Tag Team GX All Stars|39u0xzr9ujfr7uws4l4g9f94lofu|twkgqyscpwdln7y3cz5uunbj3bqo||
+sets/324/card/407|407/SM-P|Pretend Comedian Pikachu|Sun & Moon Promos|qkfc7zpc1hgv9o7l9w4q3rvbapvo|5rzz6ikeezs703c26nwvakrriv2m||
+sets/324/card/393|393/SM-P|Pikachu-GX|Sun & Moon Promos|ljyw9z3gn31phae09ycwt7a52uf7|u2c8o5h0t2tbrcgot1hjv7bcc1en||
+sets/388/card/16|016/049|Pikachu|Dream League|17mqxqdklvr5bphl7iuv50ews3i4|tqqxnx5kcmw77zmzhlrgskw31j8a||
+sets/388/card/54|054/049|Pikachu|Dream League|zb8nm56hq7qp1sc5tpa6ztd2qolv|xbovzkf1cn7ax3sw3gy8jhefnwdk||
+sets/324/card/376|376/SM-P|Pikachu|Sun & Moon Promos|51stl5z8kyhsmh0xxc3kg6fho8ex|992au77b5ed7jbaeq1dah4uvbxbs||
+sets/324/card/377|377/SM-P|Pikachu|Sun & Moon Promos|n4a0aw0w883ibh45cxwbzrrq8n6r|a1wkocqo0s362jchncbu8qvl7ui3||
+sets/324/card/369|369/SM-P|Pikachu|Sun & Moon Promos|olspky3uyde4e3hnjspysmmvlpp5|rl6dig2w26nrrb5vk27gj75t2kfv||
+sets/324/card/367|367/SM-P|Pikachu|Sun & Moon Promos|cpzkpj61wkjvmfhhdj99tjugwtl2|lt3q11rc9vb64bp3042yffom0pz0||
+sets/324/card/337|337/SM-P|Detective Pikachu|Sun & Moon Promos|09pfmsr1wr7vcup9k9rgazxn12cq|30kqod8y0qttsmy19mlf5277loxd|名探偵ピカチュウ|명탐정 피카츄
+sets/324/card/338|338/SM-P|Detective Pikachu|Sun & Moon Promos|42w827uet18rcbqff1f31yyzuei8|xhmk387qod2j6ohewsevpxw02ib5|名探偵ピカチュウ|명탐정 피카츄
+sets/324/card/339|339/SM-P|Detective Pikachu|Sun & Moon Promos|7d3paxbn0wddye9te6o04fy255wc|477m5uh27iv03z0cj74fplupyjia|名探偵ピカチュウ|명탐정 피카츄
+sets/381/card/9|009/054|Pikachu|GG End|l1dhth2de3vc85qqrj9mvn32yplo|gffx71hkbveguz1qr2wdbsg9vonz||
+sets/324/card/325|325/SM-P|Pretend Tea Ceremony Pikachu|Sun & Moon Promos|nbf237al6ur3lrrwf1cg24l2tt6f|ewixo2nmmh2rv5e8fz8ic51mtq58|お茶会ごっこピカチュウ|다과회 놀이 피카츄
+sets/379/card/24|018/051|Pikachu|Family Pokémon Card Game (Sun & Moon)|ur8tcgqxy2gdfr4t8amz3b6do9kk|5ku77qaedwrxiiurp6b95h4fhb10||
+sets/439/card/33|019/053|Pikachu V|Family Pokémon Card Game (Sword & Shield)|9f726nubcwp2r40q68jgfpnlxk2w|pm459oll0ewzywi03mui079s40cj||
+sets/373/card/14|014/055|Pikachu|Night Unison|1rwvdim2zuea6vkn4m4bcrdm2xx4|t4b5w0vnzwdubx0i6410p543v3z2||
+sets/324/card/288|288/SM-P|Pikachu|Sun & Moon Promos|te0t4d9ranh8kha1zqxofxcbov1o|khyuevttjg83aj6aajhgwfomovi3||
+sets/372/card/31|031/095|Pikachu & Zekrom-GX|Tag Bolt|ly63w49v6bewf8cl9gnytosserti|me6dcroez4cxx0px3i3kwao3u3v4||
+sets/372/card/100|100/095|Pikachu & Zekrom-GX|Tag Bolt|3bcekio7a7bodgyqvpnvv9z64hl6|3o8bdkdnu9s3zsuv7mwr6lhwj2zt||
+sets/372/card/101|101/095|Pikachu & Zekrom-GX|Tag Bolt|sc2v8els4yr2uqi1y5c9djbacq0t|zq1croq4efbvsyv08o9y1kvczwnr||
+sets/372/card/102|101/095|Pikachu & Zekrom-GX|Tag Bolt|88qbrw45bksneuek4ac6h4cdydl1|0qi6ux5ef4mmmkc8g1wqbxmxuwu4||
+sets/324/card/307|307/SM-P|Pikachu|Sun & Moon Promos|58zkc0ihwc0u1u1ino5ndu28flnm|6fcn37oalobz8khdqfhdo9k64k48||
+sets/324/card/291|291/SM-P|Pikachu|Sun & Moon Promos|dcccfmg57877k88hd65ckhznkwz7|nw030uiohspcumneleegqhf3zozw||
+sets/324/card/276|276/SM-P|Pikachu|Sun & Moon Promos|vhsykhfpt9ruvjg3swz7pnkwqam6|b7vqav1ikt03el8w2lqjetlq7v1r||
+sets/324/card/282|282/SM-P|Yokohama's Pikachu|Sun & Moon Promos|ysj3lwcuhsb6lf1zw7cjych48qka|ava7l4rm3q767vvbp8t9jj9t425r|ヨコハマのピカチュウ|요코하마의 피카츄
+sets/324/card/283|283/SM-P|Yokohama's Pikachu|Sun & Moon Promos|9jm4c85xlmh7rytm5rs81w4ys0pm|d533gd22c1wv3mwue9plqklbipt4|ヨコハマのピカチュウ|요코하마의 피카츄
+sets/324/card/280|280/SM-P|Yokohama's Pikachu|Sun & Moon Promos|v6u4rt2sk0ohi7kiej0l6ybfkqk8|yehu6jxl73z882ovywszjxq6q48i|ヨコハマのピカチュウ|요코하마의 피카츄
+sets/324/card/281|281/SM-P|Yokohama's Pikachu|Sun & Moon Promos|yvdygp9pnh3ovcnenyadkti1lh56|h77jkeyk97u8l10lx0dlapsb8hjz|ヨコハマのピカチュウ|요코하마의 피카츄
+sets/324/card/249|249/SM-P|Pikachu|Sun & Moon Promos|olkgyq4x46wufkkxuwkkqqetlrn3|7sycxg14mf1ahq690dgj6nf8vlbz||
+sets/324/card/270|270/SM-P|Red's Pikachu|Sun & Moon Promos|72letr96gcz42c2x75uket7882q7|tkj17gry37krnd6l0wp7mldqfr0e||
+sets/361/card/32|032/131|Pikachu|Starter Deck GX|r1v6jthklh7sqz9s1mthb5baehep|d4v820r2yof65jd797e6fk26vtqp||
+sets/324/card/262|262/SM-P|Pikachu|Sun & Moon Promos|3gny1ha4clohorvew7httpmuuwjk|1ek604axvhh7dfrwtd5sb7840adt||
+sets/324/card/227|227/SM-P|Pikachu|Sun & Moon Promos|6uwqn7oelkmc965tcdhhghdach8w|yd7qxd0fh9do2my2u3s5lgrdqyqt||
+sets/324/card/242|242/SM-P|Pikachu|Sun & Moon Promos|kai34u2wl3fi1rlqvmsbqs4qflq8|ktu4f6burd0z8e0cq70fxe9kpjpt||
+sets/324/card/224|224/SM-P|Pikachu|Sun & Moon Promos|sb457tbxd85f07rf0hksfqgmp53e|7of1ae0ohgm4abpak8lmxa3zr2c4||
+sets/324/card/200|200/SM-P|Pikachu|Sun & Moon Promos|11kiit4ewmy6iqmnqppzueezz553|fy5zq3i0dwykiq180wnodh3md01u||
+sets/324/card/208|208/SM-P|Hakama Pikachu|Sun & Moon Promos|pe6npthl42e1dpsrr3388ua7wuka|fnq1y8ijqw5ptd6gkueglqipbjme|袴姿のピカチュウ|하카마 차림의 피카츄
+sets/324/card/209|209/SM-P|Firefighter Pikachu|Sun & Moon Promos|op31r0vrajnb3ylmktntbh0bqdyp|sgms3izlaul5zls4eg6t5cz7xoi0|火消し姿のピカチュウ|소방수 차림의 피카츄
+sets/324/card/210|210/SM-P|Gentlemanly Pikachu|Sun & Moon Promos|r1q791gvoqmu747gfk38nr3ze3eb|vuktwg3dbt6b4wzkufgv75nrdm1c||
+sets/324/card/207|207/SM-P|Pikachu|Sun & Moon Promos|cdd4xgbpgdksvz7r1so0y8w2fsww|0048iqp75bujjvd8c4rqcfytrbn4||
+sets/324/card/214|214/SM-P|Pikachu|Sun & Moon Promos|mwn6t63z1y4y2r0otb6yljh53y8s|dhhvmvpk823t7cfdige05yu3jq7b||
+sets/324/card/199|199/SM-P|Pikachu|Sun & Moon Promos|1h06dz8398lzk2n02r239vwfe3dn|7e3ezj3m1uxtwlw8s1kq70dx7hlf||
+sets/324/card/191|191/SM-P|Pretend Boss Pikachu Team Rocket|Sun & Moon Promos|myn1kscy11qrobhbo4utosfswxq2|a3p7qka4tdaxgrpy56uccqidzrq4||
+sets/324/card/192|192/SM-P|Pretend Boss Pikachu Team Aqua|Sun & Moon Promos|k0qjck8hb7d8wkh72sdt750gg09s|0c9nft2mmg7ljpkvcn2y3y6fvfik||
+sets/324/card/193|193/SM-P|Pretend Boss Pikachu Team Magma|Sun & Moon Promos|w6mjugcnzxan1fy45890cuwyet0s|tdn8doks6py2pjz9ppjp5cqrqqzs||
+sets/324/card/194|194/SM-P|Pretend Boss Pikachu Team Galactic|Sun & Moon Promos|mvnim8001hidax63zy7fyahr3ped|hr7mwvgsm8yn0sd21q39xe6covil||
+sets/324/card/195|195/SM-P|Pretend Boss Pikachu Team Plasma|Sun & Moon Promos|d60hzxgk2c7a0wecety2i6swp97m|s1y5rzte4x6gjnkbrcili56em02t||
+sets/324/card/196|196/SM-P|Pretend Boss Pikachu Team Flare|Sun & Moon Promos|8bahvb5gew6ctdckrm5tmm6k2v15|w8kle8x8nk0nlptreqtqam4szze9||
+sets/324/card/197|197/SM-P|Pretend Boss Pikachu Team Skull|Sun & Moon Promos|a3ws035orv78sdg9tdw1rkq1zwdw|0ytyeknt9jtrkdoi93y8klzxilux||
+sets/324/card/168|168/SM-P|Pikachu|Sun & Moon Promos|mce2xfn5hy77dw5ihsejpovrwcwt|ri0k5umx7428z7nfksm6k88f2yn5||
+sets/324/card/179|179/SM-P|Pikachu|Sun & Moon Promos|9ao5opilhqn1eb3ms0ct8ih4tlxz|hq9a78jv45pez1or1rqi9dqayjcj||
+sets/345/card/28|028/114|Pikachu|GX Battle Boost|pq8l89ss07l9ntkl4d0xxemw42vx|itna038dkneh83ejjne3tnt72ebg||
+sets/342/card/15|015/050|Pikachu|Ultra Dimensional Beast|ws0gy91grwnnyrm9utflvedsywmx|7rp4iywk542ufk6xc5c4qgud11nn||
+sets/324/card/114|114/SM-P|Pikachu|Sun & Moon Promos|vj996pr17w3h9zhalrm4vgq6kvhm|fztlngnktdfib54hihwafgg7r8af||
+sets/341/card/29|029/072|Pikachu|Shining Legend|3tlgr8fdnb79a2ma3260i3om312f|o2n3sdfp8hcwxgft5jtx9snou44z||
+sets/324/card/108|108/SM-P|Pikachu|Sun & Moon Promos|dpopsztqvo5hal7y5ebh0ptqhcyf|716zyq9t3g8rx0e5s4aehe2dut8n||
+sets/324/card/86|086/SM-P|Ash's Pikachu|Sun & Moon Promos|e6447lngwn1yjsqt53dwtyw8zu0s|fyzaxf7wac6ix6xtuvih3oqeysbj||
+sets/324/card/88|088/SM-P|Tohoku's Pikachu|Sun & Moon Promos|txwxbj77myvkkr6srwhqk19wmjlx|i7101g1pt7ymr9th4f4lqqy93f7e|トウホクのピカチュウ|도호쿠의 피카츄
+sets/338/card/13|013/051|Pikachu|Light-Devouring Darkness|xxhs7tag7ryqzfpbm7025xcgl2kd|x2i8smku8mtjqntw251dsw2d0u1d||
+sets/324/card/71|071/SM-P|Ash's Pikachu|Sun & Moon Promos|sfndpue571w7a6vsq2rmpwl7umlk|ouheyi7ojaf3vmiqyssdegoavv0p||
+sets/324/card/72|072/SM-P|Ash's Pikachu|Sun & Moon Promos|41qni5evx2tkvy1zfld69isadtob|0im3uumd7r6n1wmatba8bxghnkd9||
+sets/324/card/73|073/SM-P|Ash's Pikachu|Sun & Moon Promos|e9zarw3la4uco9s6ggvhs767a8iz|n5644sbgut68oxztbvd23hj3q7wf||
+sets/324/card/74|074/SM-P|Ash's Pikachu|Sun & Moon Promos|028nju9egktjnqhzlhwb2ewkgacn|rv8c7h7fhx0fjyujqyy0neh5g2ft||
+sets/324/card/75|075/SM-P|Ash's Pikachu|Sun & Moon Promos|1jmtkary4tocjh6hjnt5wi7lcoqi|cwtmcbookxpu717p8txl4bjot79h||
+sets/324/card/76|076/SM-P|Ash's Pikachu|Sun & Moon Promos|n9doem71w5ftg2b2v557znzcp17x|lbxqbbsyfljf10nxghsubi9sqpqm||
+sets/336/card/5|005/026|Ash's Pikachu-GX|30 Card Deck Match Set: Ash vs Team Rocket|yij0i43ch2qc51kkhxknw46p1ofo|uerfclqx6re3ih9jfc7zo32vj42u||
+sets/537/card/48|029/171|Pikachu|The Best of XY|m91adia4a215ypzr8we5b4cbwx95|w0nuywgdgeylcncf11w1x3x89sv1||
+sets/537/card/49|029/171|Pikachu|The Best of XY|69oi62x5fvh0mlhdgiqhwrds38ln|5r001cgz2x9y29jtkt7f0fez8mnd||
+sets/324/card/61|061/SM-P|Pikachu|Sun & Moon Promos|718ee68srrd30mr47h6g0umitqqq|ocmfap6i193rfn5bcw44zbkh2huj||
+sets/324/card/55|055/SM-P|Easter's Pikachu|Sun & Moon Promos|nu9vv4a5qym27xakxxucz4wvl32j|48785653gthheqlirfens10e9f1v||
+sets/324/card/44|044/SM-P|Pikachu|Sun & Moon Promos|h22czxv4zuicfmjoon374i75itj8|v5uqo1cq813enu099xo3qnsgo4g9||
+sets/324/card/68|068/SM-P|Pikachu|Sun & Moon Promos|onu5h7nqdx8slttjcf437p0hmvzz|l00d8f5w2y8u34m0iwk9pnt7wrjj||
+sets/324/card/13|013/SM-P|Pretend Team Skull Pikachu|Sun & Moon Promos|x4uey7me30pyaxq4sqejaqjfpirj|htpb0edjqvmrejyh05yxtn9pzp1s|スカル団ごっこピカチュウ|스컬단 흉내 피카츄
+sets/324/card/14|014/SM-P|Pretend Grunt Pikachu|Sun & Moon Promos|9muotmjfsmfkicnn1l7db5zeu4mt|4m0cy6mzodq7jijf5ne3rd6avxlp|団員ごっこピカチュウ|단원 흉내 피카츄
+sets/324/card/3|003/SM-P|Pikachu|Sun & Moon Promos|rk57qujslu6pngy9uwevg0st8qdo|12iebtkyan1e2pmrjce3xob3apz8||
+sets/324/card/8|008/SM-P|Pikachu|Sun & Moon Promos|9rcuvrbgo2ervh2fpon6lqahd01y|pt56d9xpmvjz1agg556m5ccm1kzn||
+sets/324/card/5|005/SM-P|Sapporo's Pikachu|Sun & Moon Promos|otqijfa2ic3iiikvqioerntlujv9|vs7e4ril9a5n9d0boldxw2aj58kk|サッポロのピカチュウ|삿포로의 피카츄
+sets/323/card/4|004/004|Pikachu|Pikachu and their New Friends|r6dirtkump3204xdi1qyk7c1njch|3wn1yi9gk6x19cv7so54zrr9wam6||
+sets/279/card/309|292/XY-P|Flying Pikachu|XY Promos|8nwtk7gg0dypx42nqe4jy0zru5gi|4ustkri6dq4gb897ui39gpaf4faw||
+sets/279/card/310|293/XY-P|Mario Pikachu|XY Promos|1x0mfm7lcj24mlyi5eqf65565tmc|hil53mafntb0z6mcuner1op85uxo|マリオピカチュウ|마리오 피카츄
+sets/279/card/311|294/XY-P|Mario Pikachu|XY Promos|68gz1blzkr71ctwfiraijteb41vq|0waxrrvlgxrwj4xi3jcz4y7q0nzm|マリオピカチュウ|마리오 피카츄
+sets/279/card/312|295/XY-P|Luigi Pikachu|XY Promos|5sssdr7x2zblt9q0lz5oy0h0x0wv|l38dihnbhng9hjofao04524jivgz|ルイージピカチュウ|루이지 피카츄
+sets/279/card/313|296/XY-P|Luigi Pikachu|XY Promos|qvmvth0v4vwqw7y2oq9z7fttxdwt|9b835bsq48occ31beqxxqhzis83s|ルイージピカチュウ|루이지 피카츄
+sets/279/card/296|279/XY-P|Pikachu|XY Promos|9sydhtmlepid0cdmjpjf1okj7e1f|rp7btghnwtodmk4bdnl5s47s2584||
+sets/536/card/33|033/087|Pikachu|20th Anniversary|5z173aj47cpfm9f0ynp384xqsmdn|9wwes9vv31fwk83vhk3cfifbzl27||
+sets/536/card/94|094/087|Pikachu-EX|20th Anniversary|su27yvqyd2hohovakqmu4ng875wp|iv4gj8p6xa4hiyaowh4yc25h2cb1||
+sets/279/card/281|264/XY-P|Surfing Pikachu|XY Promos|yzbjqdeo9alpn44ax9ksig4nicli|fbh2kqj3hrrwn8ck1wibzk67t2pg||
+sets/279/card/298|281/XY-P|Pikachu|XY Promos|ufcjdy1yx15tnvz1by2i0zmhkjaz|wenil6wnaj4rf2abfv7ldhq03b0l||
+sets/279/card/276|259/XY-P|Pikachu|XY Promos|hfi1wd5v75rctlben6sclragi0kr|0yx4x8y4kusmq8vfvpjmioee26ka||
+sets/279/card/247|230/XY-P|Poncho-wearing Pikachu|XY Promos|3qhps0v8qjzzyvm77ph3f93jbt7e|l3j4skk5qb0ozm7xyyjv55xjspwh|ポンチョを着たピカチュウ（レックウザ）|판초를 입은 피카츄 (레쿠쟈)
+sets/279/card/248|231/XY-P|Poncho-wearing Pikachu|XY Promos|ysm1x1kfs02jmay5icp2u7d67ryl|z3t3e7iqkisr47ztwld6q6fbmqpj|ポンチョを着たピカチュウ（黒いレックウザ）|판초를 입은 피카츄 (검은 레쿠쟈)
+sets/279/card/264|247/XY-P|Pikachu Libre|XY Promos|3eokplin7m479536wvsfpgvenewm|vhcd3pfvvg6agb98e3hp7eyehnuv||
+sets/531/card/36|036/131|Pikachu|Premium Champion Pack EX x M x BREAK|3wefsamzh04fklgdch673lqf4kux|cnyskqwfee0a9qgowre4onzoi32c||
+sets/279/card/238|221/XY-P|Okuge-sama and Maiko-han Pikachu|XY Promos|umif261ywnn9ca5xvwb8g3sc3r6j|d3u95y3mvcpr3mx58fn0c7gd4agx|お公家さまと舞妓はんピカチュウ|귀족님과 마이코 피카츄
+sets/529/card/18|018/072|Pikachu|Starter Pack|6z47ho3nbh6rp957s3g4oczajrzi|y9j5ew8s642ctwl713nvilvu21bw||
+sets/527/card/10|010/032|Pikachu|Pokékyun Collection|gk3yw9xxrei5fgxc64tjnqognj5m|he7zkehou5r6vcq5ulonks1ybnpn||
+sets/279/card/220|204/XY-P|Mega Tokyo's Pikachu|XY Promos|4cplmgebyk0uw45040cc8wnv50zn|svrru5rehynhze31kyh83ywl6640|メガトウキョーのピカチュウ|메가도쿄의 피카츄
+sets/279/card/222|206/XY-P|Pikachu|XY Promos|tn8jibyifx7mtuy1b7kgoc62ewre|pjkrrgyot8h6guezy0ybjs5bbh9o|ピカチュウ|피카츄
+sets/279/card/223|207/XY-P|Poncho-wearing Pikachu|XY Promos|br5bj5453sz4apc7zjq7oe9jb505|ktn93tf6k6poq5yb9rwxr7xha2ax|ポンチョを着たピカチュウ（メガリザードンX）|판초를 입은 피카츄 (메가리자몽 X)
+sets/279/card/224|208/XY-P|Poncho-wearing Pikachu|XY Promos|phv29j9pbwai5wak56n79163snck|em4802k5qlq721pk9mnwxqwvs1nd|ポンチョを着たピカチュウ（メガリザードンY）|판초를 입은 피카츄 (메가리자몽 Y)
+sets/279/card/191|175/XY-P|Pikachu|XY Promos|vvr6mgl6b32c1xy540acc8te9mxn|o2ehcuskfxvp97oq7t0m1h0c2pwf||
+sets/525/card/1|001/010|Pikachu|BREAK Evolution Pack Raichu BREAK|13kwsyt3fs0y29hvu14a6bw3sugx|heozjgr1umvkyhxs5iu7woonojxe||
+sets/312/card/11|011/049|Pikachu|M Master Deck Build Box Speed Style|pr76bpbgd7umxdkfljci70fgcgt4|8d9uoc2afykitednvat1vknwbdmk||
+sets/309/card/8|008/027|Pikachu-EX|Legendary Holo Collection|d363bl4kydko0m798bljxznjpfv8|ajolhpjky977scugnmejj5gxto5z||
+sets/279/card/170|154/XY-P|Pikachu|XY Promos|gdwf3e2s1b4dh6tmi1cnsig6kyu3|zspfal3k906bypita1r0c14dosvz||
+sets/279/card/172|156/XY-P|Pikachu|XY Promos|8odkyyfwbu0lh049hoo7sbqjs7js|3adx3jbxn20np78bmalj9tjccmxe||
+sets/279/card/114|099/XY-P|Cosplay Pikachu|XY Promos|zzlw57zm67tjtrsvyrobcbbhli5k|2kv7lu3npvemv2fmsn9570knjek7||
+sets/279/card/113|098/XY-P|Mega Tokyo's Pikachu|XY Promos|z5072z3q44kffsswds5gtd4qqb05|v2dv2fx84ruwymgj01q814hfkr0y||
+sets/279/card/109|094/XY-P|Warm Pikachu|XY Promos|z2tarp9ag291vxi60sak4vcxzxha|0w6hoayomjg683r39bmz66mwq8vi||
+sets/279/card/110|095/XY-P|Warm Pikachu|XY Promos|v1ejiqy2u55tvm18t7xvcgurm2nt|9s9y03701nkz0s35zoiqtg5ymo97||
+sets/279/card/111|096/XY-P|Warm Pikachu|XY Promos|86o4khpyndrkn6r5vzbdic0o3uao|cre1dwn5oyrkomot93pbhtxspo5z||
+sets/279/card/112|097/XY-P|Warm Pikachu|XY Promos|en2o3mt0u6hu2dlz1ubz6qh64ulm|0bu1r4jx7l4xjkzlehb6lramr4t8||
+sets/279/card/105|090/XY-P|Pikachu|XY Promos|8qnlqs7hc8xfcgawlc4ffkrbfzs5|eag62zyorvsdxrsgkont6tvgvlcp||
+sets/279/card/85|070/XY-P|Pikachu|XY Promos|now831m8oyvotf9zkw44i46qdiyy|u6ci1jo2507m8rib3sxmrusx7bcd||
+sets/279/card/83|068/XY-P|Pikachu|XY Promos|9aymh81kidw4m2vy70r0xhldi7ef|qejat40ee0lxfoo0jopynw36385s||
+sets/279/card/84|069/XY-P|Pikachu|XY Promos|wvbnsb22xthu10rwnzm9qqjmizct|q16mcmbg9q4vohbi4wep43anbt6g||
+sets/279/card/67|056/XY-P|PokéTV's AD Pikachu|XY Promos|o46wfx86vxy1gufg6mazlxz9cts4|6of7h27my5m8wam41o43kvvah539||
+sets/279/card/78|064/XY-P|Pikachu|XY Promos|5fmh35m5w4xtx2dr0htjdbfsoqyi|669ef4cl4wfeoldsm7xji1v6nl0e||
+sets/285/card/22|022/060|Pikachu|Collection X|b5hobju43qns4wjydqw5p991rjcg|pdyjgzkzqsqxpxm72gkwcmuher3a||
+sets/279/card/1|001/XY-P|Pikachu|XY Promos|7kfcdhkxjo9c0j2req7wntgzo728|g5ncidh7xzojvcz8yre99bp20541||
+sets/279/card/77|064/XY-P|Pikachu|XY Promos|eiv4wkqoxqu97zjmtw72grhagpvc|e8q1wbkyv4yw5npq72y37rguy2n2||
+sets/279/card/76|064/XY-P|Pikachu|XY Promos|vrsqgonjhqaw3unznr19m5f6p58f|ow8hr8ejkbgt74sg226eejb6ivu8||
+sets/279/card/75|064/XY-P|Pikachu|XY Promos|x4e77koqjbq9h7s6fzc6auxncrnz|p9ddqc9cxuuh4zji4h7rjjr4swo1||
+sets/279/card/329|XY-P|Pikachu|XY Promos|yryu9bzav8x92rzubkyvd3bssf05|a5mahvaq57al4q05tv68df50dfkz||
+sets/279/card/392|XY-P|Pikachu|XY Promos|seg4twg7sogn15fj711lqj5gy0is|9nbtiuo0uzb9c5oggogfr8zmrypx||
+sets/279/card/415|XY-P|Pikachu|XY Promos|izpashyi8ryc8kdk71b5s3x0sb2g|9qmvq7win7jfiwh9rcsi5tnlwfwv||
+sets/279/card/422|XY-P|Pikachu|XY Promos|m9amntds76ec8egelijcd82jnaso|xayho1alatq4gin8zaq39ilhqkpg||
+sets/279/card/420|XY-P|Pikachu|XY Promos|bgrnqmz8gomfysgvim6nf1297718|xqsi63pdym9bkhyjvau5oh6dxjsg||
+sets/279/card/416|XY-P|Pikachu|XY Promos|ak7aom7q7sizmmtdjx45x9hkcf43|eir4opbdemar80i4sxb8zeyl2m0v||
+sets/279/card/418|XY-P|Pikachu|XY Promos|ylgw23ksb51mdh2f0773xz9se687|kmhd63cevq7m6usu306xpnywgixj||
+sets/279/card/423|XY-P|Pikachu|XY Promos|t97q8tz1pb7w4ky2erua64uhnrql|r1agmup8daosqck9smz4brajh770||
+sets/279/card/443|XY-P|Pikachu|XY Promos|jmn0v9l99otz6s8fk2hne52c9ov4|wfdh43yjzjheoo8tk3psob08qa4w||
+sets/226/card/229|229/BW-P|Pikachu|BW-P Promotional cards|7o1ksjctgxg5bh5nao9l14ip2dsf|l8qsojpd4kv94o8jr95u6n24xszt||
+sets/274/card/7|007/020|Pikachu|Shiny Collection|wpqwx6d9bmjzko3g7zw7hujjewag|7q5iox2wa0om9wefjxvuu8cww7ej||
+sets/268/card/16|016/047|Pikachu|Everyone's Exciting Battle|us9ao5pwd78g7aryzz1cqsm2t1u6|j5tkmx0ff2vfuor1dfiuy7ofcogd||
+sets/226/card/163|163/BW-P|Pikachu|BW-P Promotional cards|khlrus0n85j35m3vjwlu43ry0noo|qwwwj9x9j6ob5bxwncoid4zu8f1u||
+sets/255/card/5|013/034|Pikachu|National Beginning Set|32t5y4p9hwjz5abvyg6xp3div8y8|suoifpv3c7eegsna4gjjnmza0t6p||
+sets/226/card/151|151/BW-P|Pikachu|BW-P Promotional cards|gkgyc7wfs7h1laeceomb02lpod30|54i8vxeoaip1lr4g4v5zck6s04wm||
+sets/226/card/120|120/BW-P|Pikachu|BW-P Promotional cards|pl5n0bevjj2xlcgo35pozadspgza|7ityekdra56k9cd73qg0iaub8slg||
+sets/226/card/108|108/BW-P|Pikachu|BW-P Promotional cards|lac52m159so5ebnc5olw295q020e|klksevpjrqxboez8xjwk95e7uua1||
+sets/241/card/23|023/052|Pikachu|Hail Blizzard|pkdq0xqc5tdtjij0wmhjehpygnjj|ffdxgsim2frn91w5riruqvlj9wli||
+sets/228/card/56|056/053|Pikachu|White Collection|jkj52o5m19vz8a9lrkeavsqv8lxx|stmueh2t7wprq99ypoqw56k8tm6z||
+sets/227/card/56|056/053|Pikachu|Black Collection|0izx8kqiap3cjm9ilbptv49y46oc|3iu6qvbef8sabpuqphdlr3df37xf||
+sets/202/card/79|079/L-P|Shopping Pikachu|Legend Promos|8gmwbw3p43vxeyl56l64m094mx0b|twq2o2gf6ed682q62eip9hbiza4g||
+cards/23313|050/XY-P|Team Japan's Pikachu|XY Promos (세트 미지정)|iza6fm32r88g3xh8gzckt8w3q10m|7v2owtigzje1v5mu8e9xnhpho2nn||
+sets/397/card/246|272/S-P|Pikachu|Sword & Shield Promos|yevfg9a8fyss232hohj1a666lldy|89u6gfbekl5qhuatp190w7j7c3q7|ピカチュウ|피카츄
+sets/210/card/1|001/011|Pikachu|Battle Starter Deck Raichu|ozebydbgrmd12awy6e2sa6ivjsso|k1upif72q9r5mmlbht3t6g8k4j07||
+sets/204/card/31|032/070|Pikachu|SoulSilver Collection|ycrm9mx7z84dzpr1qwosfgd1s706|bjhpnbv7qd3v5msj4wtqrw4c20b0||
+sets/198/card/7|007/016|Pikachu|Melee! Pokémon Scramble x Pokémon Card Game|i86z9g63wf8ypxyfaw00t5vgvo44|f3owhtlc1810xqu7lpy9gh55risj||
+sets/195/card/31|031/090|Pikachu|Advent of Arceus|tw1ex84ct0tuepg0ds52lfulnuci|i82843e4uvmps42nhh2l8u3fyrul||
+sets/192/card/7|007/012|Pikachu|Collection Pack Shaymin LV.X|l8w8tyatavqxpwg2yuh3ustw5jc0|a4kahz13q46hyrurc9sy7ewktqw9||
+sets/202/card/19|019/L-P|Pikachu|Legend Promos|hm63415qzvl9g4nf75qxw7343im5|zclw23vnd1r8l4peokbbla8oizef||
+sets/202/card/31|031/L-P|Victory Medal|Legend Promos|ew721qjhchh8fw1l6x5kdsiroo01|yup9989zqejx6t8wypcm8657g9cg||
+sets/186/card/88|088/090|Pikachu|Bonds to the End of Time|69rtm123eytw7kecb8zoudkk7qa7|8lujffi2da9vppbkaoc5dw3du1bz||
+sets/183/card/46|004/015|Pikachu|Gift Box DPt|emzwnh0g5qadj11eythm7cdo8p0i|c4cdp25hlv6xxkbtpbhssw1xd6gd||
+sets/183/card/47|004/015|Pikachu|Gift Box DPt|d1m7odyg0v1l7heks2rlh8auk5it|h5cn7xoj82m5nlrf3df5h1ho68o6||
+sets/180/card/16|016/DPt-P|Pikachu|DPt-P Promotional cards|cx3wfw1cqvyptnw6snwdkiw9h1ug|s8q8lgjjwtp36ru8np0i7m36pb1j||
+sets/180/card/43|043/DPt-P|Pikachu M|DPt-P Promotional cards|f2e2266806w28wtw9xeidmcsysya|fzey91jrnriv53jtnwatj0ambtie||
+sets/145/card/113|113/DP-P|Pikachu|DP-P Promotional Cards|v5k3hp0bg7jln8ii35r3vldep502|7micqz0heb0c1dztdglbb26fnnz5||
+sets/177/card/3|003/009|Pikachu|11th Movie Commemoration Set|yqc2e8xl990inaaes16418itv8ty|nsrvl4r1t9vtrxtd4a2x78mmrogs||
+sets/175/card/24|024/092|Pikachu|Intense Fight in the Destroyed Sky|uuxudcrvyl7pz0axdp5revotdrfi|tcbxz7ynkj9m6lyeuxbwyhwx5d3z||
+sets/145/card/98|098/DP-P|Pikachu|DP-P Promotional Cards|n2fjyt231mt3ksy9jhitx0cmpq4l|lfp49962ipvpuq4jrmtoorki4o5j||
+sets/145/card/99|099/DP-P|Pikachu|DP-P Promotional Cards|nthz9tsfaw64gbwts6owxtd8kjrr|n2s7r168zp9di1adgo4tisomwk6g||
+sets/145/card/100|100/DP-P|Pikachu|DP-P Promotional Cards|9amr5j4u9muo20dzjfuhhl03bxzl|xpbk3c6sa0kn14zl224cdn3f28mm||
+sets/145/card/101|101/DP-P|Pikachu|DP-P Promotional Cards|nmumy7tkj9os5i8y279fq1t9p0i1|zhzkh1soqfyim1j1z9tmp7l6ldls||
+sets/145/card/102|102/DP-P|Pikachu|DP-P Promotional Cards|f75seubf3i3i3yhdr7iqtr00suep|kz3451y9o5sp13h7e7yqy6lkg10n||
+sets/145/card/95|095/DP-P|Pikachu|DP-P Promotional Cards|krfknlcj5tnat1xk6z2us18zyf7z|bo5c0g380avacxo17cc9sc2eifwj||
+sets/168/card/7||Pikachu|Entry Pack '08|qpi3onk1q72tl599b98d0nw3usaj|4upoudjo1dd5ruqfn7ukchr63twc||
+sets/145/card/57|057/DP-P|Pikachu|DP-P Promotional Cards|6rn48mgkn1b6uw78p2oi2heobqei|txc4sgivec4nmq7al1i4hau7kw3w||
+sets/145/card/48|048/DP-P|Pikachu|DP-P Promotional Cards|tn6eht63van9bvpkzzcve20bsnek|727b026o29f2zzi5lbbz75cc7584||
+sets/145/card/25|025/DP-P|Pikachu|DP-P Promotional Cards|hy7acexywqxlvtjlszik2d9e4ge3|a1k8wsiobgqsf5qv9ga8ug4e8pyk||
+sets/150/card/48|DPBP#026|Pikachu|Secret of the Lake|6hrjwdibm0mx3m3mn2hkhkejzlsu|6re243rfpo67lww98g22igalxuhv||
+sets/152/card/2|DPBP#026|Pikachu|Constructed Half Deck Rampardos the Attacker|87oj2ua3a694ly3oegh9fhlbnsmp|sq4mfhf8e0zl4545zmge5ucnuduc||
+sets/89/card/153|153/PCG-P|Pikachu|PCG Promotional Cards|xgs5d5d3paxovrpvfppigd6eepx7|yu7s8i4cu95vj6s6c2w0s1id9yqt||
+sets/89/card/123|123/PCG-P|Pikachu|PCG Promotional Cards|bawvwiv60apc98emwjgt1hzx36fq|3a3l419qb37gk1lz0iaps58kgn17||
+sets/130/card/40|041/052|Pikachu|Holon Phantom|ac4uu7m4t0dcsz6wsptgzs6excux|c23j7sr0490rom8ya5eyli2jn4jq||
+sets/89/card/118|118/PCG-P|Pikachu|PCG Promotional Cards|cl9ebppqlbc2vyqd8nepdzwxytss|cc9gmx3npofi0b38l8u52ygyaq6u||
+sets/129/card/31|001/002|Pikachu ☆|Gift Box Mew & Lucario|94vf8jjdvnha0lf84kczjqogon2i|owwgfr3k9il5j0bvr9mb7jluikab||
+sets/89/card/113|113/PCG-P|Pikachu|PCG Promotional Cards|0964tvl66lp8b9u7bbr7iped4mal|050bo1r0zvzlfd76o2bgglfuttjv||
+sets/89/card/112|112/PCG-P|Pikachu|PCG Promotional Cards|kaafma1azl97o6pkyjw5hi0dw1sp|0y9nvzvtq5ehq0f89ujtzvnd8xds||
+sets/120/card/4||Pikachu|Master Kit|36e1n2unio8sm15h66avfm7be13e|cwbu02sfp4end21wqmqk5pkfifzk||
+sets/119/card/23|023/108|Pikachu|World Champions Pack|jax01ty7hvld379sw8i0ue0wmo07|4j6bn3p46tj3euduzwkw1vvpw00u||
+sets/89/card/84|084/PCG-P|Pikachu|PCG Promotional Cards|bjk3bsz3upplua8tk0ucg00msra0|t1h6r9sbg7yjmvx2yoocoajtxpqi||
+sets/89/card/68|068/PCG-P|Pikachu|PCG Promotional Cards|sbpvgwmnoy44cea9gp142ib7f1r9|2tu4mx64ifiml5i7dbivnprkapzi||
+sets/114/card/4|004/009|Poképark‘s Pikachu|PokéPark Premium File - Forest (Green) Version|m8ntuss21yffm2laery3hrf9xkp9|a0b3swbk977i5zgzzjpw12y77aji||
+sets/89/card/43|043/PCG-P|PokéPark's Pikachu|PCG Promotional Cards|h0epfw5v0z2818gxda6resglv9es|jczsx23ck92d01csu2f0w06t652h||
+sets/106/card/1|001/015|Pikachu|Quick Construction Pack Lightning|hbodbjqz29zcludgcb2jnunu7fd9|3p80ik1qah4jmrfhxldwwg5mgu8e||
+sets/92/card/5|5/5|Pikachu|Poké Card Creator Pack|8llogbzh5am3heed99fdrjn9hur7|3zuv6n7j5kvqvgodir2k4y4zds3l||
+sets/89/card/155||Pikachu|PCG Promotional Cards|rftta09fk8ryy143nnuw2hdyn8ax|rqlpm7ig0epamntzccurt2r6raq8||
+sets/89/card/164||Victory Medal|PCG Promotional Cards|tzs8pfkwxgnhhaort3996tqvpknw|sd7gvdbv9ntov3ju9h7w641knbxz||
+sets/89/card/165||Victory Medal|PCG Promotional Cards|7bojh7d9rtod25uhi3as5dhj1m6d|y0uvk6otg3rea4vn41bo6zoe1an5||
+sets/89/card/166||Victory Ring|PCG Promotional Cards|ffori46h1vu5xvdkxwklpk0c6n7r|kqzkauhjy6gwszuym6v6iwe3als8||
+sets/88/card/37|037/082|Pikachu|Flight of Legends|1f7ghbrpt33xja5v7fo4zox2wnvk|3h7io0hvdjbo3s0644n77fpqzzoa||
+sets/64/card/57|057/ADV-P|Pikachu|ADV Promotional cards|wl7xqgnhn7rqmtkgr4u0cdvbjbsa|p1cr1vh794dhvqzndbgvbxv16y2x||
+sets/64/card/23|023/ADV-P|Pikachu|ADV Promotional cards|ow8owhhvtbtwtnykrgbqiqo12m7j|n2fgvgyo8hz2xzwfpdy6qevvghb5||
+sets/64/card/24|024/ADV-P|Pikachu|ADV Promotional cards|8hbmu6j725sq74dph2t1imik83y1|fmd3g19362a9rfplc7mx5jizs89g||
+sets/71/card/22|022/053|Pikachu|Miracle of the Desert|9gf55oyg5r8sb2xwdpyo0syeqh74|nq4tyq8c54ca3g94qjwzgll1qpz6||
+sets/59/card/33|033/088|Pikachu|Split Earth|bm7dt1fbpb1mcwgrcryxxh181vpr|20grv1qmm9ahyakvokft559wqobm||
+sets/45/card/43|044/P|Pikachu|P Promotional Cards|odeiufs4jeo3qfajh82u87r3gcp1|kbi2an66swqwco9c7wt1mm41jcfq||
+sets/4/card/38|038/P|Pikachu|e Promotional Cards|rgt8gpsa1vz5m158znk5s0dtx4ig|9gj89malo0k6s66g1hps6qamyt39||
+sets/54/card/10|010/018|Pikachu|McDonald's Pokémon-e Minimum Pack|yowtd2bkemjxj2pod7qizlvppdm3|m1jvme5xbtpwrldqpqbcxoh0h5lp||
+sets/4/card/21|021/P|Pikachu|e Promotional Cards|zh5pbor414ia6uwbtann1t87ojzx|frbv2wt3j4ep7bayrrlsl10c45qv||
+sets/51/card/16|016/128|Pikachu|Base Expansion Pack|zkfbtd3y3f58uab37dr7ji5yg9km|mldb7oa9vd3q1rg5xcr7iv08vc2c||
+sets/50/card/25|025/048|Surfing Pikachu|Pokémon Card★web|85qls4nup5wrr8sia7l8eja5wnmb|9swdy9ydy3yp9jh1t57ji8mpssik||
+sets/4/card/4|004/P|Pikachu|e Promotional Cards|a49c2kp2f84az5cm8qha4rpkie4p|lw5o1w58wpin8i1dhfm3rlguvzh8||
+sets/4/card/73||Pikachu|e Promotional Cards|xo5wrjkw76n700fun24j7tt7m71d|58d4sbim5sewblf58qa66a9hap24||
+sets/42/card/41||Pikachu|Intro Pack Neo|dqj469zjyvepq28jjandloozqezq|jiojfzfhu7fc525awq92jhutyx1z||
+sets/31/card/14||Pikachu|Gold, Silver, to a New World...|edgrgweuskrkmf3odgo9a9pkxzpv|xv4o7xmiy4p3lmjbnmf8amk0h5a2||
+sets/28/card/54|13|Pikachu|Intro Pack|lmiibqacxr7fue4lhhzk3imn6j6j|87yjjgi3les9mo2l6oprf1x3pba8||
+sets/219/card/2||Pikachu|Pikachu World Collection 2010|cx0we6pi3m4fxr2pyvecuzw8ewa1|hyhz677bjjok8c2vc42o4fgglpk6||
+sets/219/card/1||Pikachu|Pikachu World Collection 2010|fbr1sct2krmraae5opt41s8mobkz|5on64567anbefj6lb569qdnloliu||
+sets/200/card/12|012/022|Pikachu M|2009 Movie Commemoration Random Pack|zddu5xb09mwsqynnltuyucb9c37s|ol9a2n7aol53s27icsiikcqkfaov||
+sets/19/card/41||Pikachu|Quick Starter Gift Set|dc78ahlezevc3z8csh9r2w511893|nnz7zh3hvf8j8cf7yjsvz8db99a9||
+sets/19/card/42||Pikachu|Quick Starter Gift Set|e64h5hml6nimer70s4wptz1srcpu|dp7ly48b7d9i1y8acyao3ujz8afi||
+sets/17/card/40||Ooyama's Pikachu|Expansion Sheet No. 3 (Green Version)|6bpjutph7bpp63g61gafa32k2rb8|xweyr3hpf36ohmjp7iup5c1dowy2||
+sets/18/card/61||Lt. Surge's Pikachu|Gym Expansion 1: Gym Leader Stadiums|0cwafp2yrbcowh6xvm90btha7wx6|dw5g3dwtsfr9lkcj6h5tg9511586||
+sets/15/card/2||Lt. Surge's Pikachu|Vermillion City Gym–Lt. Surge|w5jsa7pxe4mewvgcy2eaydbtxzxy|n8x5f2aic6h8e7c1o4d48fdhhdb9||
+sets/15/card/1||Lt. Surge's Pikachu|Vermillion City Gym–Lt. Surge|94tyimrhb1ng2h11o7anhtaw6qkk|kjoewcrd6lfs3ycf4bv4tqtna33c||
+sets/11/card/12||Pikachu|Expansion Sheet No. 1 (Blue Version)|waatp9r3p4t8lcikktob31gwqzte|l7r90g8ipo5ax475qluoolynudu1||
+sets/5/card/14||Pikachu|PMCG Promos|mc9t1uezd963dkq6of2rpvf7x1v5|yl4wlfch1rsnd34izfomisn1onz4||
+sets/5/card/11||Surfing Pikachu|PMCG Promos|b0qs6o2h8hs26fs6v9fgszbjfn7v|fshhywfvuv76g7s7bok2j1q3my9i||
+sets/5/card/12||Surfing Pikachu|PMCG Promos|kv3oe1nic9dya7fju9ptfpihwrje|dnfc1srtd7f63wemnc29pefkgml0||
+sets/8/card/24||Pikachu|Pokémon Jungle|dx5znqwvqen11o6vdm9l1p2ansco|z8ghts3aiefz29au5a043wh0yaoo||
+sets/6/card/35||Pikachu|Base Set|9z1is5mkerdxrfaok5006lxig04n|0xuu3d2wn7v0ncnki9r99ptftqcj||
+sets/5/card/50||Pikachu|PMCG Promos|dyh1w48gjpm0488mqz8g52f3y2yp|ocpzcnwa83dy1o797y4qa1greith||
+sets/5/card/2||Pikachu|PMCG Promos|jze4dfq5j8vbrwoe2csx1epufzb6|fher8nh5kjehha28ndwnznuxnbeh||
+sets/5/card/5||Pikachu|PMCG Promos|zi86042fx6jjon7sgp3qp1hc1udm|u1bq01d7qyexfpvz31qb4dfgfjsk||
+sets/5/card/64||_____'s Pikachu|PMCG Promos|r8u1wq7ipwvm505am09stayf3kvd|3a2n7cqfl5aboaxrfdo9dqyteshk||
+sets/5/card/37||_____'s Pikachu|PMCG Promos|75vz0mwfxysl0r61af9ckblb0k2a|k0c05523tq993qlf6bvpdo71dqld||
+sets/5/card/67||Pikachu|PMCG Promos|9pws0bkyvx81m77qyqnc6wm4ydze|i1v6ybv1y8q63bapu0cqxzkvom0f||
+sets/5/card/55||Flying Pikachu|PMCG Promos|a4ieyp7prxlhr9yiodxmrn08wvbz|xuav7cp81qei6xfi1eyx3py7yddy||
+sets/5/card/39||Flying Pikachu|PMCG Promos|p0e68rlth2cpr2u509wc95an6alr|w2rui16kt0x8t4inopx4hefo8l00||
+sets/5/card/3||Flying Pikachu|PMCG Promos|dz7bwvksi6y2bpihzxo3nxeurhpa|aqrg30irn19drhz6obgvc1vepjo6||
+sets/5/card/85||No. 1 Trainer|PMCG Promos|xjtf2lrlpr3gzqd71tx56rnbl8xp|4dk2am76fixyrzn0etzpdq2wwt15||
+sets/5/card/88||No. 1 Trainer|PMCG Promos|fqnf09p0brlos7l2jr58vmh3dd4p|9h9upyi1r9xcrmxi3uohzjg8m4na||
+sets/5/card/91||No. 1 Trainer|PMCG Promos|i20ftrnty5z5dm1xh66zy7kdf7w6|v2q7aedu1gl4k2mdsylf5jsmvqh9||
+sets/5/card/86||No. 2 Trainer|PMCG Promos|cgy8kivpxebu7dcd13fjumrdh463|7tfsucw87qjc2t5rney751h3ieuu||
+sets/5/card/89||No. 2 Trainer|PMCG Promos|f29upu9fuev1hruxul2g5vku7wem|92v07uuqqaykpfo26qo7r587dn80||
+sets/5/card/92||No. 2 Trainer|PMCG Promos|9kdpxe4axvhkzjptctrxh0ldf05j|bq54m43qve3t4n5lx6clgdoexz2m||
+sets/5/card/87||No. 3 Trainer|PMCG Promos|pkslqtk5l5vxs25ihz7xip2eo7fc|o7koab1oo9dyixy25ijlzio3g0nc||
+sets/5/card/90||No. 3 Trainer|PMCG Promos|y6bwn9nrjszr9he8t1961je0zmfm|6zi2y1bkkn2lkpb5i0zuql3bmppt||
+sets/5/card/93||No. 3 Trainer|PMCG Promos|jfsp2lihimgzcvy0ip4azd57wpgp|xitc2f2kr0sqyut0e6bpxpqkz7m5||
+own/XYP-150|150/XY-P|Magikarp Cosplay Pikachu|XY Promos|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/XYP/XYP_150_R_JP_SM.png|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/XYP/XYP_150_R_JP_LG.png|コイキングごっこピカチュウ|잉어킹 흉내 피카츄
+own/XYP-151|151/XY-P|Gyarados Cosplay Pikachu|XY Promos|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/XYP/XYP_151_R_JP_SM.png|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/XYP/XYP_151_R_JP_LG.png|ギャラドスごっこピカチュウ|갸라도스 흉내 피카츄
+own/SMP-37|037/SM-P|Poncho-wearing Pikachu (Alolan Vulpix)|Sun & Moon Promos|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/SMP/SMP_37_R_JP_SM.png|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/SMP/SMP_37_R_JP_LG.png|ポンチョを着たピカチュウ（アローラロコン）|판초를 입은 피카츄 (알로라 식스테일)
+own/SMP-38|038/SM-P|Poncho-wearing Pikachu (Vulpix)|Sun & Moon Promos|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/SMP/SMP_38_R_JP_SM.png|https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/SMP/SMP_38_R_JP_LG.png|ポンチョを着たピカチュウ（ロコン）|판초를 입은 피카츄 (식스테일)
+sets/592/card/22|037/103|Pikachu|30th CELEBRATION|zdtlykl9hgs6t7441q1la58pi0w9|uvhxtmp7sdzww0tqi3eiaenj5ytu||
+sets/592/card/53|126/103|Pikachu ex|30th CELEBRATION|rga91cb5p5m6284fanoyabmdmuu4|qxj3u27utacq5v7tgotees0ru01z||
+sets/592/card/54|127/103|Pikachu ex|30th CELEBRATION|h7xvrggwqeha8m1y8qo673rp9ezy|alzrjrwhbi6wahm6rye98oxe8451||
+`.trim();
+
+const CDN = "https://cdn.artofpkm.com/";
+
+/* 출처(세트)별 상품 이미지 — { "세트명": [{t:상품명, i:이미지해시}, ...] } */
+const SRCPROD = {"30th CELEBRATION":[{"t":"Booster Box: 30th CELEBRATION","i":"4548tcs274385c5bb1jahmnke1kq"},{"t":"Booster Pack: 30th Celebration","i":"6txbni4gxtpedq9y8493o1xp88g9"},{"t":"30th CELEBRATION Premium Deck Set - Espeon & Umbreon","i":"ramkrzwvbzz4g39sr6f5kxc3hd9m"},{"t":"30th CELEBRATION Card Set: Bulbasaur, Charmander, Squirtle","i":"x5a0b6esuj223ltn90k1ab2vznhb"},{"t":"30th CELEBRATION Card Set: Chespin, Fennekin, Froakie","i":"hhvbik2mezai1h8whz6wdv86ss1x"},{"t":"30th CELEBRATION Card Set: Chikorita, Cyndaquil, Totodile","i":"uy4bvve68mqctlauvbkq6qy0j6vz"},{"t":"30th CELEBRATION Card Set: Grookey, Scorbunny, Sobble","i":"0ddulutp169mbve19zeccfd1ab2g"},{"t":"30th CELEBRATION Card Set: Rowlet, Litten, Popplio","i":"ugxeloap8a2lzqw8pk3bl3xyui2d"}],"Start Deck 100 Battle Collection - CoroCiào Ver.":[{"t":"Start Deck 100 Battle Collection CoroCiào Ver.","i":"9cqwfwk0kkt595605drlimu2yii7"}],"Start Deck 100 Battle Collection":[{"t":"Start Deck 100 Battle Collection","i":"mt4mv0h9monohb6uezekrsukyoyr"}],"Mega Dream ex":[{"t":"Booster Box: Mega Dream ex","i":"nu3npfuueyvsix4ltxqyudb9lyn3"},{"t":"Booster Pack: Mega Dream ex","i":"pmevwrylqix518mt9mpktknhqe2b"}],"Terastal Festival ex":[{"t":"Booster Box: Terastal Festival ex","i":"ol56kdnsizlhj5kjq98btknas5ov"},{"t":"Booster Pack: Terastal Festival ex","i":"3py47cr5hlpfwgw95rb7a27jncdf"}],"Start Deck Generations":[{"t":"Deck Sleeves Alolan Adventure - Tapu Koko & Mimikyu","i":"btepg8w0n288n0l6ffc00zlaoqb8"},{"t":"Deck Sleeves Galar Adventure - Zacian & Alcremie","i":"64vvrkt7af5u6129yncmcp4q0dde"},{"t":"Deck Sleeves Hoenn Adventure - Kyogre & Blaziken","i":"xln1xye95m23lmqqivwvcfj9fovs"},{"t":"Deck Sleeves Johto Adventure - Lugia & Tyranitar","i":"s14ld0gzlwgq0on4u8kvqjnn3zo0"},{"t":"Deck Sleeves Kalos Adventure - Xerneas & Noivern","i":"nah3o7ohul11kl4kjqau5tuscwb1"},{"t":"Deck Sleeves Kanto Adventure - Pikachu & Snorlax","i":"n4t6z4ijm7ly7wknp9rai2pg0yb4"},{"t":"Deck Sleeves Paldea Adventure - Koraidon & Paldean Clodsire","i":"fkrroo6t7u1ql65ehqohf7z0yyv4"},{"t":"Deck Sleeves Sinnoh Adventure - Dialga & Lucario","i":"j114s7ul3j5iurdp8o3b7826yfar"}],"Electric Breaker":[{"t":"Booster Box: Electric Breaker","i":"6logkdcb3izh89l8zrvvmu2z7tm7"},{"t":"Booster Pack: Electric Breaker","i":"mvjiggfc4zkfbgjkple0mtxtlp5n"},{"t":"Deck Box Terastal Type: Stellar Pikachu","i":"vctplqwivnvfsxcq5jha1l45ewuj"},{"t":"Deck Box Terastal Type: Stellar Pikachu","i":"17cxj033ixseq3vg6gz1f7bqgpsp"}],"Battle Academy":[{"t":"Battle Academy","i":"pg9gzez3tt1s7sgfs980n879frmj"},{"t":"Battle Academy - Anytime, Anywhere","i":"ws585nri5sdiml6l3gbanw92xfha"}],"Cyber Judge":[{"t":"Booster Box: Cyber Judge","i":"vr334qtkeohnhtkswfg21o260t9s"},{"t":"Booster Pack: Cyber Judge","i":"rovf0kjbchytmoxziy6jsvs8z7w0"}],"Shiny Treasure ex":[{"t":"Booster Box: Shiny Treasure ex","i":"cvx2l8z9pom8tm6w7mv8s8fi4cvm"},{"t":"Booster Pack: Shiny Treasure ex","i":"szgk5sj65c4yvbbayiwwocjf3vk8"}],"ex Start Decks":[{"t":"ex Start Deck: Darkness Houndoom","i":"ne35eytgs5snfeq3fc3w0nz1uzan"},{"t":"ex Start Deck: Fighting Koraidon","i":"pty49ubgb8g7s2e6cb2h2afscpr7"},{"t":"ex Start Deck: Fire Victini","i":"mkeyshuheipx0o1cg0a60uc8kjb1"},{"t":"ex Start Deck: Grass Decidueye","i":"4nkoja8wwlbjwvk64lqez1e29f4b"},{"t":"ex Start Deck: Lightning Miraidon","i":"wjdrx7us4c6lwastvk6s2z17456u"},{"t":"ex Start Deck: Metal Melmetal","i":"kmcw9m48x1kxtop22wdnl0npkoad"},{"t":"ex Start Deck: Omakase (Random)","i":"fre1n3sbasv0wzcbz5vm7d8wsdzw"},{"t":"ex Start Deck: Psychic Clefable","i":"rwxrblfobkzg21kl8eseoxzjm0ry"}],"Pokémon Card 151":[{"t":"Booster Box: Pokémon 151","i":"4c4b1s2x3bsxnnyx30wzptykdt7i"},{"t":"Booster Pack: Pokémon 151","i":"n4fwqoqod0xolb5q5v1m0kq8e1qh"},{"t":"Card Illustration Figure Collection","i":"x8r6rgfisthd2frbc80a6k89ys47"}],"Clay Burst":[{"t":"Booster Box: Clay Burst","i":"f8sooy3vl7df0hwj47e73tywyse3"},{"t":"Booster Pack: Clay Burst","i":"7sk0ir0u6e3o6ee6no7crt1q5mwx"}],"Scarlet & Violet Starter set ex Pikachu ex & Pawmot":[{"t":"Starter Set ex: Pikachu & Pawmot ex","i":"ts0kq56r2p5i6j4g4nfhgzw11s9s"}],"VSTAR Universe":[{"t":"Booster Pack: VSTAR Universe","i":"0xckua9qyybihg7jj2s5yuk7707a"}],"Paradigm Trigger":[{"t":"Booster Box: Paradigm Trigger","i":"kwa7e92ct9ajc16mkblr5eu91lyk"},{"t":"Booster Pack: Paradigm Trigger","i":"fgzbsy0c3832gfc5b6ap7fjoh6py"}],"Pokémon GO":[{"t":"Booster Box: Pokémon GO","i":"5jbgl2hwsdhn306bxwc4pzkhxddu"},{"t":"Booster Pack: Pokémon GO","i":"3uhdzyh3yb20pwnghzveu99ei55j"}],"Dark Fantasma":[{"t":"Booster Box: Dark Fantasma","i":"m95tn2a48lpxcpd99rgncau2xtjh"},{"t":"Booster Pack Dark Fantasma","i":"72nwe9r4049pmf3t8v4m29yrfhv3"}],"Start Deck 100 (Corocoro Version)":[{"t":"Start Deck 100 CoroCoro Comic Version","i":"t23yomz6g9c29c2emi2sd7z8nwvn"}],"Start Deck 100":[{"t":"Start Deck 100","i":"0v73c75pc008qpgho360kqq0zrpo"}],"VMAX Climax":[{"t":"Booster Box: VMAX Climax","i":"qykebvnj5hgbcxiclapu13qxr1xj"},{"t":"Booster Pack: VMAX Climax","i":"wdryapsyf88bvlicbirm6jveq2l5"}],"25th Anniversary Collection":[{"t":"Booster Box: 25th Anniversary Collection","i":"oi83bierzl4mjyhi1my2li59q1ra"},{"t":"Booster Pack: 25th Anniversary Collection","i":"yp03dtcnhj03q6ypioekmmy1ebl5"}],"Eevee Heroes":[{"t":"Booster Box: Eevee Heroes","i":"0om565n3j3s633bhj7mi9q3lwr06"},{"t":"Booster Pack: Eevee Heroes","i":"6m73dsr870rf4xtie3c7qeknoe8x"},{"t":"Eevee Heroes: Eevee‘s Set","i":"wyf4ahimbydzwzf23ew17b6h3s0q"},{"t":"VMAX Special Set Eevee Heroes","i":"g1gm1b0beajbc2k20x96qbh0i3ge"},{"t":"Collection Binder Eevee Heroes","i":"pktg1l5wuctmke0fietn8qdh3oxc"}],"Astonishing Volt Tackle":[{"t":"Booster Box: Astonishing Volt Tackle","i":"2s8w59nxoh522qy8dmfupnqe2ahq"},{"t":"Booster Pack: Astonishing Volt Tackle","i":"js9mxlm0iq8l9jgw7m041hgn9esz"}],"V Start Deck":[{"t":"V Starter Deck: Duraludon","i":"et5ytrx88yqqfsdq4rzdy3yp66a3"},{"t":"V Starter Deck: Eevee","i":"0fmk94ukz76l15xi159k30001786"},{"t":"V Starter Deck: Incineroar","i":"9dz10nva732h39bu2zsaj3x7s0jx"},{"t":"V Starter Deck: Lucario","i":"qei7wap0ch6bhdhmqlcswald2v0m"},{"t":"V Starter Deck: Mew","i":"dzvggk632brwnd08ap99q5wjlpps"},{"t":"V Starter Deck: Pikachu","i":"w7swl0pui7nx82ptup4o5e627rll"},{"t":"V Starter Deck: Slowbro","i":"r5xif96ymgwc2lltf2n0qdr74vj1"},{"t":"V Starter Deck: Venusaur","i":"yvokla2szb96n6cao8j1zqzrlury"}],"Starter Set V":[{"t":"7-Eleven Limited Special Set Starter Set V Fire","i":"twjm330l6g8bymzf9kgldnglzlvb"},{"t":"Starter Deck V: Fighting","i":"33djggp1r2gazqdxrrrx331inwan"},{"t":"Starter Deck V: Fire","i":"eibenmhwv19el069zkykobj8dh3g"},{"t":"Starter Deck V: Grass","i":"kp78ov2vec0zlplj7iao90cuat50"},{"t":"Starter Deck V: Lightning","i":"8rkoikkc3a6fiayjmhj7z5v3i88f"},{"t":"Starter Deck V: Water","i":"lr3tofrmckl51rsjfxht206c0lk7"},{"t":"Starter Deck V5: Complete Battle Box","i":"lja94plnlkkgsig6vnhz8zd6tggb"},{"t":"Toys R Us limited edition Triple Starter Set V","i":"zsurs5g88ebozjnr575yqn02mf5e"}],"Tag Team GX All Stars":[{"t":"Booster Box: Tag Team GX All Stars","i":"2qfnqj82gpvf9e56x4c3dcxm3esf"},{"t":"Booster Pack: Tag Team GX All Stars","i":"i92btnuzgq4300mmdycyq3cuvkmf"},{"t":"TAG TEAM GX: Tag All Stars Store Poster","i":"v68d3ot3ozzjxkiei7lm46lxekjv"}],"Dream League":[{"t":"Booster Box: Dream League","i":"uuubwlnc8yaohgsdvlo1q0lwzi4t"},{"t":"Booster Pack: Dream League","i":"9bwdseqnmthwv6873qmzudnuxus6"},{"t":"Dream League Store Poster","i":"ir36wdb81lit6bw2nlwb4fi22aha"}],"GG End":[{"t":"Booster Box: GG End","i":"1rhvcojilc25c2w8qbq7aw4d3ift"},{"t":"Booster Pack: GG End","i":"1rkvlx1qj99ii3hbkceevnorx4fl"}],"Family Pokémon Card Game (Sun & Moon)":[{"t":"Family Pokemon Card Game 2019","i":"l3tai9go717jpi9ia2ckep31fnp4"}],"Family Pokémon Card Game (Sword & Shield)":[{"t":"Family Pokémon Card Game: Anytime Anywhere","i":"fnr0mx7fc7wr7qj8k3bha27nzzen"}],"Night Unison":[{"t":"Booster Box: Night Unison","i":"yx818msns2p4dti25z22i3ucr7v4"},{"t":"Booster Pack: Night Unison","i":"g2ur0eqj14psqdom1gla8cfqrj6c"}],"Tag Bolt":[{"t":"Booster Box: Tag Bolt","i":"ce4vcfr82s9c73lqb6iapu2971tu"},{"t":"Booster Pack: Tag Bolt","i":"qk1rssoazsvoeifeaxigdgc8em1m"},{"t":"Expansion Tagbolt Pokémon Center Exclusive Set","i":"ipp0znykybfuc7laar0o5eqt35y8"},{"t":"Rubber Playmat Pikachu & Zekrom TAG TEAM GX","i":"utj2efbxehw71tal2empewbgo7mk"},{"t":"Tag Bolt Store Poster","i":"ttqiv8xm29t11z8i50e7xzknctf8"}],"Starter Deck GX":[{"t":"GX Start Deck Darkness Yveltal","i":"w4dm1zrmqs274se2ksr8supypczc"},{"t":"GX Start Deck Fairy Xerneas","i":"knuswt25u07b6qkes8jm2s6ue4rs"},{"t":"GX Start Deck Fighting Lycanroc","i":"fteslrht8iwfxugys5u9cpub1oku"},{"t":"GX Start Deck Fire Charizard","i":"tdt2qyy6ugrd71d9yetufs801b63"},{"t":"GX Start Deck Grass Lurantis","i":"lcdlnkzty998zcms216wf6kvtcjs"},{"t":"GX Start Deck Lightning Raichu","i":"71n2e1iqgpyt1up43d6ue8kilwo0"},{"t":"GX Start Deck Metal Metagross","i":"0d2uwr6zn0mhvi4e3l1mdwe68req"},{"t":"GX Start Deck Psychic Mewtwo","i":"nhqe1yx1eg8weu60uwk75j67ey90"}],"GX Battle Boost":[{"t":"Booster Box: GX Battle Boost","i":"ifhqthev3khb9e4jp7jsk50x7xic"},{"t":"Booster Pack: GX Battle Boost","i":"6vzvky32ema6eoyjkm49bwh5fp0p"}],"Ultra Dimensional Beast":[{"t":"Booster Box: Ultra Dimensional Beast","i":"dqlql86gt28vddyi0tjqd17ddotv"},{"t":"Booster Pack: Ultra Dimensional Beast","i":"5ucpsl68i17jgcaxk1ganrwz2oe2"}],"Shining Legend":[{"t":"Booster Box: Shining Legend","i":"w7zw5c5cnqijjz7r1lgsxsv5hyh3"},{"t":"Booster Pack: Shining Legend","i":"piqp4iql1yxhias30hre0pt7dt2k"},{"t":"Shining Legends Store Poster","i":"s053yy2zxabt6nmdjeicsyp534cs"}],"Light-Devouring Darkness":[{"t":"Booster Box: Light-Devouring Darkness","i":"huxwg3o71chcct3qdbccrtiocjyr"},{"t":"Booster Pack: Light-Devouring Darkness","i":"2oyyz4765w6hxob91t0vwzozrsjx"}],"30 Card Deck Match Set: Ash vs Team Rocket":[{"t":"30-Card Battle Deck Set: Ash vs Team Rocket","i":"fjawpp1pcjuds3xohvqnobmewa1g"}],"The Best of XY":[{"t":"Booster Box: The Best of XY","i":"f8nyh8utltjdohkzxa4ibcbz9eal"},{"t":"Booster Pack: The Best of XY","i":"zyr4z3jumsevji72enh3fcwx0wag"}],"20th Anniversary":[{"t":"Booster Box: 20th Anniversary","i":"req79mwe4rzjishnulr8zyup5rj3"},{"t":"Booster Pack: 20th Anniversary","i":"qqi97yohxo3w0hfmoi2o8gmbhb5b"},{"t":"Pokémon Card Game 20th Anniversary Campaign Set of 3 Postcards","i":"yndtrqu2ltxx16ts5s4vp0lyqdpp"}],"Premium Champion Pack EX x M x BREAK":[{"t":"Booster Box: Premium Champion Pack, EX×M×BREAK","i":"f8cf6izmaxm2hqmrxlhpl6p9v9zm"},{"t":"Booster Pack: Premium Champion Pack, EX×M×BREAK","i":"ktggc8k5ibwdp07re0pkc1aarb7r"}],"Pokékyun Collection":[{"t":"Booster Pack: PokéKyun Collection","i":"llcjbwrambd09offn7he2oildda5"},{"t":"Pokékyun Collection Mini File Set","i":"2fhqhdfxccygcwv0ggu1ndene4ny"},{"t":"Premium PokéKyun♥ Set","i":"efm9rgcgwj0xr76vhtj8azf8wnvg"}],"BREAK Evolution Pack Raichu BREAK":[{"t":"Raichu BREAK Evolution Pack","i":"meory9nnd0mpllzw7elv7wjjg8kq"}],"Legendary Holo Collection":[{"t":"Booster Pack: Legendary Holo Collection - Pack 2","i":"tidfgzto34sffdrg650eaisz4f3b"}],"Collection X":[{"t":"Booster Box: Collection X","i":"tloptsvf7pwkz7udp79d8ad403xg"},{"t":"Booster Pack: Collection X","i":"7j08ky5njpdoz2s3od5cvxhwfumh"}],"Shiny Collection":[{"t":"Booster Box: Shiny Collection","i":"1imvamb3ommr45ozov3mmk7evgly"},{"t":"Concept Pack: Shiny Collection","i":"qpmzoadwaly44n49b66b5b7cfql3"}],"Everyone's Exciting Battle":[{"t":"Everyone's Exciting Battle","i":"3elb47qppm52en3rvb3d849yq5cp"}],"National Beginning Set":[{"t":"National Beginning Set","i":"yzxj9pngu09sl2ty3u8i0h2rwf71"}],"Hail Blizzard":[{"t":"Booster Box: Hail Blizzard","i":"1al3n6hfmiy51hl16psfabbmpfpj"},{"t":"Booster Pack: Hail Blizzard","i":"jx47as9v9z53kcblaq5v1zajmy7q"}],"White Collection":[{"t":"Booster Box: White Collection","i":"scii2kf41ss9c760zy71qm7483uk"},{"t":"Booster Pack: White Collection","i":"qutihtzdagf2pc22h44gcebctfgp"}],"Black Collection":[{"t":"Booster Box: Black Collection","i":"rpsli9xx1k034tuqfbi0to8kp45x"},{"t":"Booster Pack: Black Collection","i":"7scyem48ihfwdizd9t11of973xhe"}],"Battle Starter Deck Raichu":[{"t":"Battle Starter Deck Raichu","i":"3y9qgmzc2xb5lqzl52x8abgll65y"}],"SoulSilver Collection":[{"t":"Booster Box: SoulSilver Collection","i":"jogis3karisilyt2fq5t6kx5lhin"},{"t":"Booster Pack: SoulSilver Collection","i":"dplsd0p76d40l082gl1be0fcemln"}],"Melee! Pokémon Scramble x Pokémon Card Game":[{"t":"Melee! Pokémon Scramble × Pokémon Card Game","i":"akyp6lmvl0t8z6z6j4wrkwppj97d"}],"Advent of Arceus":[{"t":"Booster Box: Advent of Arceus","i":"3x706yukwzgedhj9vambekw37iy7"},{"t":"Booster Pack: Advent of Arceus","i":"8vldsky1dlof3abyem41cm4vuwrk"},{"t":"Deck Case Advent of Arceus","i":"fwgm9uehv1vg56b4uogtdb0p83ye"},{"t":"Advent of Arceus Store Poster","i":"3bwe5fhvkn2pnl4stra5pte1hyc4"},{"t":"Official Mini Card File Advent of Arceus","i":"y0u9sdq7p6sa6odxtlw7mndeurft"}],"Collection Pack Shaymin LV.X":[{"t":"Collection Pack Shaymin LV.X","i":"ay8w02ny0ujfjg6fhl5tqpv8986u"}],"Bonds to the End of Time":[{"t":"Booster Box: Bonds to the End of Time","i":"ax0m5w7c7to6imm71bloxaytkn9i"},{"t":"Booster Pack: Bonds to the End of Time","i":"kktzi9lcusq4aj1cztua9hwj9jcd"},{"t":"Galactic's Conquest, Bonds to the End of Time Special Pack","i":"pv19mbga9hvcpio2livp8q2udcyj"}],"11th Movie Commemoration Set":[{"t":"Movie Commemoration Premium Sheet 2008","i":"pklrbzjwp5nrxl9xw2aptsex7g8h"}],"Intense Fight in the Destroyed Sky":[{"t":"Booster Box: Intense Fight in the Destroyed Sky","i":"ld9iy4cuqx29v7koy6919p31j2sz"},{"t":"Booster Pack: Intense Fight in the Destroyed Sky","i":"jmvh90bqmpdwxf50m83flfnyvotq"},{"t":"Pokémon Card Game DP Official Visual Book - Intense Fight in the Destroyed Sky","i":"zw450t7ioc9f9zxm8qk7eg45b5o7"}],"Secret of the Lake":[{"t":"Booster Box: Secret of the Lake","i":"ylq9kjopudpiu7jjrek7uavcfwbc"},{"t":"Booster Pack: Secret of the Lake","i":"yvcqd25gznx1laitu2warsmkd88d"},{"t":"Pokémon Card Game DP Official Visual Book - Secret of the Lakes & Shining Darkness","i":"vft4cmsfsokzcezbamy9oegcbbar"}],"Constructed Half Deck Rampardos the Attacker":[{"t":"Constructed Half Deck Rampardos the Attacker","i":"jbcu4ikjbq5vlrnu51u5cu7qcnko"}],"Holon Phantom":[{"t":"Booster Box: Holon Phantom","i":"4f7d91fb9cjkz96ihoiqcqk58vqi"},{"t":"Booster Pack: Holon Phantom","i":"hl8ra9f88flaeemfnrvexpqakdhi"}],"Gift Box Mew & Lucario":[{"t":"Gift Box Mew • Lucario","i":"q71466hl0txoxna5dsdjbcm8n9qg"}],"Master Kit":[{"t":"Master Kit","i":"ggws0ow7wiypw3rgjpcv4wgcxoii"}],"PokéPark Premium File - Forest (Green) Version":[{"t":"PokéPark Premium File Forest Sheet","i":"wpyjkv7vq6rjiwr7h7it5ifqqx3e"}],"Quick Construction Pack Lightning":[{"t":"Quick Construction Pack - Lightning","i":"m7irssxzlde6mpi5dwl9c5yyoqki"}],"Flight of Legends":[{"t":"Booster Box: Flight of Legends","i":"j31jewinenabw0x61f5dbz4lzkei"},{"t":"Booster Pack: Flight of Legends","i":"06l80tv761p5labmt278rr2j7z8r"}],"Miracle of the Desert":[{"t":"Booster Box: Miracle of the Desert","i":"yp0peuhiq3cklfa2tnm8dl6tlsvk"},{"t":"Booster Pack: Miracle of the Desert","i":"6ok8eovkbii9zc8eqbmm4x3rbn0y"}],"Split Earth":[{"t":"Booster Box: Split Earth","i":"1x39c64b8fmj8rfupcvc984hf4ox"},{"t":"Booster Pack: Split Earth","i":"b9ziy6zgf59o61770z99xw2o9uoo"},{"t":"Pokémon Card Trainers - Summer 2002","i":"l0r96fzgxu4l9urvga84qm74rl5t"}],"McDonald's Pokémon-e Minimum Pack":[{"t":"McDonald's Pokémon-e Minimum Pack","i":"mhwtwldt0i4gydako1gl9agqt9zk"}],"Base Expansion Pack":[{"t":"Booster Box: eSeries 1st Expansion","i":"ubsivzxcnyte25jhpzb5pubh04o3"},{"t":"Booster Pack: eSeries 1st Expansion","i":"dwvuj1v9k5p9i1eufnujhi2dtjjb"}],"Pokémon Card★web":[{"t":"Booster Pack: Pokémon Web","i":"ileo4m0tg120zllzplrjgmzsg61c"}],"Intro Pack Neo":[{"t":"Intro Pack Neo","i":"dcqxkehxpbrv1efxoxeur5gd2sz4"}],"Gold, Silver, to a New World...":[{"t":"Booster Box: Gold, Silver, to a New World...","i":"oxia1nn3wdy9pvf1jkrki7ecwhzs"},{"t":"Booster Pack: Gold, Silver, to a New World...","i":"pannox7f1v0x3zpffsypuujkctx4"},{"t":"Gold, Silver, to a New World Promotional Poster","i":"q9v352fz1zxkxrz8edqpsq8vk4jf"}],"Intro Pack":[{"t":"Intro Pack","i":"5cy7vv93fquhx19a2qg7qb2jrbi4"}],"2009 Movie Commemoration Random Pack":[{"t":"Booster Box: Movie Commemoration Random Pack 2009","i":"62c3xvvji19zldsenmmu1feoyhl6"},{"t":"Booster Pack: Movie Commemoration Random Pack 2009","i":"c1xk8xii3kslj4bknnfsxm1s8bl3"}],"Quick Starter Gift Set":[{"t":"Quick Starter Gift Set","i":"4srojn8ofeu9m86e5ho0hkq09vb9"}],"Expansion Sheet No. 3 (Green Version)":[{"t":"Expansion Sheet Vol. 3 (Green)","i":"n9biq5wwfaje8nec8ohm83e9tv59"}],"Gym Expansion 1: Gym Leader Stadiums":[{"t":"Booster Box: Leaders' Stadium","i":"5evgrkrf6631x34iykzeupgmvioc"},{"t":"Booster Pack: Leaders' Stadium","i":"2oq58glpgqrokdmkssm9n6efpkll"}],"Vermillion City Gym–Lt. Surge":[{"t":"Corocoro Gym Deck Poster","i":"2salfwv490kr15exu59qab8kaq0n"},{"t":"Kuchiba City Gym","i":"0htxbkkyjot3tuh433cmucbt943t"}],"Expansion Sheet No. 1 (Blue Version)":[{"t":"Expansion Sheet Vol. 1 (Blue)","i":"pcradu762ojk0v9brbszyfwtsznu"}],"Pokémon Jungle":[{"t":"Booster Box: Pokémon Jungle","i":"czu7bk4rq0gfmsyjb8lwij1la6li"},{"t":"Booster Pack: Pokémon Jungle","i":"xcfb2ngf86cpjeunv3p3fpfw35zv"}],"Base Set":[{"t":"Booster Box: Base Set","i":"grvc84zb0ekwyu90s0in9isz18td"},{"t":"Booster Pack: Base Set","i":"48l4h3p27zobs04udovv3brhlwcz"},{"t":"The First Starter Deck","i":"nurbokwod977b5zcc3uemxojjnk6"}]};
+/* 카드번호 -> 스페셜 BOX 상품 { n:상품명(한국어), i:이미지URL } */
+const BOXIMG  = {"150/XY-P":{"n":"스페셜 BOX 「잉어킹 흉내 & 갸라도스 흉내 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/hiroshima_img_01.png"},"151/XY-P":{"n":"스페셜 BOX 「잉어킹 흉내 & 갸라도스 흉내 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/hiroshima_img_01.png"},"230/XY-P":{"n":"XY BREAK 스페셜 BOX 「레쿠쟈 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/skytree_img_01.png"},"231/XY-P":{"n":"XY BREAK 스페셜 BOX 「레쿠쟈 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/skytree_img_01.png"},"208/SM-P":{"n":"썬&문 스페셜 BOX 「포켓몬센터 도쿄DX」","i":"https://m.media-amazon.com/images/I/61JxIlqIV7L._AC_SX385_.jpg"},"209/SM-P":{"n":"썬&문 스페셜 BOX 「포켓몬센터 도쿄DX」","i":"https://m.media-amazon.com/images/I/61JxIlqIV7L._AC_SX385_.jpg"},"147/S-P":{"n":"소드&실드 스페셜 BOX 「포켓몬센터 카나자와 오픈 기념」","i":"https://www.pokemon-card.com/info/2020/10/images/8801e9f1f30765728d8df4e16cf842a6c9e4f5b9.jpg"},"145/S-P":{"n":"소드&실드 스페셜 BOX 「포켓몬센터 카나자와 오픈 기념」","i":"https://www.pokemon-card.com/info/2020/10/images/8801e9f1f30765728d8df4e16cf842a6c9e4f5b9.jpg"},"146/S-P":{"n":"소드&실드 스페셜 BOX 「포켓몬센터 카나자와 오픈 기념」","i":"https://www.pokemon-card.com/info/2020/10/images/8801e9f1f30765728d8df4e16cf842a6c9e4f5b9.jpg"},"260/SV-P":{"n":"스칼렛&바이올렛 스페셜 BOX 「포켓몬센터 도호쿠」","i":"https://www.pokemon-card.com/info/2025/06/images/005043_7.jpg"},"261/SV-P":{"n":"스칼렛&바이올렛 스페셜 BOX 「포켓몬센터 히로시마」","i":"https://www.pokemon-card.com/info/2025/06/images/005053_10.jpg"},"289/SV-P":{"n":"스칼렛&바이올렛 스페셜 BOX 「포켓몬센터 후쿠오카」","i":"https://www.pokemon-card.com/info/2025/06/images/005053_9.jpg"},"207/XY-P":{"n":"XY BREAK 스페셜 BOX 「메가리자몽 X의 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/boxlz_img_01.png"},"206/XY-P":{"n":"XY BREAK 스페셜 BOX 「메가리자몽 Y의 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/boxlz_img_01.png"},"208/XY-P":{"n":"XY BREAK 스페셜 BOX 「메가리자몽 Y의 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/boxlz_img_01.png"},"293/XY-P":{"n":"XY BREAK 마리오 피카츄 스페셜 BOX","i":"https://cdn.artofpkm.com/scgbui7e1i6uh7jhjjlta9tz24af"},"294/XY-P":{"n":"XY BREAK 마리오 피카츄 스페셜 BOX","i":"https://cdn.artofpkm.com/scgbui7e1i6uh7jhjjlta9tz24af"},"295/XY-P":{"n":"XY BREAK 루이지 피카츄 스페셜 BOX","i":"https://cdn.artofpkm.com/7fdg8hhyc7qm3dsgzlrypvpc1ino"},"296/XY-P":{"n":"XY BREAK 루이지 피카츄 스페셜 BOX","i":"https://cdn.artofpkm.com/7fdg8hhyc7qm3dsgzlrypvpc1ino"},"227/S-P":{"n":"포켓몬 우표 BOX 「포켓몬카드게임 미카에리 미인 · 달에 기러기 세트」","i":"https://www.post.japanpost.jp/kitte/collection/archive/2021/0825_01/img_item_01.jpg"},"226/S-P":{"n":"포켓몬 우표 BOX 「포켓몬카드게임 미카에리 미인 · 달에 기러기 세트」","i":"https://www.post.japanpost.jp/kitte/collection/archive/2021/0825_01/img_item_01.jpg"},"272/S-P":{"n":"포켓몬 GO 카드파일 세트","i":"https://product-images.tcgplayer.com/fit-in/437x437/627702.jpg"},"338/SM-P":{"n":"스페셜 점보 카드팩 「명탐정 피카츄 리자몽GX ver.」","i":"https://product-images.tcgplayer.com/fit-in/437x437/707531.jpg"},"339/SM-P":{"n":"스페셜 점보 카드팩 「명탐정 피카츄 뮤츠GX ver.」","i":"https://product-images.tcgplayer.com/fit-in/437x437/707532.jpg"},"1/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"2/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"3/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"4/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"5/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"6/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"7/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"8/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"9/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"10/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"11/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"12/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"13/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"14/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"15/015":{"n":"소드&실드 25th ANNIVERSARY GOLDEN BOX","i":"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg"},"13/SM-P":{"n":"썬&문 스페셜 BOX 「단원 흉내 피카츄」","i":"https://cdn.artofpkm.com/s3sb7263wktqwwd1uwnn14n41d2i"},"14/SM-P":{"n":"썬&문 스페셜 BOX 「단원 흉내 피카츄」","i":"https://cdn.artofpkm.com/s3sb7263wktqwwd1uwnn14n41d2i"},"37/SM-P":{"n":"썬&문 스페셜 BOX 「알로라 식스테일 & 식스테일 판초 피카츄」","i":"https://cdn.artofpkm.com/0a8gsinb08m6s01qsyz6zbg5fh1b"},"38/SM-P":{"n":"썬&문 스페셜 BOX 「알로라 식스테일 & 식스테일 판초 피카츄」","i":"https://cdn.artofpkm.com/0a8gsinb08m6s01qsyz6zbg5fh1b"},"280/SM-P":{"n":"썬&문 스페셜 BOX 「포켓몬센터 요코하마」","i":"https://cdn.artofpkm.com/arrs0yvns606c3iqedkl71ru9wv2"},"281/SM-P":{"n":"썬&문 스페셜 BOX 「포켓몬센터 요코하마」","i":"https://cdn.artofpkm.com/arrs0yvns606c3iqedkl71ru9wv2"}};
+/* 카드번호 -> collectory.cc 보강 { ko:한국어명, r:레어도, p:한국판 시세(원) } */
+const EXTRA   = {"28":{"ko":"피카츄","r":"N"},"184":{"ko":"피카츄 VMAX","r":"CSR","p":69000},"236/187":{"ko":"피카츄 ex","r":"UR","p":53000},"132/106":{"ko":"피카츄 ex","r":"SAR","p":143000},"205/172":{"ko":"피카츄 (갓팩)","r":"AR","p":150000},"234/193":{"ko":"피카츄 ex (분홍피카츄)","r":"SAR","p":120000},"136/106":{"ko":"피카츄 ex","r":"UR","p":42000},"1/015":{"ko":"피카츄 V","r":"N","p":230500},"54/049":{"ko":"피카츄","r":"CHR","p":16000},"223/184":{"ko":"피카츄 VMAX","r":"CSR"},"142/S-P":{"ko":"첵스 피카츄 VMAX","r":"PROMO"},"41/173":{"ko":"피카츄&제크로무 GX","r":"RR","p":145940},"10/032":{"ko":"피카츄","r":"RR","p":36000},"120/S-P":{"ko":"통째로 삼켜진 피카츄","r":"PROMO","p":132000},"222/184":{"ko":"피카츄 V","r":"CSR","p":46000},"73/071":{"ko":"피카츄","r":"CHR","p":172000},"14/071":{"ko":"피카츄 (다크 판타즈마)","r":"C","p":14000},"8/027":{"ko":"피카츄 EX","r":"RR","p":160000},"25/028[좌측상단]RRR":{"ko":"피카츄 V-UNION","r":"RRR","p":75000},"5/026":{"ko":"지우의 피카츄 GX","r":"RR","p":50000},"135/SM-P":{"ko":"피카츄","r":"PROMO","p":28000},"279/184":{"ko":"피카츄 VMAX","r":"UR","p":86000},"46/184":{"ko":"피카츄 VMAX","r":"RRR","p":79000},"236/190":{"ko":"피카츄 이로치","r":"S","p":50000},"9/054":{"ko":"피카츄","r":"C","p":26000},"69/SM-P":{"ko":"피카츄 (과학연구소)","r":"PROMO","p":15000},"75/S-P":{"ko":"피카츄 (앙천의 볼트태클)","r":"PROMO","p":22000},"114/076":{"ko":"피카츄 VMAX","r":"HR","p":66000},"15/050":{"ko":"피카츄","r":"C","p":10000},"160/SV-P":{"ko":"피카츄 (여름츄)","r":"PROMO","p":86000},"31/095":{"ko":"피카츄&제크로무 GX","r":"RR","p":15000},"29/072":{"ko":"무지개 피카츄","r":"C","p":12000},"173/165":{"ko":"피카츄","r":"AR","p":23000},"28/071":{"ko":"포고 모자 피카츄","r":"R","p":14000},"13/024":{"ko":"개굴닌자 GX","r":"RR","p":40000},"23/052":{"ko":"피카츄","r":"C","p":24000},"7/024":{"ko":"리자몽 GX","r":"RR","p":1000},"1/028":{"ko":"피카츄","r":"AR","p":16000},"221/173":{"ko":"피카츄&제크로무 GX","r":"UR","p":14000},"23/071":{"ko":"피카츄","r":"C","p":3500},"165/SV-P":{"ko":"피카츄","r":"PROMO","p":35000},"23/028":{"ko":"파도타기 피카츄 V","r":"RR","p":9500},"22/060":{"ko":"피카츄","r":"C","p":14000},"74/S-P":{"ko":"피카츄","r":"Rare Holo VMAX","p":20000},"7/025":{"ko":"피카츄","r":"U","p":31000},"52/SM-P":{"ko":"피카츄","r":"PROMO","p":35000},"104/100":{"ko":"피카츄 V","r":"SR","p":35000},"24/098":{"ko":"피카츄","r":"C","p":4500},"14/055":{"ko":"피카츄","r":"C","p":7500},"16/049":{"ko":"피카츄","r":"C","p":1000},"24/028":{"ko":"파도타기 피카츄 VMAX","r":"RRR","p":24950},"122/106":{"ko":"피카츄 ex","r":"SR","p":31000},"38/175":{"ko":"피카츄 ex","r":"RR"},"136/SM-P":{"ko":"피카츄","r":"PROMO","p":28000},"134/SM-P":{"ko":"피카츄","r":"PROMO","p":28000},"31/100":{"ko":"피카츄 VMAX","r":"RRR","p":5000},"45/184":{"ko":"피카츄 V","r":"RR","p":5500},"107/100":{"ko":"피카츄 EX","r":"SR","p":25000},"25/165CM":{"ko":"피카츄","r":"CM","p":6000},"27/071":{"ko":"포고 산책 피카츄","r":"C","p":1000},"19/053":{"ko":"피카츄 V","r":"RR","p":2000},"30/100":{"ko":"피카츄 V","r":"RR","p":20000},"73/S-P":{"ko":"피카츄 V","r":"PROMO","p":8000},"86/SM-P":{"ko":"피카츄","r":"PROMO","p":20000},"1/SM-P":{"ko":"피카츄","r":"PROMO","p":19900},"36/131":{"ko":"피카츄","r":"N","p":7000},"14/024":{"ko":"명탐정 피카츄","r":"U","p":2000},"26/069":{"ko":"피카츄","r":"C","p":4800},"183/S-P":{"ko":"프레셔스 피카츄","r":"PROMO","p":17000},"55/190":{"ko":"피카츄","r":"N","p":3000},"35/100":{"ko":"피카츄","r":"C","p":16000},"127/414M":{"ko":"피카츄","r":"M","p":15400},"20/028":{"ko":"피카츄 V","r":"RR","p":28000},"17/024":{"ko":"뮤츠 GX","r":"RR","p":9950},"17/071":{"ko":"피카츄","r":"C","p":750},"13/051":{"ko":"피카츄","r":"C","p":8000},"44/193":{"ko":"피카츄 ex","r":"RR","p":3500},"33/106":{"ko":"피카츄 ex","r":"RR","p":1000},"225/742":{"ko":"피카츄","r":"N","p":8000},"100/095":{"ko":"피카츄&제크로무 GX","r":"SR","p":11000},"58/102":{"ko":"피카츄","r":"C","p":11000},"6/024":{"ko":"리자몽","r":"U","p":10600},"29/171":{"ko":"피카츄","r":"Mirror","p":10500},"182/XY-P":{"ko":"피카츄 ex","r":"RR","p":10000},"22/SM-P":{"ko":"피카츄","r":"PROMO","p":10000},"143/SM-P":{"ko":"명탐정 피카츄","r":"PROMO","p":9000},"88/XY-P":{"ko":"피카츄","r":"PROMO","p":9000},"164/SM-P":{"ko":"피카츄","r":"PROMO","p":8000},"5/SM-P":{"ko":"피카츄","r":"PROMO","p":7000},"227/742":{"ko":"피카츄 ex","r":"RR","p":7000},"10/024":{"ko":"고라파덕","r":"C","p":6250},"25/165C":{"ko":"피카츄","r":"C","p":3500},"127/414":{"ko":"피카츄","r":"N","p":6000},"12/031":{"ko":"피카츄 V","r":"RR","p":5800},"18/066":{"ko":"피카츄 ex","r":"RR","p":4500},"44/SM-P":{"ko":"지우의 피카츄","r":"PROMO","p":3500},"41/SM-P":{"ko":"지우의 피카츄","r":"PROMO","p":3500},"141/SM-P":{"ko":"명탐정 피카츄","r":"PROMO","p":3000},"142/SM-P":{"ko":"명탐정 피카츄","r":"PROMO","p":3000},"34/139":{"ko":"피카츄","r":"N"},"8/024":{"ko":"잠만보","r":"N"},"159/S-P":{"ko":"피카츄","r":"PROMO","p":2000},"28/114":{"ko":"피카츄","r":"N","p":1200},"24/024":{"ko":"저지맨","r":"N"},"19/024":{"ko":"푸린","r":"C"},"16/024":{"ko":"뮤츠","r":"U","p":1000},"9/024":{"ko":"고라파덕","r":"C"},"20/024":{"ko":"박사의 연구(마박사)","r":"N"},"21/024":{"ko":"보스의 지령(태홍)","r":"N"},"18/024":{"ko":"포켓몬 캐처","r":"N"},"15/024":{"ko":"마임맨","r":"C"},"164/XY-P":{"ko":"피카츄","r":"PROMO"},"28/60":{"ko":"피카츄","r":"C"},"129/414M":{"ko":"피카츄 V","r":"RR"},"1/017":{"ko":"피카츄","r":"N"},"2/024":{"ko":"이상해씨","r":"C"},"12/024":{"ko":"개굴닌자","r":"U"},"1/XY-P":{"ko":"피카츄","r":"PROMO"},"22/024":{"ko":"사나","r":"N"},"LIG":{"ko":"기본 번개 에너지","r":"N"},"1/024":{"ko":"피카츄","r":"C"},"55/190M":{"ko":"피카츄","r":"M"},"112/095":{"ko":"피카츄&제크로무 GX","r":"HR"},"126/SV-P":{"ko":"피카츄","r":"PROMO"},"4/024":{"ko":"멍파치","r":"N"},"5/024":{"ko":"펄스멍","r":"N"},"23/024":{"ko":"메타몽","r":"U"},"28/55":{"ko":"피카츄","r":"N"},"18/051":{"ko":"피카츄","r":"N"},"47/SM-P":{"ko":"지우의 피카츄","r":"PROMO"},"51/SV-P":{"ko":"명탐정 피카츄","r":"PROMO","p":182000},"5/015":{"ko":"피카츄 V","r":"RR"},"129/414":{"ko":"피카츄 V","r":"RR"},"11/024":{"ko":"잉어킹","r":"C"},"101/095":{"ko":"피카츄&제크로무 GX","r":"SR"},"6/015":{"ko":"피카츄 VMAX","r":"RRR"},"50/SV-P":{"ko":"피카츄","r":"PROMO"},"3/024":{"ko":"로파파","r":"U"},"21/080":{"ko":"피카츄","r":"N"},"102/SV-P":{"ko":"피카츄","r":"PROMO"},"3/015":{"ko":"피카츄","r":"N"},"114/100":{"ko":"피카츄","r":"HR"},"1/022":{"ko":"피카츄","r":"N"},"003":{"ko":"피카츄","r":"PROMO"},"3/DP-P":{"ko":"피카츄","r":"PROMO"},"120/SM-P":{"ko":"피카츄","r":"PROMO"},"8/032":{"ko":"피카츄","r":"—"},"764/742":{"ko":"피카츄 ex","r":"SAR","p":102000},"203/S-P":{"ko":"피카츄","r":"PROMO"},"5/S-P":{"ko":"피카츄","r":"PROMO"}};
+const PRICE_ASOF = "2026-08-19";
+/* 카드번호 -> ポケブーン 배포처 { d:배포처(일본어), ja:일본어 카드명 } */
+const DIST    = {"242/SV-P":{"d":"受賞作品プロモカード化記念キャンペーン","ja":"ピカチュウ"},"197/SV-P":{"d":"「ピカチュウ」もらえる！ ジムイベント","ja":"ピカチュウ"},"216/SV-P":{"d":"ポケカの夏がキタ！プロモカードGetキャンペーン！","ja":"ピカチュウ"},"218/SV-P":{"d":"ポケカの夏がキタ！プロモカードGetキャンペーン！","ja":"ピカチュウ"},"120/SV-P":{"d":"ジムイベントに参加して、「ピカチュウ」をもらおう","ja":"ピカチュウ"},"74/SV-P":{"d":"NAKANO STYLING TANTO × ポケモンカードゲーム","ja":"ピカチュウ"},"323/S-P":{"d":"PRECIOUS COLLECTOR BOX","ja":"ピカチュウ"},"1/SV-P":{"d":"『スカーレット』『バイオレット』パッケージ版 早期購入特典","ja":"ピカチュウ"},"265/S-P":{"d":"月刊コロコロコミック 2022年2月号ふろく","ja":"ピカチュウVMAX"},"227/S-P":{"d":"ポケモン切手BOX～ポケモンカードゲーム 見返り美人・月に雁セット～"},"208/S-P":{"d":"YU NAGABA×ポケモンカードゲーム"},"144/S-P":{"d":"ポケモンセンターカナザワオープン記念「カナザワ便りキャンペーン」"},"147/S-P":{"d":"スペシャルBOX ポケモンセンターカナザワオープン記念"},"121/S-P":{"d":"キョダイパックセット 仰天のボルテッカー","ja":"ピカチュウV"},"122/S-P":{"d":"ピカピカ！ピカチュウ！プロモカードキャンペーン！","ja":"ピカチュウV"},"123/S-P":{"d":"ピカピカ！ピカチュウ！プロモカードキャンペーン！","ja":"ピカチュウVMAX"},"124/S-P":{"d":"ピカピカ！ピカチュウ！プロモカードキャンペーン！","ja":"ピカチュウ"},"125/S-P":{"d":"ピカピカ！ピカチュウ！プロモカードキャンペーン！","ja":"ピカチュウ"},"126/S-P":{"d":"ピカピカ！ピカチュウ！プロモカードキャンペーン！","ja":"ピカチュウ"},"132/S-P":{"d":"ローソン Vスタートキャンペーン","ja":"ピカチュウ"},"105/S-P":{"d":"「オコヤの森のセレビィ＆ザルード」シリアルコード付き特別前売券セット封入","ja":"まるのみされたピカチュウ"},"36/S-P":{"d":"ゲオ限定プロモカード キャンペーン","ja":"救助隊DXのピカチュウ"},"24/S-P":{"d":"ジムプロモカードパック 第1弾","ja":"ピカチュウ"},"400/SM-P":{"d":"リミテッドコレクション マスターバトルセット","ja":"ピカチュウ"},"2/S-P":{"d":"ポケモンセンターシブヤ オープン記念"},"1/S-P":{"d":"ソード&シールド ゲーム購入特典","ja":"ピカチュウ"},"407/SM-P":{"d":"ポケモンセンターオーサカDX オープン記念 おいかぜキャンペーン","ja":"漫才ごっこピカチュウ"},"393/SM-P":{"d":"BEAMSとポケモンカードゲームによるコラボプロジェクト","ja":"ピカチュウGX"},"376/SM-P":{"d":"ローソンサマーキャンペーン","ja":"ピカチュウ"},"377/SM-P":{"d":"ローソンサマーキャンペーン","ja":"ピカチュウ"},"369/SM-P":{"d":"映画「ミュウツーの逆襲 EVOLUTION」主題歌「風といっしょに」","ja":"ピカチュウ"},"367/SM-P":{"d":"スペシャルジャンボカードパック ミュウツー&ミュウGX","ja":"ピカチュウ"},"337/SM-P":{"d":"名探偵ピカチュウパンフレット"},"338/SM-P":{"d":"名探偵ピカチュウ前売り券セット"},"339/SM-P":{"d":"名探偵ピカチュウ劇場限定セット"},"325/SM-P":{"d":"はなびらのまいキャンペーン"},"288/SM-P":{"d":"ムンク展×ポケモンカードゲーム","ja":"ピカチュウ"},"307/SM-P":{"d":"イオン限定スペシャルパック","ja":"ピカチュウ"},"291/SM-P":{"d":"ポケモンパン","ja":"ピカチュウ"},"276/SM-P":{"d":"トイザらス限定 イーブイGX対戦 トリプルスターターセット","ja":"ピカチュウ"},"282/SM-P":{"d":"ポケモンセンターヨコハマ リニューアル記念 潮風にのって キャンペーン"},"283/SM-P":{"d":"ポケモンセンターヨコハマ リニューアル記念 潮風にのって キャンペーン"},"280/SM-P":{"d":"スペシャルBOX ポケモンセンターヨコハマ"},"281/SM-P":{"d":"スペシャルBOX ポケモンセンターヨコハマ"},"249/SM-P":{"d":"SM-P フレンドリィショップキャンペーン「ピカチュウ」まとめ","ja":"ピカチュウ"},"270/SM-P":{"d":"ポケモンセンター オープン20周年記念","ja":"レッドのピカチュウ"},"262/SM-P":{"d":"トイザらスのポケカくじ","ja":"ピカチュウ"},"227/SM-P":{"d":"SM-P フレンドリィショップキャンペーン「ピカチュウ」まとめ","ja":"ピカチュウ"},"242/SM-P":{"d":"スペシャルセット「ピカチュウ2018」","ja":"ピカチュウ"},"224/SM-P":{"d":"ポケモンセンター20周年記念キャンペーン","ja":"ピカチュウ"},"200/SM-P":{"d":"SM-P フレンドリィショップキャンペーン「ピカチュウ」まとめ","ja":"ピカチュウ"},"208/SM-P":{"d":"スペシャルBOX ポケモンセンタートウキョーDX"},"209/SM-P":{"d":"スペシャルBOX ポケモンセンタートウキョーDX"},"210/SM-P":{"d":"ポケモンセンタートウキョーDX オープン記念 にほんばれキャンペーン","ja":"紳士風のピカチュウ"},"207/SM-P":{"d":"輝くウルトラビーストキャンペーン","ja":"ピカチュウ"},"214/SM-P":{"d":"プロモカードパック第4弾","ja":"ピカチュウ"},"199/SM-P":{"d":"スペシャルBOX ミミッキュだよ","ja":"ピカチュウ"},"191/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ ロケット団"},"192/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ アクア団"},"193/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ マグマ団"},"194/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ ギンガ団"},"195/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ プラズマ団"},"196/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ フレア団"},"197/SM-P":{"d":"レインボーロケット団の野望キャンペーン","ja":"ボスごっこピカチュウ スカル団"},"168/SM-P":{"d":"コンビニキャンペーン","ja":"ピカチュウ"},"179/SM-P":{"d":"SM-P フレンドリィショップキャンペーン「ピカチュウ」まとめ","ja":"ピカチュウ"},"114/SM-P":{"d":"真夏のピカピカアローラ祭り","ja":"ピカチュウ"},"108/SM-P":{"d":"ポケモンカードジム 夏フェス2017","ja":"ピカチュウ"},"86/SM-P":{"d":"スペシャルジャンボカードパック「ホウオウGX」","ja":"サトシのピカチュウ"},"88/SM-P":{"d":"ポケモンセンタートウホク リニューアルキャンペーン"},"71/SM-P":{"d":"サトシのピカチュウGET キャンペーン","ja":"サトシのピカチュウ"},"72/SM-P":{"d":"サトシのピカチュウGET キャンペーン","ja":"サトシのピカチュウ"},"73/SM-P":{"d":"サトシのピカチュウGET キャンペーン","ja":"サトシのピカチュウ"},"74/SM-P":{"d":"サトシのピカチュウGET キャンペーン","ja":"サトシのピカチュウ"},"75/SM-P":{"d":"サトシのピカチュウGET キャンペーン","ja":"サトシのピカチュウ"},"76/SM-P":{"d":"サトシのピカチュウGET キャンペーン","ja":"サトシのピカチュウ"},"61/SM-P":{"d":"「チャンピオンズリーグ2017」まとめ","ja":"ピカチュウ"},"55/SM-P":{"d":"ピカピカ春祭りキャンペーン","ja":"イースターのピカチュウ"},"44/SM-P":{"d":"スペシャルセット「ピカチュウ」","ja":"ピカチュウ"},"68/SM-P":{"d":"「チャンピオンズリーグ2017」まとめ","ja":"ピカチュウ"},"13/SM-P":{"d":"スペシャルBOX 団員ごっこピカチュウ"},"14/SM-P":{"d":"スペシャルBOX 団員ごっこピカチュウ"},"3/SM-P":{"d":"スペシャルセット「ピカチュウ」","ja":"ピカチュウ"},"8/SM-P":{"d":"トイザらス限定 GXスターターセット","ja":"ピカチュウ"},"5/SM-P":{"d":"アローラロコンとゆきまつりキャンペーン"},"292/XY-P":{"d":"コロコロアニキ第7号","ja":"そらをとぶピカチュウ"},"293/XY-P":{"d":"マリオピカチュウスペシャルＢＯＸ"},"294/XY-P":{"d":"マリオピカチュウスペシャルＢＯＸ"},"295/XY-P":{"d":"ルイージピカチュウスペシャルＢＯＸ"},"296/XY-P":{"d":"ルイージピカチュウスペシャルＢＯＸ"},"279/XY-P":{"d":"20th アニバーサリーフェスタ","ja":"ピカチュウ"},"264/XY-P":{"d":"スペシャルパック MヤドランEX+なみのりピカチュウ","ja":"なみのりピカチュウ"},"281/XY-P":{"d":"とりかえっこプリーズキャンペーン20th","ja":"ピカチュウ"},"259/XY-P":{"d":"ポケモンパン","ja":"ピカチュウ"},"230/XY-P":{"d":"スペシャルBOX レックウザポンチョを着たピカチュウ"},"231/XY-P":{"d":"スペシャルBOX レックウザポンチョを着たピカチュウ"},"247/XY-P":{"d":"マスクド・ピカチュウ スペシャルパック","ja":"マスクド・ピカチュウ"},"221/XY-P":{"d":"「おこしやすジョウト」キャンペーン"},"204/XY-P":{"d":"ポケモンカードゲームイベント「ポケモンセンターメガバトル＋クリーチャーズに挑戦」"},"206/XY-P":{"d":"スペシャルBOX メガリザードンXのポンチョを着たピカチュウ メガリザードンYのポンチョを着たピカチュウ"},"207/XY-P":{"d":"スペシャルBOX メガリザードンXのポンチョを着たピカチュウ"},"208/XY-P":{"d":"スペシャルBOX メガリザードンYのポンチョを着たピカチュウ"},"175/XY-P":{"d":"バトルフェスタ2015","ja":"ピカチュウ"},"154/XY-P":{"d":"セブン-イレブン限定 ポケモンべんとう","ja":"ピカチュウ"},"156/XY-P":{"d":"映画公開記念スペシャルパック フーパ","ja":"ピカチュウ"},"99/XY-P":{"d":"イラストコレクション","ja":"おきがえピカチュウ"},"98/XY-P":{"d":"ポケモンセンター メガトウキョー オープン記念プレゼント","ja":"メガトウキョーのピカチュウ"},"94/XY-P":{"d":"ユニクロのポケモンヒートテック","ja":"あったかピカチュウ"},"95/XY-P":{"d":"ユニクロのポケモンヒートテック","ja":"あったかピカチュウ"},"96/XY-P":{"d":"ユニクロのポケモンヒートテック","ja":"あったかピカチュウ"},"97/XY-P":{"d":"ユニクロのポケモンヒートテック","ja":"あったかピカチュウ"},"90/XY-P":{"d":"バトルフェスタ2014","ja":"ピカチュウ"},"70/XY-P":{"d":"ピカチュウ大量発生チュウ！","ja":"ピカチュウ"},"68/XY-P":{"d":"ピカチュウ大量発生チュウ！","ja":"ピカチュウ"},"69/XY-P":{"d":"ピカチュウ大量発生チュウ！","ja":"ピカチュウ"},"56/XY-P":{"d":"「ポケモン夏の感謝祭2014」","ja":"ポケテレのADピカチュウ"},"64/XY-P":{"d":"ハッピーセットおまけ 丸美屋 ポケモンパン 黒いメガサーナイトキャンペーン","ja":"ピカチュウ"},"1/XY-P":{"d":"ポケモンカードゲーム教室","ja":"ピカチュウ"},"229/BW-P":{"d":"ポケモンセンター15周年","ja":"ピカチュウ"},"163/BW-P":{"d":"ポケモンカードゲームBWワークブック全国図鑑版付録","ja":"ピカチュウ"},"151/BW-P":{"d":"ポケモンカードゲーム教室","ja":"ピカチュウ"},"120/BW-P":{"d":"ポケモンセンター トウホク オープン記念","ja":"ピカチュウ"},"108/BW-P":{"d":"はじめてセットDX ピカチュウver.","ja":"ピカチュウ"},"79/L-P":{"d":"ポケモンセンターで、オリジナルカードをもらおうキャンペーン","ja":"おかいものピカチュウ"},"50/XY-P":{"d":"ポケモンNewモン! Book付録","ja":"日本代表のピカチュウ"},"272/S-P":{"d":"Pokémon GO カードファイルセット"},"19/L-P":{"d":"PCGアクションポイント ゴールドランク","ja":"ピカチュウ"},"31/L-P":{"d":"「ジム☆チャレンジ」 入賞者カード","ja":"勝利のメダル"},"16/DPt-P":{"d":"PCGアクションポイント ゴールドランクプレゼントカード","ja":"ピカチュウ"},"43/DPt-P":{"d":"ポケモンカードゲーム 映画公開記念スペシャルパック2009","ja":"ピカチュウMLV.X"},"113/DP-P":{"d":"コレクションチャレンジ「ポケットモンスタープラチナ」発売記念 クイズラリー","ja":"ピカチュウLV.18"},"98/DP-P":{"d":"ポケモンセンター10周年記念オリジナルカード 第1弾","ja":"ピカチュウLV.14"},"99/DP-P":{"d":"ポケモンセンター10周年記念オリジナルカード 第1弾","ja":"ピカチュウLV.14"},"100/DP-P":{"d":"ポケモンセンター10周年記念オリジナルカード 第1弾","ja":"ピカチュウLV.14"},"101/DP-P":{"d":"ポケモンセンター10周年記念オリジナルカード 第1弾","ja":"ピカチュウLV.14"},"102/DP-P":{"d":"ポケモンセンター10周年記念オリジナルカード 第1弾","ja":"ピカチュウLV.14"},"95/DP-P":{"d":"｢バトルロード スプリング★2008｣ 「ポケモンだいすきクラブ」","ja":"ピカチュウLV.12"},"57/DP-P":{"d":"｢バトルロード サマー★2007｣","ja":"ピカチュウLV.15"},"48/DP-P":{"d":"とりかえっこDP引換カード全国のお店","ja":"ピカチュウLV.15"},"25/DP-P":{"d":"「バトルロード スプリング★2007」 「ポケモンチャレンジひろば」","ja":"ピカチュウLV.13"},"153/PCG-P":{"d":"ANA「ピカ夏旅割」プレゼントカード","ja":"ピカチュウ"},"123/PCG-P":{"d":"マクドナルドオリジナル「ポケモンカードゲーム」","ja":"ピカチュウ"},"118/PCG-P":{"d":"小学館スペシャル『ポケモンワンダーランドVol.6』付録","ja":"ピカチュウδ-デルタ種"},"113/PCG-P":{"d":"「バトルロード オータム★2005」公式大会 バトルロードスタジアム参加賞","ja":"ピカチュウδ-デルタ種"},"112/PCG-P":{"d":"明治製菓「ポケモンチョコスナック 第4弾」","ja":"ピカチュウδ-デルタ種"},"84/PCG-P":{"d":"マクドナルドオリジナル「ポケモンカードゲーム」全10種","ja":"ピカチュウ"},"68/PCG-P":{"d":"明治製菓「ポケモンチョコスナック 第3弾」","ja":"ピカチュウ"},"43/PCG-P":{"d":"ポケパーク アトラクション限定カード","ja":"ポケパークのピカチュウ"},"57/ADV-P":{"d":"明治製菓「ポケモンチョコスナック」おまけカード","ja":"ピカチュウ"},"23/ADV-P":{"d":"セブン-イレブン「ポケモンフェア」オリジナルカード","ja":"ピカチュウ"},"24/ADV-P":{"d":"セブン-イレブン「ポケモンフェア」オリジナルカード","ja":"ピカチュウ"},"44/P":{"d":"JR「ポケモンハッピーアドベンチャーラリー2002」オリジナルカード","ja":"ピカチュウ"},"38/P":{"d":"「ポケモンフェスタ2002」オリエンテーリング参加記念カード","ja":"ピカチュウ"},"21/P":{"d":"マクドナルドオリジナルポケモンカードe","ja":"ピカチュウ"},"4/P":{"d":"「ANA'S ピカ夏ですよ」キャンペーン「ポケモンカードe」ANAスペシャル'01バージョン","ja":"ピカチュウ"},"150/XY-P":{"d":"スペシャルBOX コイキングごっこ&ギャラドスごっこピカチュウ"},"151/XY-P":{"d":"スペシャルBOX コイキングごっこ&ギャラドスごっこピカチュウ"},"37/SM-P":{"d":"スペシャルBOX アローラロコン＆ロコン"},"38/SM-P":{"d":"スペシャルBOX アローラロコン＆ロコン"}};
+/* 배포처 일본어 -> 한국어 */
+const DISTKO  = {"レインボーロケット団の野望キャンペーン":"레인보우 로켓단의 야망 캠페인","サトシのピカチュウGET キャンペーン":"지우의 피카츄 GET 캠페인","ピカピカ！ピカチュウ！プロモカードキャンペーン！":"삐까삐까! 피카츄! 프로모카드 캠페인","ポケモンセンター10周年記念オリジナルカード 第1弾":"포켓몬센터 10주년 기념 오리지널 카드 제1탄","SM-P フレンドリィショップキャンペーン「ピカチュウ」まとめ":"프렌들리샵 캠페인 「피카츄」 (SM-P)","ユニクロのポケモンヒートテック":"유니클로 포켓몬 히트텍","ハッピーセットおまけ 丸美屋 ポケモンパン 黒いメガサーナイトキャンペーン":"해피밀 사은품 · 마루미야 포켓몬빵 · 검은 메가가디안 캠페인","ピカチュウ大量発生チュウ！":"피카츄 대량발생츄!","ポケカの夏がキタ！プロモカードGetキャンペーン！":"포켓카의 여름이 왔다! 프로모카드 Get 캠페인","ローソンサマーキャンペーン":"로손 서머 캠페인","ポケモンパン":"포켓몬빵","ポケモンセンターヨコハマ リニューアル記念 潮風にのって キャンペーン":"포켓몬센터 요코하마 리뉴얼 기념 「바닷바람을 타고」 캠페인","スペシャルBOX ポケモンセンターヨコハマ":"스페셜 BOX 「포켓몬센터 요코하마」","スペシャルBOX ポケモンセンタートウキョーDX":"스페셜 BOX 「포켓몬센터 도쿄DX」","「チャンピオンズリーグ2017」まとめ":"챔피언스 리그 2017","スペシャルセット「ピカチュウ」":"스페셜 세트 「피카츄」","スペシャルBOX 団員ごっこピカチュウ":"스페셜 BOX 「단원 흉내 피카츄」","マリオピカチュウスペシャルＢＯＸ":"마리오 피카츄 스페셜 BOX","ルイージピカチュウスペシャルＢＯＸ":"루이지 피카츄 스페셜 BOX","スペシャルBOX レックウザポンチョを着たピカチュウ":"스페셜 BOX 「레쿠쟈 판초를 입은 피카츄」","ポケモンカードゲーム教室":"포켓몬카드게임 교실","セブン-イレブン「ポケモンフェア」オリジナルカード":"세븐일레븐 「포켓몬 페어」 오리지널 카드","スペシャルBOX コイキングごっこ&ギャラドスごっこピカチュウ":"스페셜 BOX 「잉어킹 흉내 & 갸라도스 흉내 피카츄」","スペシャルBOX アローラロコン＆ロコン":"스페셜 BOX 「알로라 식스테일 & 식스테일」","受賞作品プロモカード化記念キャンペーン":"수상작 프로모카드화 기념 캠페인","「ピカチュウ」もらえる！ ジムイベント":"「피카츄」 받자! 짐 이벤트","ジムイベントに参加して、「ピカチュウ」をもらおう":"짐 이벤트 참가하고 「피카츄」 받기","NAKANO STYLING TANTO × ポケモンカードゲーム":"NAKANO STYLING TANTO × 포켓몬카드게임 콜라보","PRECIOUS COLLECTOR BOX":"프레셔스 컬렉터 박스 (소드&실드)","『スカーレット』『バイオレット』パッケージ版 早期購入特典":"『스칼렛』『바이올렛』 패키지판 조기구매 특전","月刊コロコロコミック 2022年2月号ふろく":"월간 코로코로 코믹 2022년 2월호 부록","ポケモン切手BOX～ポケモンカードゲーム 見返り美人・月に雁セット～":"포켓몬 우표 BOX 「미카에리 미인 · 달에 기러기 세트」","YU NAGABA×ポケモンカードゲーム":"YU NAGABA × 포켓몬카드게임 콜라보","ポケモンセンターカナザワオープン記念「カナザワ便りキャンペーン」":"포켓몬센터 카나자와 오픈 기념 「카나자와 소식 캠페인」","スペシャルBOX ポケモンセンターカナザワオープン記念":"스페셜 BOX 「포켓몬센터 카나자와 오픈 기념」","キョダイパックセット 仰天のボルテッカー":"거다이맥스 팩 세트 「앙천의 볼트태클」","ローソン Vスタートキャンペーン":"로손 V스타트 캠페인","「オコヤの森のセレビィ＆ザルード」シリアルコード付き特別前売券セット封入":"「오코야 숲의 세레비 & 자루드」 시리얼코드 특별 전매권 세트 동봉","ゲオ限定プロモカード キャンペーン":"GEO 한정 프로모카드 캠페인","ジムプロモカードパック 第1弾":"짐 프로모카드팩 제1탄","リミテッドコレクション マスターバトルセット":"리미티드 컬렉션 마스터 배틀 세트","ポケモンセンターシブヤ オープン記念":"포켓몬센터 시부야 오픈 기념","ソード&シールド ゲーム購入特典":"소드&실드 게임 구매 특전","ポケモンセンターオーサカDX オープン記念 おいかぜキャンペーン":"포켓몬센터 오사카DX 오픈 기념 「순풍 캠페인」","BEAMSとポケモンカードゲームによるコラボプロジェクト":"BEAMS × 포켓몬카드게임 콜라보 프로젝트","映画「ミュウツーの逆襲 EVOLUTION」主題歌「風といっしょに」":"영화 「뮤츠의 역습 EVOLUTION」 주제가 「바람과 함께」","スペシャルジャンボカードパック ミュウツー&ミュウGX":"스페셜 점보 카드팩 「뮤츠 & 뮤GX」","名探偵ピカチュウパンフレット":"명탐정 피카츄 영화 팸플릿 동봉","名探偵ピカチュウ前売り券セット":"명탐정 피카츄 전매권 세트","名探偵ピカチュウ劇場限定セット":"명탐정 피카츄 극장 한정 세트","はなびらのまいキャンペーン":"꽃잎댄스 캠페인","ムンク展×ポケモンカードゲーム":"뭉크전 × 포켓몬카드게임","イオン限定スペシャルパック":"확장팩 「태그볼트」 발매 기념 이온(AEON) 한정 스페셜팩","トイザらス限定 イーブイGX対戦 トリプルスターターセット":"토이저러스 한정 「이브이GX 대전 트리플 스타터 세트」","ポケモンセンター オープン20周年記念":"포켓몬센터 오픈 20주년 기념","トイザらスのポケカくじ":"토이저러스 포켓카 뽑기","スペシャルセット「ピカチュウ2018」":"스페셜 세트 「피카츄 2018」","ポケモンセンター20周年記念キャンペーン":"포켓몬센터 20주년 기념 캠페인","ポケモンセンタートウキョーDX オープン記念 にほんばれキャンペーン":"포켓몬센터 도쿄DX 오픈 기념 「쾌청 캠페인」","輝くウルトラビーストキャンペーン":"빛나는 울트라비스트 캠페인","プロモカードパック第4弾":"프로모카드팩 제4탄","スペシャルBOX ミミッキュだよ":"스페셜 BOX 「따라큐야」","コンビニキャンペーン":"편의점 캠페인","真夏のピカピカアローラ祭り":"한여름의 삐까삐까 알로라 축제","ポケモンカードジム 夏フェス2017":"포켓몬카드짐 여름 페스티벌 2017","スペシャルジャンボカードパック「ホウオウGX」":"스페셜 점보 카드팩 「칠색조GX」","ポケモンセンタートウホク リニューアルキャンペーン":"포켓몬센터 도호쿠 리뉴얼 캠페인","ピカピカ春祭りキャンペーン":"삐까삐까 봄축제 캠페인","トイザらス限定 GXスターターセット":"토이저러스 한정 GX 스타터 세트","アローラロコンとゆきまつりキャンペーン":"알로라 식스테일과 눈축제 캠페인","コロコロアニキ第7号":"코로코로 아니키 제7호","20th アニバーサリーフェスタ":"20th 애니버서리 페스타","スペシャルパック MヤドランEX+なみのりピカチュウ":"스페셜팩 「M야도란EX + 파도타기 피카츄」","とりかえっこプリーズキャンペーン20th":"교환하기 플리즈 캠페인 20th","マスクド・ピカチュウ スペシャルパック":"마스크드 피카츄 스페셜팩","「おこしやすジョウト」キャンペーン":"「어서오세요 성도」 캠페인","ポケモンカードゲームイベント「ポケモンセンターメガバトル＋クリーチャーズに挑戦」":"포켓몬카드게임 이벤트 「포켓몬센터 메가배틀 + 크리처스에 도전」","スペシャルBOX メガリザードンXのポンチョを着たピカチュウ メガリザードンYのポンチョを着たピカチュウ":"스페셜 BOX 「메가리자몽 X / Y의 판초를 입은 피카츄」","スペシャルBOX メガリザードンXのポンチョを着たピカチュウ":"스페셜 BOX 「메가리자몽 X의 판초를 입은 피카츄」","スペシャルBOX メガリザードンYのポンチョを着たピカチュウ":"스페셜 BOX 「메가리자몽 Y의 판초를 입은 피카츄」","バトルフェスタ2015":"배틀 페스타 2015","セブン-イレブン限定 ポケモンべんとう":"세븐일레븐 한정 포켓몬 도시락","映画公開記念スペシャルパック フーパ":"영화 공개 기념 스페셜팩 「후파」","イラストコレクション":"일러스트 컬렉션","ポケモンセンター メガトウキョー オープン記念プレゼント":"포켓몬센터 메가도쿄 오픈 기념 증정","バトルフェスタ2014":"배틀 페스타 2014","「ポケモン夏の感謝祭2014」":"「포켓몬 여름 감사제 2014」","ポケモンセンター15周年":"포켓몬센터 15주년","ポケモンカードゲームBWワークブック全国図鑑版付録":"포켓몬카드게임 BW 워크북 「전국도감판」 부록","ポケモンセンター トウホク オープン記念":"포켓몬센터 도호쿠 오픈 기념","はじめてセットDX ピカチュウver.":"처음 시작 세트 DX 「피카츄 ver.」","ポケモンセンターで、オリジナルカードをもらおうキャンペーン":"포켓몬센터에서 오리지널 카드 받기 캠페인","ポケモンNewモン! Book付録":"포켓몬 New몬! Book 부록","Pokémon GO カードファイルセット":"포켓몬 GO 카드파일 세트","PCGアクションポイント ゴールドランク":"PCG 액션포인트 골드랭크","「ジム☆チャレンジ」 入賞者カード":"「짐☆챌린지」 입상자 카드","PCGアクションポイント ゴールドランクプレゼントカード":"PCG 액션포인트 골드랭크 증정 카드","ポケモンカードゲーム 映画公開記念スペシャルパック2009":"포켓몬카드게임 영화 공개 기념 스페셜팩 2009","コレクションチャレンジ「ポケットモンスタープラチナ」発売記念 クイズラリー":"컬렉션 챌린지 「포켓몬스터 플라티나」 발매 기념 퀴즈 랠리","｢バトルロード スプリング★2008｣ 「ポケモンだいすきクラブ」":"「배틀로드 스프링★2008」 · 「포켓몬 다이스키 클럽」","｢バトルロード サマー★2007｣":"「배틀로드 서머★2007」","とりかえっこDP引換カード全国のお店":"교환하기 DP 교환 카드 (전국 매장)","「バトルロード スプリング★2007」 「ポケモンチャレンジひろば」":"「배틀로드 스프링★2007」 · 「포켓몬 챌린지 광장」","ANA「ピカ夏旅割」プレゼントカード":"ANA 「삐까 여름 여행할인」 증정 카드","マクドナルドオリジナル「ポケモンカードゲーム」":"맥도날드 오리지널 「포켓몬카드게임」","小学館スペシャル『ポケモンワンダーランドVol.6』付録":"쇼가쿠칸 스페셜 『포켓몬 원더랜드 Vol.6』 부록","「バトルロード オータム★2005」公式大会 バトルロードスタジアム参加賞":"「배틀로드 오텀★2005」 공식대회 배틀로드 스타디움 참가상","明治製菓「ポケモンチョコスナック 第4弾」":"메이지제과 「포켓몬 초코스낵 제4탄」","マクドナルドオリジナル「ポケモンカードゲーム」全10種":"맥도날드 오리지널 「포켓몬카드게임」 전 10종","明治製菓「ポケモンチョコスナック 第3弾」":"메이지제과 「포켓몬 초코스낵 제3탄」","ポケパーク アトラクション限定カード":"포켓파크 어트랙션 한정 카드","明治製菓「ポケモンチョコスナック」おまけカード":"메이지제과 「포켓몬 초코스낵」 사은 카드","JR「ポケモンハッピーアドベンチャーラリー2002」オリジナルカード":"JR 「포켓몬 해피 어드벤처 랠리 2002」 오리지널 카드","「ポケモンフェスタ2002」オリエンテーリング参加記念カード":"「포켓몬 페스타 2002」 오리엔티어링 참가 기념 카드","マクドナルドオリジナルポケモンカードe":"맥도날드 오리지널 포켓몬카드e","「ANA'S ピカ夏ですよ」キャンペーン「ポケモンカードe」ANAスペシャル'01バージョン":"「ANA'S 삐까 여름이에요」 캠페인 · 포켓몬카드e ANA 스페셜 '01 버전"};
+/* 배포처 문자열 -> 그 상품 { n:상품명, i:이미지URL } */
+const PRODIMG = {"ポケモン切手BOX～ポケモンカードゲーム 見返り美人・月に雁セット～":{"n":"포켓몬 우표 BOX 「포켓몬카드게임 미카에리 미인 · 달에 기러기 세트」","i":"https://www.post.japanpost.jp/kitte/collection/archive/2021/0825_01/img_item_01.jpg","s":"box"},"YU NAGABA×ポケモンカードゲーム":{"n":"YU NAGABA × 포켓몬카드게임 「이브이즈 스페셜 BOX」","i":"https://www.pokemon-card.com/info/2023/04/images/b56766f5afe2af3ed6a443395efdbacd0d904365.png","s":"box"},"スペシャルBOX ポケモンセンターカナザワオープン記念":{"n":"スペシャルBOX ポケモンセンターカナザワオープン記念","i":"https://cdn.artofpkm.com/af680yxytv01txo2em8rbbow9t3w","s":"apk"},"キョダイパックセット 仰天のボルテッカー":{"n":"キョダイパックセット 仰天のボルテッカー","i":"https://cdn.artofpkm.com/w6nb2v322tsgqq6v1hjv2vk04ka2","s":"apk"},"スペシャルジャンボカードパック ミュウツー&ミュウGX":{"n":"スペシャルジャンボカードパック「ミュウツー&ミュウGX」","i":"https://cdn.artofpkm.com/yjgol2l2qcuugy31q4643ubjvivk","s":"apk"},"イオン限定スペシャルパック":{"n":"확장팩 「태그볼트」 발매 기념 이온(AEON) 한정 스페셜팩","i":"https://cdn.artofpkm.com/1io6odmgp3y45l8g2ycuxmu0j0cx","s":"apk"},"トイザらス限定 イーブイGX対戦 トリプルスターターセット":{"n":"ポケモンカードゲーム サン＆ムーントイザらス限定 イーブイGX対戦 トリプルスターターセット","i":"https://cdn.artofpkm.com/azm7bubpn5r1ad6puvlyzruoxir0","s":"apk"},"スペシャルBOX ポケモンセンターヨコハマ":{"n":"スペシャルBOX ポケモンセンターヨコハマ","i":"https://cdn.artofpkm.com/i7zmmnx6trc3atrp8n7pct1j764j","s":"apk"},"スペシャルセット「ピカチュウ2018」":{"n":"スペシャルセット ピカチュウ2018","i":"https://cdn.artofpkm.com/e026mdm1iqxsssamvlfp0ycc3yvd","s":"apk"},"スペシャルBOX ポケモンセンタートウキョーDX":{"n":"スペシャルBOX ポケモンセンタートウキョーDX","i":"https://cdn.artofpkm.com/cxr88qajnnsay3mczysafq0lng15","s":"apk"},"スペシャルBOX ミミッキュだよ":{"n":"スペシャルBOX ミミッキュだよ","i":"https://cdn.artofpkm.com/oukrekb057i4dmupolbpt63qvqyu","s":"apk"},"スペシャルジャンボカードパック「ホウオウGX」":{"n":"スペシャルジャンボカードパック「ホウオウGX」","i":"https://cdn.artofpkm.com/sczc3wqbmc03gt4x8nrxv4gpqnvp","s":"apk"},"スペシャルセット「ピカチュウ」":{"n":"스페셜 세트 「피카츄」","i":"https://cdn.artofpkm.com/jp806zrktif1cv8fmyz0qurkl4up","s":"apk"},"スペシャルBOX 団員ごっこピカチュウ":{"n":"スペシャルBOX 団員ごっこピカチュウ","i":"https://cdn.artofpkm.com/ash5jhyi4th3ylv77ixwnjfa7ltm","s":"apk"},"トイザらス限定 GXスターターセット":{"n":"トイザらス限定 GXスターターセット","i":"https://cdn.artofpkm.com/q96q9isx94dcvsfi1pu72cpal9ps","s":"apk"},"マリオピカチュウスペシャルＢＯＸ":{"n":"マリオピカチュウスペシャルBOX","i":"https://cdn.artofpkm.com/lbf7zv1p37l65ea58zjdtrn5i6xu","s":"apk"},"ルイージピカチュウスペシャルＢＯＸ":{"n":"ルイージピカチュウスペシャルBOX","i":"https://cdn.artofpkm.com/5fyt8jts0yzyej4ahkkwqx41vrli","s":"apk"},"スペシャルBOX レックウザポンチョを着たピカチュウ":{"n":"XY BREAK 스페셜 BOX 「레쿠쟈 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/skytree_img_01.png","s":"box"},"マスクド・ピカチュウ スペシャルパック":{"n":"マスクド・ピカチュウ スペシャルパック<セブン＆アイ・ポケモンセンター限定>","i":"https://cdn.artofpkm.com/o42beehdouwqf9tf3azo0syuoxi3","s":"apk"},"スペシャルBOX メガリザードンXのポンチョを着たピカチュウ":{"n":"XY BREAK 스페셜 BOX 「메가리자몽 X의 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/boxlz_img_01.png","s":"box"},"スペシャルBOX メガリザードンYのポンチョを着たピカチュウ":{"n":"スペシャルBOX メガリザードンYのポンチョを着たピカチュウ","i":"https://cdn.artofpkm.com/uyi1ogxw9qyqhkheoiop6b3lrd76","s":"apk"},"映画公開記念スペシャルパック フーパ":{"n":"映画公開記念スペシャルパック フーパ<セブン&アイ・ポケモンセンター限定>","i":"https://cdn.artofpkm.com/6273lp5q6tva6jzvwatx17ypt3uu","s":"apk"},"イラストコレクション":{"n":"ポケモンカードゲーム イラストコレクション","i":"https://cdn.artofpkm.com/inkte7p6z6qyjrtv3l1eosyvei6w","s":"apk"},"ポケモンセンター15周年":{"n":"ポケモンセンター15周年 カードプレミアムセット","i":"https://cdn.artofpkm.com/9e9avc7de68t9zf5y6rk2jxql2bv","s":"apk"},"Pokémon GO カードファイルセット":{"n":"포켓몬 GO 카드파일 세트","i":"https://product-images.tcgplayer.com/fit-in/437x437/627702.jpg","s":"box"},"ポケモンカードゲーム 映画公開記念スペシャルパック2009":{"n":"ポケモンカードゲーム 映画公開記念 スペシャルパック2009","i":"https://cdn.artofpkm.com/6uwg34vzl44yfkznr4ymfjg08qp8","s":"apk"},"スペシャルBOX コイキングごっこ&ギャラドスごっこピカチュウ":{"n":"스페셜 BOX 「잉어킹 흉내 & 갸라도스 흉내 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/hiroshima_img_01.png","s":"box"},"スペシャルBOX アローラロコン＆ロコン":{"n":"썬&문 스페셜 BOX 「알로라 식스테일 & 식스테일 판초 피카츄」","i":"https://cdn.artofpkm.com/0a8gsinb08m6s01qsyz6zbg5fh1b","s":"box"},"スペシャルBOX メガリザードンXのポンチョを着たピカチュウ メガリザードンYのポンチョを着たピカチュウ":{"n":"XY BREAK 스페셜 BOX 「메가리자몽 X / Y의 판초를 입은 피카츄」","i":"https://www.pokemon-card.com/products/xy/images/boxlz_img_01.png","s":"box"},"PRECIOUS COLLECTOR BOX":{"n":"프레셔스 컬렉터 박스 소드&실드","i":"https://cdn.artofpkm.com/lg76wor8r3pesnjdpb6q8ahww2rs","s":"apk"},"「オコヤの森のセレビィ＆ザルード」シリアルコード付き特別前売券セット封入":{"n":"「오코야 숲의 세레비 & 자루드」 특별 전매권 세트","i":"https://cdn.artofpkm.com/xilnitt2oxz9ae7xdd1muqj79sm1","s":"apk"},"スペシャルパック MヤドランEX+なみのりピカチュウ":{"n":"20th Anniversary 스페셜팩 「M야도란EX + 파도타기 피카츄」","i":"https://cdn.artofpkm.com/ynekcy0onzrcs21po5gm3uzgp55w","s":"apk"},"名探偵ピカチュウ前売り券セット":{"n":"스페셜 점보 카드팩 「명탐정 피카츄 리자몽GX Ver.」","i":"https://cdn.artofpkm.com/o21g4rzsgtp074lof8u1y7ic1xnf","s":"apk"},"名探偵ピカチュウ劇場限定セット":{"n":"스페셜 점보 카드팩 「명탐정 피카츄 뮤츠GX Ver.」","i":"https://cdn.artofpkm.com/8dha9o74x3h683lsp1uyt80yb5el","s":"apk"},"はじめてセットDX ピカチュウver.":{"n":"처음 시작 세트 DX 「피카츄 ver.」","i":"https://cdn.artofpkm.com/yzsb9xhar22hmph5rlmmp6j9frlq","s":"apk"}};
+/* 번호가 없어 번호 대조가 안 되는 카드 — 카드 이미지에서 직접 읽은 배포처 { d:일본어, k:한국어 } */
+const DISTKEY = {
+"sets/279/card/329": {"d":"20th アニバーサリーフェスタ（有田満弘サイン入り）","k":"20th 애니버서리 페스타 (아리타 미츠히로 사인 ver.)"},
+"sets/279/card/392": {"d":"ポケキュンコレクション 関連プロモ（にこるん）","k":"「포켓큥 컬렉션」 관련 프로모 (니코룽)"},
+"sets/279/card/415": {"d":"ポケモンアートアカデミー","k":"포켓몬 아트 아카데미"},
+"sets/279/card/416": {"d":"ポケモンアートアカデミー","k":"포켓몬 아트 아카데미"},
+"sets/279/card/418": {"d":"ポケモンアートアカデミー","k":"포켓몬 아트 아카데미"},
+"sets/279/card/420": {"d":"ポケモンアートアカデミー","k":"포켓몬 아트 아카데미"},
+"sets/279/card/422": {"d":"ポケモンアートアカデミー","k":"포켓몬 아트 아카데미"},
+"sets/279/card/423": {"d":"ポケモンアートアカデミー","k":"포켓몬 아트 아카데미"},
+"sets/279/card/443": {"d":"POKÉMON with YOU（東北支援プロジェクト）","k":"POKÉMON with YOU (도호쿠 지원 프로젝트)"}
+};
+/* key -> [출시일 순서, 발매일, 정확도(0확실/1추정), 시대, Pocket여부] */
+const CHRONO  = {"sets/592/card/7":[0,"2026-09-16",0,"mega",0],"sets/592/card/8":[1,"2026-09-16",0,"mega",0],"sets/592/card/9":[2,"2026-09-16",0,"mega",0],"sets/592/card/10":[3,"2026-09-16",0,"mega",0],"sets/592/card/11":[4,"2026-09-16",0,"mega",0],"sets/592/card/12":[5,"2026-09-16",0,"mega",0],"sets/592/card/13":[6,"2026-09-16",0,"mega",0],"sets/592/card/14":[7,"2026-09-16",0,"mega",0],"sets/592/card/15":[8,"2026-09-16",0,"mega",0],"sets/592/card/16":[9,"2026-09-16",0,"mega",0],"sets/592/card/17":[10,"2026-09-16",0,"mega",0],"sets/592/card/18":[11,"2026-09-16",0,"mega",0],"sets/592/card/19":[12,"2026-09-16",0,"mega",0],"sets/592/card/20":[13,"2026-09-16",0,"mega",0],"sets/592/card/21":[14,"2026-09-16",0,"mega",0],"sets/592/card/22":[15,"2026-09-16",0,"mega",0],"sets/592/card/23":[16,"2026-09-16",0,"mega",0],"sets/592/card/24":[17,"2026-09-16",0,"mega",0],"sets/592/card/25":[18,"2026-09-16",0,"mega",0],"sets/592/card/26":[19,"2026-09-16",0,"mega",0],"sets/592/card/27":[20,"2026-09-16",0,"mega",0],"sets/592/card/28":[21,"2026-09-16",0,"mega",0],"sets/573/card/118":[22,"2026-09-16",1,"mega",0],"sets/573/card/119":[23,"2026-09-16",1,"mega",0],"sets/592/card/53":[24,"2026-09-16",0,"mega",0],"sets/592/card/54":[25,"2026-09-16",0,"mega",0],"sets/592/card/58":[26,"2026-09-16",0,"mega",0],"sets/620/card/82":[27,"2026-08-17",1,"mega",1],"sets/618/card/49":[28,"2026-07-30",0,"mega",1],"sets/617/card/21":[29,"2026-06-30",0,"mega",1],"sets/617/card/72":[30,"2026-06-30",0,"mega",1],"sets/573/card/120":[31,"2026-04-18",1,"mega",0],"sets/614/card/22":[32,"2026-03-26",0,"mega",1],"sets/614/card/96":[33,"2026-03-26",0,"mega",1],"sets/612/card/49":[34,"2026-01-29",0,"mega",1],"sets/582/card/6":[35,"2025-12-19",0,"mega",0],"sets/581/card/267":[36,"2025-12-19",0,"mega",0],"sets/581/card/268":[37,"2025-12-19",0,"mega",0],"sets/581/card/271":[38,"2025-12-19",0,"mega",0],"sets/581/card/272":[39,"2025-12-19",0,"mega",0],"sets/581/card/884":[40,"2025-12-19",0,"mega",0],"sets/579/card/45":[41,"2025-11-28",0,"mega",0],"sets/579/card/236":[42,"2025-11-28",0,"mega",0],"sets/620/card/1":[43,"2025-11-09",1,"mega",1],"sets/610/card/321":[44,"2025-10-30",0,"mega",1],"sets/619/card/111":[45,"2025-10-03",1,"mega",1],"sets/609/card/128":[46,"2025-09-30",0,"mega",1],"sets/609/card/129":[47,"2025-09-30",0,"mega",1],"sets/609/card/131":[48,"2025-09-30",0,"mega",1],"sets/609/card/132":[49,"2025-09-30",0,"mega",1],"sets/609/card/364":[50,"2025-09-30",0,"mega",1],"sets/609/card/376":[51,"2025-09-30",0,"mega",1],"sets/573/card/20":[52,"2025-08-01",1,"mega",0],"sets/604/card/57":[56,"2025-04-30",0,"scarlet-and-violet",1],"sets/603/card/22":[57,"2025-03-27",0,"scarlet-and-violet",1],"sets/603/card/82":[58,"2025-03-27",0,"scarlet-and-violet",1],"sets/603/card/92":[59,"2025-03-27",0,"scarlet-and-violet",1],"sets/478/card/242":[61,"2025-02-19",1,"scarlet-and-violet",0],"sets/602/card/25":[60,"2025-02-28",0,"scarlet-and-violet",1],"sets/619/card/26":[62,"2025-01-13",1,"scarlet-and-violet",1],"sets/600/card/25":[63,"2024-12-17",0,"scarlet-and-violet",1],"sets/552/card/380":[64,"2024-12-06",0,"scarlet-and-violet",0],"sets/554/card/38":[65,"2024-11-22",0,"scarlet-and-violet",0],"sets/619/card/15":[66,"2024-11-18",1,"scarlet-and-violet",1],"sets/619/card/9":[67,"2024-11-13",1,"scarlet-and-violet",1],"sets/599/card/94":[68,"2024-10-30",0,"scarlet-and-violet",1],"sets/599/card/96":[69,"2024-10-30",0,"scarlet-and-violet",1],"sets/599/card/259":[70,"2024-10-30",0,"scarlet-and-violet",1],"sets/599/card/281":[71,"2024-10-30",0,"scarlet-and-violet",1],"sets/599/card/285":[72,"2024-10-30",0,"scarlet-and-violet",1],"sets/551/card/33":[73,"2024-10-18",0,"scarlet-and-violet",0],"sets/551/card/122":[74,"2024-10-18",0,"scarlet-and-violet",0],"sets/551/card/132":[75,"2024-10-18",0,"scarlet-and-violet",0],"sets/551/card/136":[76,"2024-10-18",0,"scarlet-and-violet",0],"sets/478/card/197":[77,"2024-08-23",1,"scarlet-and-violet",0],"sets/478/card/216":[78,"2024-06-28",1,"scarlet-and-violet",0],"sets/478/card/218":[79,"2024-05-03",1,"scarlet-and-violet",0],"sets/512/card/18":[80,"2024-03-08",0,"scarlet-and-violet",0],"cards/556":[81,"2024-03-08",0,"scarlet-and-violet",0],"sets/509/card/23":[82,"2024-01-26",0,"scarlet-and-violet",0],"sets/506/card/86":[83,"2023-12-01",0,"scarlet-and-violet",0],"sets/506/card/87":[84,"2023-12-01",0,"scarlet-and-violet",0],"sets/506/card/360":[85,"2023-12-01",0,"scarlet-and-violet",0],"sets/545/card/30":[86,"2023-10-20",0,"scarlet-and-violet",0],"sets/478/card/120":[87,"2023-09-22",1,"scarlet-and-violet",0],"sets/478/card/74":[88,"2023-08-25",1,"scarlet-and-violet",0],"sets/495/card/1":[89,"2023-07-28",0,"scarlet-and-violet",0],"sets/491/card/34":[90,"2023-07-07",0,"scarlet-and-violet",0],"sets/490/card/46":[91,"2023-06-16",0,"scarlet-and-violet",0],"sets/490/card/45":[92,"2023-06-16",0,"scarlet-and-violet",0],"sets/490/card/326":[93,"2023-06-16",0,"scarlet-and-violet",0],"sets/486/card/17":[94,"2023-04-14",0,"scarlet-and-violet",0],"sets/483/card/1":[95,"2023-03-24",0,"scarlet-and-violet",0],"sets/479/card/294":[96,"2022-12-02",0,"sword-and-shield",0],"sets/397/card/296":[97,"2022-11-25",1,"sword-and-shield",0],"sets/478/card/1":[98,"2022-11-18",1,"scarlet-and-violet",0],"sets/478/card/260":[53,"2025-06-13",0,"scarlet-and-violet",0],"sets/478/card/261":[54,"2025-06-13",0,"scarlet-and-violet",0],"sets/478/card/280":[55,"2025-06-13",0,"scarlet-and-violet",0],"sets/476/card/24":[99,"2022-10-21",0,"sword-and-shield",0],"sets/464/card/27":[100,"2022-06-17",0,"sword-and-shield",0],"sets/464/card/28":[101,"2022-06-17",0,"sword-and-shield",0],"sets/462/card/24":[103,"2022-05-13",0,"sword-and-shield",0],"sets/462/card/25":[104,"2022-05-13",0,"sword-and-shield",0],"sets/462/card/122":[105,"2022-05-13",0,"sword-and-shield",0],"sets/455/card/1":[106,"2022-01-15",0,"sword-and-shield",0],"sets/397/card/239":[107,"2022-01-01",1,"sword-and-shield",0],"sets/452/card/160":[108,"2021-12-17",0,"sword-and-shield",0],"sets/452/card/161":[109,"2021-12-17",0,"sword-and-shield",0],"sets/452/card/164":[110,"2021-12-17",0,"sword-and-shield",0],"sets/452/card/165":[111,"2021-12-17",0,"sword-and-shield",0],"sets/452/card/541":[112,"2021-12-17",0,"sword-and-shield",0],"sets/451/card/45":[113,"2021-12-03",0,"sword-and-shield",0],"sets/451/card/46":[114,"2021-12-03",0,"sword-and-shield",0],"sets/451/card/219":[115,"2021-12-03",0,"sword-and-shield",0],"sets/451/card/220":[116,"2021-12-03",0,"sword-and-shield",0],"sets/451/card/273":[117,"2021-12-03",0,"sword-and-shield",0],"sets/448/card/1":[118,"2021-10-22",0,"sword-and-shield",0],"sets/446/card/1":[119,"2021-10-22",0,"sword-and-shield",0],"sets/448/card/3":[120,"2021-10-22",0,"sword-and-shield",0],"sets/448/card/5":[121,"2021-10-22",0,"sword-and-shield",0],"sets/448/card/6":[122,"2021-10-22",0,"sword-and-shield",0],"sets/447/card/7":[123,"2021-10-22",1,"sword-and-shield",0],"sets/446/card/20":[124,"2021-10-22",0,"sword-and-shield",0],"sets/446/card/25":[125,"2021-10-22",0,"sword-and-shield",0],"sets/445/card/24":[126,"2021-10-21",0,"sword-and-shield",0],"sets/397/card/202":[127,"2021-08-25",0,"sword-and-shield",0],"sets/397/card/184":[128,"2021-07-16",1,"sword-and-shield",0],"sets/432/card/26":[130,"2021-05-28",0,"sword-and-shield",0],"sets/397/card/134":[131,"2021-03-05",1,"sword-and-shield",0],"sets/397/card/137":[132,"2020-11-20",0,"sword-and-shield",0],"sets/415/card/30":[133,"2020-09-18",0,"sword-and-shield",0],"sets/415/card/31":[134,"2020-09-18",0,"sword-and-shield",0],"sets/415/card/104":[135,"2020-09-18",0,"sword-and-shield",0],"sets/415/card/114":[136,"2020-09-18",0,"sword-and-shield",0],"sets/397/card/112":[137,"2020-09-10",1,"sword-and-shield",0],"sets/397/card/113":[138,"2020-09-02",1,"sword-and-shield",0],"sets/397/card/114":[139,"2020-08-26",1,"sword-and-shield",0],"sets/397/card/115":[140,"2020-08-18",1,"sword-and-shield",0],"sets/397/card/116":[141,"2020-08-10",1,"sword-and-shield",0],"sets/397/card/117":[142,"2020-08-02",1,"sword-and-shield",0],"sets/397/card/123":[143,"2020-07-26",1,"sword-and-shield",0],"sets/397/card/96":[144,"2020-07-18",1,"sword-and-shield",0],"sets/412/card/28":[145,"2020-07-10",0,"sword-and-shield",0],"sets/397/card/35":[146,"2020-05-15",1,"sword-and-shield",0],"sets/397/card/23":[147,"2020-03-20",1,"sword-and-shield",0],"sets/324/card/400":[148,"2020-01-24",1,"sun-and-moon",0],"sets/398/card/70":[149,"2019-11-29",0,"sword-and-shield",0],"sets/397/card/2":[150,"2019-11-15",1,"sword-and-shield",0],"sets/397/card/1":[151,"2019-11-15",1,"sword-and-shield",0],"sets/392/card/41":[152,"2019-10-04",0,"sun-and-moon",0],"sets/392/card/221":[153,"2019-10-04",0,"sun-and-moon",0],"sets/324/card/407":[154,"2019-09-13",1,"sun-and-moon",0],"sets/324/card/393":[155,"2019-08-23",1,"sun-and-moon",0],"sets/388/card/16":[156,"2019-08-02",0,"sun-and-moon",0],"sets/388/card/54":[157,"2019-08-02",0,"sun-and-moon",0],"sets/324/card/376":[158,"2019-07-18",1,"sun-and-moon",0],"sets/324/card/377":[159,"2019-07-03",1,"sun-and-moon",0],"sets/324/card/369":[160,"2019-06-18",1,"sun-and-moon",0],"sets/324/card/367":[161,"2019-06-04",1,"sun-and-moon",0],"sets/324/card/337":[162,"2019-05-20",1,"sun-and-moon",0],"sets/324/card/338":[163,"2019-05-05",1,"sun-and-moon",0],"sets/324/card/339":[164,"2019-04-20",1,"sun-and-moon",0],"sets/381/card/9":[165,"2019-04-05",0,"sun-and-moon",0],"sets/324/card/325":[166,"2019-03-26",1,"sun-and-moon",0],"sets/379/card/24":[167,"2019-03-15",0,"sun-and-moon",0],"sets/439/card/33":[129,"2021-07-09",0,"sword-and-shield",0],"sets/373/card/14":[168,"2019-01-11",0,"sun-and-moon",0],"sets/324/card/288":[169,"2018-12-24",1,"sun-and-moon",0],"sets/372/card/31":[170,"2018-12-07",0,"sun-and-moon",0],"sets/372/card/100":[171,"2018-12-07",0,"sun-and-moon",0],"sets/372/card/101":[172,"2018-12-07",0,"sun-and-moon",0],"sets/372/card/102":[173,"2018-12-07",0,"sun-and-moon",0],"sets/324/card/307":[174,"2018-11-22",1,"sun-and-moon",0],"sets/324/card/291":[177,"2018-11-08",1,"sun-and-moon",0],"sets/324/card/276":[178,"2018-10-24",1,"sun-and-moon",0],"sets/324/card/282":[179,"2018-10-09",1,"sun-and-moon",0],"sets/324/card/283":[180,"2018-09-25",1,"sun-and-moon",0],"sets/324/card/280":[175,"2018-11-09",0,"sun-and-moon",0],"sets/324/card/281":[176,"2018-11-09",0,"sun-and-moon",0],"sets/324/card/249":[181,"2018-08-11",1,"sun-and-moon",0],"sets/324/card/270":[182,"2018-07-28",1,"sun-and-moon",0],"sets/361/card/32":[183,"2018-07-13",0,"sun-and-moon",0],"sets/324/card/262":[184,"2018-06-30",1,"sun-and-moon",0],"sets/324/card/227":[185,"2018-06-18",1,"sun-and-moon",0],"sets/324/card/242":[186,"2018-06-05",1,"sun-and-moon",0],"sets/324/card/224":[187,"2018-05-23",1,"sun-and-moon",0],"sets/324/card/200":[188,"2018-05-11",1,"sun-and-moon",0],"sets/324/card/208":[191,"2018-03-14",0,"sun-and-moon",0],"sets/324/card/209":[192,"2018-03-14",0,"sun-and-moon",0],"sets/324/card/210":[189,"2018-04-03",1,"sun-and-moon",0],"sets/324/card/207":[190,"2018-03-21",1,"sun-and-moon",0],"sets/324/card/214":[193,"2018-03-08",1,"sun-and-moon",0],"sets/324/card/199":[194,"2018-02-24",1,"sun-and-moon",0],"sets/324/card/191":[195,"2018-02-11",1,"sun-and-moon",0],"sets/324/card/192":[196,"2018-01-29",1,"sun-and-moon",0],"sets/324/card/193":[197,"2018-01-17",1,"sun-and-moon",0],"sets/324/card/194":[198,"2018-01-04",1,"sun-and-moon",0],"sets/324/card/195":[199,"2017-12-22",1,"sun-and-moon",0],"sets/324/card/196":[200,"2017-12-10",1,"sun-and-moon",0],"sets/324/card/197":[201,"2017-11-27",1,"sun-and-moon",0],"sets/324/card/168":[202,"2017-11-14",1,"sun-and-moon",0],"sets/324/card/179":[203,"2017-11-02",1,"sun-and-moon",0],"sets/345/card/28":[204,"2017-10-20",0,"sun-and-moon",0],"sets/342/card/15":[205,"2017-09-15",0,"sun-and-moon",0],"sets/324/card/114":[206,"2017-08-15",1,"sun-and-moon",0],"sets/341/card/29":[207,"2017-07-15",0,"sun-and-moon",0],"sets/324/card/108":[208,"2017-07-08",1,"sun-and-moon",0],"sets/324/card/86":[209,"2017-06-30",1,"sun-and-moon",0],"sets/324/card/88":[210,"2017-06-23",1,"sun-and-moon",0],"sets/338/card/13":[211,"2017-06-16",0,"sun-and-moon",0],"sets/324/card/71":[212,"2017-06-08",1,"sun-and-moon",0],"sets/324/card/72":[213,"2017-05-31",1,"sun-and-moon",0],"sets/324/card/73":[214,"2017-05-23",1,"sun-and-moon",0],"sets/324/card/74":[215,"2017-05-15",1,"sun-and-moon",0],"sets/324/card/75":[216,"2017-05-07",1,"sun-and-moon",0],"sets/324/card/76":[217,"2017-04-29",1,"sun-and-moon",0],"sets/336/card/5":[218,"2017-04-21",0,"sun-and-moon",0],"sets/537/card/48":[219,"2017-04-21",0,"xandy-break",0],"sets/537/card/49":[220,"2017-04-21",0,"xandy-break",0],"sets/324/card/61":[221,"2017-04-08",1,"sun-and-moon",0],"sets/324/card/55":[222,"2017-03-26",1,"sun-and-moon",0],"sets/324/card/44":[223,"2017-03-14",1,"sun-and-moon",0],"sets/324/card/68":[224,"2017-03-01",1,"sun-and-moon",0],"own/SMP-38":[225,"2017-02-01",0,"sun-and-moon",0],"own/SMP-37":[226,"2017-02-01",0,"sun-and-moon",0],"sets/324/card/13":[228,"2016-12-17",0,"sun-and-moon",0],"sets/324/card/14":[229,"2016-12-17",0,"sun-and-moon",0],"sets/324/card/3":[227,"2016-12-26",1,"sun-and-moon",0],"sets/324/card/8":[230,"2016-12-14",1,"sun-and-moon",0],"sets/324/card/5":[231,"2016-12-01",1,"sun-and-moon",0],"sets/323/card/4":[232,"2016-11-18",0,"sun-and-moon",0],"sets/279/card/309":[233,"2016-11-10",1,"xandy",0],"sets/279/card/310":[234,"2016-10-29",0,"xandy",0],"sets/279/card/311":[235,"2016-10-29",0,"xandy",0],"sets/279/card/312":[236,"2016-10-29",0,"xandy",0],"sets/279/card/313":[237,"2016-10-29",0,"xandy",0],"sets/279/card/296":[238,"2016-09-28",1,"xandy",0],"sets/536/card/33":[239,"2016-09-20",0,"xandy-break",0],"sets/536/card/94":[240,"2016-09-20",0,"xandy-break",0],"sets/279/card/281":[241,"2016-08-29",1,"xandy",0],"sets/279/card/298":[242,"2016-08-06",1,"xandy",0],"sets/279/card/276":[243,"2016-07-15",1,"xandy",0],"sets/279/card/247":[244,"2016-07-06",0,"xandy",0],"sets/279/card/248":[245,"2016-07-06",0,"xandy",0],"sets/279/card/264":[246,"2016-05-08",1,"xandy",0],"sets/531/card/36":[247,"2016-04-16",0,"xandy-break",0],"sets/279/card/238":[248,"2016-03-23",1,"xandy",0],"sets/529/card/18":[249,"2016-02-27",0,"xandy-break",0],"sets/527/card/10":[250,"2016-01-29",0,"xandy-break",0],"sets/279/card/220":[251,"2016-01-08",1,"xandy",0],"sets/279/card/222":[252,"2016-01-01",0,"xandy",0],"sets/279/card/223":[253,"2016-01-01",0,"xandy",0],"sets/279/card/224":[254,"2016-01-01",0,"xandy",0],"sets/279/card/191":[255,"2015-10-17",1,"xandy",0],"sets/525/card/1":[256,"2015-09-26",0,"xandy-break",0],"sets/312/card/11":[257,"2015-08-07",0,"xandy",0],"sets/309/card/8":[258,"2015-07-18",0,"xandy",0],"sets/279/card/170":[261,"2015-06-14",1,"xandy",0],"sets/279/card/172":[262,"2015-05-11",1,"xandy",0],"own/XYP-151":[259,"2015-06-26",0,"xandy",0],"own/XYP-150":[260,"2015-06-26",0,"xandy",0],"sets/279/card/114":[263,"2015-01-28",1,"xandy",0],"sets/279/card/113":[264,"2014-12-25",1,"xandy",0],"sets/279/card/109":[265,"2014-11-20",1,"xandy",0],"sets/279/card/110":[266,"2014-10-17",1,"xandy",0],"sets/279/card/111":[267,"2014-09-13",1,"xandy",0],"sets/279/card/112":[268,"2014-08-10",1,"xandy",0],"sets/279/card/105":[269,"2014-07-06",1,"xandy",0],"sets/279/card/85":[270,"2014-06-02",1,"xandy",0],"sets/279/card/83":[271,"2014-04-29",1,"xandy",0],"sets/279/card/84":[272,"2014-03-26",1,"xandy",0],"sets/279/card/67":[273,"2014-02-19",1,"xandy",0],"sets/279/card/78":[274,"2014-01-16",1,"xandy",0],"sets/285/card/22":[275,"2013-12-13",0,"xandy",0],"sets/279/card/1":[276,"2013-11-22",1,"xandy",0],"sets/279/card/77":[277,"2013-11-01",1,"xandy",0],"sets/279/card/76":[278,"2013-10-11",1,"xandy",0],"sets/279/card/75":[279,"2013-09-20",1,"xandy",0],"sets/279/card/329":[280,"2013-08-30",1,"xandy",0],"sets/279/card/392":[281,"2013-08-09",1,"xandy",0],"sets/279/card/415":[282,"2013-08-01",1,"xandy",0],"sets/279/card/422":[283,"2013-08-01",1,"xandy",0],"sets/279/card/420":[284,"2013-08-01",1,"xandy",0],"sets/279/card/416":[285,"2013-08-01",1,"xandy",0],"sets/279/card/418":[286,"2013-08-01",1,"xandy",0],"sets/279/card/423":[287,"2013-08-01",1,"xandy",0],"sets/279/card/443":[288,"2013-08-01",1,"xandy",0],"sets/226/card/229":[290,"2013-02-22",1,"black-and-white",0],"sets/274/card/7":[291,"2013-02-01",0,"black-and-white",0],"sets/268/card/16":[292,"2012-11-16",0,"black-and-white",0],"sets/226/card/163":[293,"2012-08-03",1,"black-and-white",0],"sets/255/card/5":[294,"2012-04-20",0,"black-and-white",0],"sets/226/card/151":[295,"2012-02-26",1,"black-and-white",0],"sets/226/card/120":[296,"2012-01-02",1,"black-and-white",0],"sets/226/card/108":[297,"2011-11-09",1,"black-and-white",0],"sets/241/card/23":[298,"2011-09-16",0,"black-and-white",0],"sets/228/card/56":[299,"2010-12-17",0,"black-and-white",0],"sets/227/card/56":[300,"2010-12-17",0,"black-and-white",0],"sets/202/card/79":[301,"2010-09-10",1,"legend",0],"cards/23313":[289,"2013-08-01",1,"xandy",0],"sets/397/card/246":[102,"2022-06-17",0,"sword-and-shield",0],"sets/210/card/1":[304,"2009-11-20",0,"legend",0],"sets/204/card/31":[305,"2009-10-09",0,"legend",0],"sets/198/card/7":[309,"2009-07-10",0,"dpt",0],"sets/195/card/31":[310,"2009-07-08",0,"dpt",0],"sets/192/card/7":[311,"2009-04-18",0,"dpt",0],"sets/202/card/19":[306,"2009-09-01",1,"legend",0],"sets/202/card/31":[307,"2009-09-01",1,"legend",0],"sets/186/card/88":[312,"2008-12-26",0,"dpt",0],"sets/183/card/46":[313,"2008-11-20",0,"dpt",0],"sets/183/card/47":[314,"2008-11-20",0,"dpt",0],"sets/180/card/16":[315,"2008-10-20",1,"dpt",0],"sets/180/card/43":[316,"2008-10-01",1,"dpt",0],"sets/145/card/113":[317,"2008-08-19",1,"dp",0],"sets/177/card/3":[318,"2008-07-19",0,"dp",0],"sets/175/card/24":[319,"2008-07-10",0,"dp",0],"sets/145/card/98":[320,"2008-06-08",1,"dp",0],"sets/145/card/99":[321,"2008-05-07",1,"dp",0],"sets/145/card/100":[322,"2008-04-05",1,"dp",0],"sets/145/card/101":[323,"2008-03-05",1,"dp",0],"sets/145/card/102":[324,"2008-02-02",1,"dp",0],"sets/145/card/95":[325,"2008-01-01",1,"dp",0],"sets/168/card/7":[326,"2007-11-30",0,"dp",0],"sets/145/card/57":[327,"2007-09-23",1,"dp",0],"sets/145/card/48":[328,"2007-07-17",1,"dp",0],"sets/145/card/25":[329,"2007-05-09",1,"dp",0],"sets/150/card/48":[330,"2007-03-02",0,"dp",0],"sets/152/card/2":[331,"2007-03-02",0,"dp",0],"sets/89/card/153":[332,"2006-10-20",1,"pcg",0],"sets/89/card/123":[333,"2006-06-09",1,"pcg",0],"sets/130/card/40":[334,"2006-01-27",0,"pcg",0],"sets/89/card/118":[335,"2005-12-22",1,"pcg",0],"sets/129/card/31":[336,"2005-11-16",0,"pcg",0],"sets/89/card/113":[337,"2005-10-06",1,"pcg",0],"sets/89/card/112":[338,"2005-08-25",1,"pcg",0],"sets/120/card/4":[339,"2005-07-15",0,"pcg",0],"sets/119/card/23":[340,"2005-07-05",0,"pcg",0],"sets/89/card/84":[341,"2005-05-30",1,"pcg",0],"sets/89/card/68":[342,"2005-04-23",1,"pcg",0],"sets/114/card/4":[343,"2005-03-18",0,"pcg",0],"sets/89/card/43":[344,"2005-02-15",1,"pcg",0],"sets/106/card/1":[345,"2005-01-16",0,"pcg",0],"sets/92/card/5":[346,"2004-07-01",0,"pcg",0],"sets/89/card/155":[347,"2004-06-14",1,"pcg",0],"sets/89/card/164":[348,"2004-05-29",1,"pcg",0],"sets/89/card/165":[349,"2004-05-12",1,"pcg",0],"sets/89/card/166":[350,"2004-04-26",1,"pcg",0],"sets/88/card/37":[351,"2004-04-09",0,"pcg",0],"sets/64/card/57":[352,"2004-01-11",1,"adv",0],"sets/64/card/23":[353,"2003-10-14",1,"adv",0],"sets/64/card/24":[354,"2003-07-16",1,"adv",0],"sets/71/card/22":[355,"2003-04-18",0,"adv",0],"sets/59/card/33":[356,"2002-08-23",0,"e-card",0],"sets/45/card/43":[357,"2002-06-14",1,"e-card",0],"sets/4/card/38":[358,"2002-04-06",1,"e-card",0],"sets/54/card/10":[359,"2002-01-26",0,"e-card",0],"sets/4/card/21":[360,"2001-12-29",1,"e-card",0],"sets/51/card/16":[361,"2001-12-01",0,"e-card",0],"sets/50/card/25":[362,"2001-10-20",0,"vs-and-web",0],"sets/4/card/4":[363,"2001-08-15",1,"e-card",0],"sets/4/card/73":[364,"2001-07-07",1,"e-card",0],"sets/42/card/41":[365,"2001-04-06",0,"neo",0],"sets/31/card/14":[366,"2000-02-04",0,"neo",0],"sets/28/card/54":[367,"1999-07-30",0,"pmcg",0],"sets/219/card/2":[302,"2010-07-08",0,"legend",0],"sets/219/card/1":[303,"2010-07-08",0,"legend",0],"sets/200/card/12":[308,"2009-07-18",0,"dpt",0],"sets/19/card/41":[368,"1998-12-04",0,"pmcg",0],"sets/19/card/42":[369,"1998-12-04",0,"pmcg",0],"sets/17/card/40":[370,"1998-11-24",0,"pmcg",0],"sets/18/card/61":[371,"1998-10-24",0,"pmcg",0],"sets/15/card/2":[372,"1998-07-25",0,"pmcg",0],"sets/15/card/1":[373,"1998-07-25",0,"pmcg",0],"sets/11/card/12":[374,"1998-03-23",0,"pmcg",0],"sets/5/card/14":[375,"1997-12-17",1,"pmcg",0],"sets/5/card/11":[376,"1997-09-13",1,"pmcg",0],"sets/5/card/12":[377,"1997-06-09",1,"pmcg",0],"sets/8/card/24":[378,"1997-03-05",0,"pmcg",0],"sets/6/card/35":[379,"1996-10-20",0,"pmcg",0],"sets/5/card/50":[380,"1996-10-15",1,"pmcg",0],"sets/5/card/2":[381,"1996-10-15",1,"pmcg",0],"sets/5/card/5":[382,"1996-10-15",1,"pmcg",0],"sets/5/card/64":[383,"1996-10-15",1,"pmcg",0],"sets/5/card/37":[384,"1996-10-15",1,"pmcg",0],"sets/5/card/67":[385,"1996-10-15",1,"pmcg",0],"sets/5/card/55":[386,"1996-10-15",1,"pmcg",0],"sets/5/card/39":[387,"1996-10-15",1,"pmcg",0],"sets/5/card/3":[388,"1996-10-15",1,"pmcg",0],"sets/5/card/85":[389,"1996-10-15",1,"pmcg",0],"sets/5/card/88":[390,"1996-10-15",1,"pmcg",0],"sets/5/card/91":[391,"1996-10-15",1,"pmcg",0],"sets/5/card/86":[392,"1996-10-15",1,"pmcg",0],"sets/5/card/89":[393,"1996-10-15",1,"pmcg",0],"sets/5/card/92":[394,"1996-10-15",1,"pmcg",0],"sets/5/card/87":[395,"1996-10-15",1,"pmcg",0],"sets/5/card/90":[396,"1996-10-15",1,"pmcg",0],"sets/5/card/93":[397,"1996-10-15",1,"pmcg",0]};
+/* 출처 -> { d:발매일, e:시대, p:프로모, k:Pocket, n:카드수 } */
+const SRCINFO = {"30th CELEBRATION":{"d":"2026-09-16","e":"mega","p":0,"k":0,"n":25},"MEGA Promos":{"d":"2025-08-01","e":"mega","p":1,"k":0,"n":4},"Promo-B":{"d":"2025-11-01","e":"","p":1,"k":1,"n":2},"Ruler of the Skies":{"d":"2026-07-30","e":"","p":0,"k":1,"n":1},"Everyday Wonders":{"d":"2026-06-30","e":"","p":0,"k":1,"n":2},"Mega Shine":{"d":"2026-03-26","e":"","p":0,"k":1,"n":2},"Fantastical Parade":{"d":"2026-01-29","e":"","p":0,"k":1,"n":1},"Start Deck 100 Battle Collection - CoroCiào Ver.":{"d":"2025-12-19","e":"mega","p":0,"k":0,"n":1},"Start Deck 100 Battle Collection":{"d":"2025-12-19","e":"mega","p":0,"k":0,"n":5},"Mega Dream ex":{"d":"2025-11-28","e":"mega","p":0,"k":0,"n":2},"Mega Rising":{"d":"2025-10-30","e":"","p":0,"k":1,"n":1},"Promo-A":{"d":"2024-10-30","e":"","p":1,"k":1,"n":4},"Deluxe Pack: ex":{"d":"2025-09-30","e":"","p":0,"k":1,"n":6},"Scarlet & Violet Promos":{"d":"2022-11-18","e":"scarlet-and-violet","p":1,"k":0,"n":10},"Celestial Guardians":{"d":"2025-04-30","e":"","p":0,"k":1,"n":1},"Shining Revelry":{"d":"2025-03-27","e":"","p":0,"k":1,"n":3},"Triumphant Light":{"d":"2025-02-28","e":"","p":0,"k":1,"n":1},"Mythical Island":{"d":"2024-12-17","e":"","p":0,"k":1,"n":1},"Terastal Festival ex":{"d":"2024-12-06","e":"scarlet-and-violet","p":0,"k":0,"n":1},"Start Deck Generations":{"d":"2024-11-22","e":"scarlet-and-violet","p":0,"k":0,"n":1},"Genetic Apex":{"d":"2024-10-30","e":"","p":0,"k":1,"n":5},"Electric Breaker":{"d":"2024-10-18","e":"scarlet-and-violet","p":0,"k":0,"n":4},"Battle Academy":{"d":"2024-03-08","e":"scarlet-and-violet","p":0,"k":0,"n":2},"Cyber Judge":{"d":"2024-01-26","e":"scarlet-and-violet","p":0,"k":0,"n":1},"Shiny Treasure ex":{"d":"2023-12-01","e":"scarlet-and-violet","p":0,"k":0,"n":3},"Pokémon Card Game Classic":{"d":"2023-10-20","e":"scarlet-and-violet","p":0,"k":0,"n":1},"Pokémon World Championship 2023 Yokohama Memorial Deck Pikachu":{"d":"2023-07-28","e":"scarlet-and-violet","p":0,"k":0,"n":1},"ex Start Decks":{"d":"2023-07-07","e":"scarlet-and-violet","p":0,"k":0,"n":1},"Pokémon Card 151":{"d":"2023-06-16","e":"scarlet-and-violet","p":0,"k":0,"n":3},"Clay Burst":{"d":"2023-04-14","e":"scarlet-and-violet","p":0,"k":0,"n":1},"Scarlet & Violet Starter set ex Pikachu ex & Pawmot":{"d":"2023-03-24","e":"scarlet-and-violet","p":0,"k":0,"n":1},"VSTAR Universe":{"d":"2022-12-02","e":"sword-and-shield","p":0,"k":0,"n":1},"Sword & Shield Promos":{"d":"2019-11-15","e":"sword-and-shield","p":1,"k":0,"n":19},"Paradigm Trigger":{"d":"2022-10-21","e":"sword-and-shield","p":0,"k":0,"n":1},"Pokémon GO":{"d":"2022-06-17","e":"sword-and-shield","p":0,"k":0,"n":2},"Dark Fantasma":{"d":"2022-05-13","e":"sword-and-shield","p":0,"k":0,"n":3},"Start Deck 100 (Corocoro Version)":{"d":"2022-01-15","e":"sword-and-shield","p":0,"k":0,"n":1},"Start Deck 100":{"d":"2021-12-17","e":"sword-and-shield","p":0,"k":0,"n":5},"VMAX Climax":{"d":"2021-12-03","e":"sword-and-shield","p":0,"k":0,"n":5},"25th Anniversary Golden Box":{"d":"2021-10-22","e":"sword-and-shield","p":0,"k":0,"n":4},"25th Anniversary Collection":{"d":"2021-10-22","e":"sword-and-shield","p":0,"k":0,"n":3},"25th Anniversary Promo Pack":{"d":"2021-10-22","e":"sword-and-shield","p":1,"k":0,"n":1},"Creatures 25th Anniversary Deck":{"d":"2021-10-21","e":"sword-and-shield","p":0,"k":0,"n":1},"Family Pokémon Card Game (Sword & Shield)":{"d":"2021-07-09","e":"sword-and-shield","p":0,"k":0,"n":1},"Eevee Heroes":{"d":"2021-05-28","e":"sword-and-shield","p":0,"k":0,"n":1},"Astonishing Volt Tackle":{"d":"2020-09-18","e":"sword-and-shield","p":0,"k":0,"n":4},"V Start Deck":{"d":"2020-07-10","e":"sword-and-shield","p":0,"k":0,"n":1},"Sun & Moon Promos":{"d":"2016-11-16","e":"sun-and-moon","p":1,"k":0,"n":62},"Starter Set V":{"d":"2019-11-29","e":"sword-and-shield","p":0,"k":0,"n":1},"Tag Team GX All Stars":{"d":"2019-10-04","e":"sun-and-moon","p":0,"k":0,"n":2},"Dream League":{"d":"2019-08-02","e":"sun-and-moon","p":0,"k":0,"n":2},"GG End":{"d":"2019-04-05","e":"sun-and-moon","p":0,"k":0,"n":1},"Family Pokémon Card Game (Sun & Moon)":{"d":"2019-03-15","e":"sun-and-moon","p":0,"k":0,"n":1},"Night Unison":{"d":"2019-01-11","e":"sun-and-moon","p":0,"k":0,"n":1},"Tag Bolt":{"d":"2018-12-07","e":"sun-and-moon","p":0,"k":0,"n":4},"Starter Deck GX":{"d":"2018-07-13","e":"sun-and-moon","p":0,"k":0,"n":1},"GX Battle Boost":{"d":"2017-10-20","e":"sun-and-moon","p":0,"k":0,"n":1},"Ultra Dimensional Beast":{"d":"2017-09-15","e":"sun-and-moon","p":0,"k":0,"n":1},"Shining Legend":{"d":"2017-07-15","e":"sun-and-moon","p":0,"k":0,"n":1},"Light-Devouring Darkness":{"d":"2017-06-16","e":"sun-and-moon","p":0,"k":0,"n":1},"30 Card Deck Match Set: Ash vs Team Rocket":{"d":"2017-04-21","e":"sun-and-moon","p":0,"k":0,"n":1},"The Best of XY":{"d":"2017-04-21","e":"xandy-break","p":0,"k":0,"n":2},"Pikachu and their New Friends":{"d":"2016-11-18","e":"sun-and-moon","p":0,"k":0,"n":1},"XY Promos":{"d":"2013-08-01","e":"xandy","p":1,"k":0,"n":47},"20th Anniversary":{"d":"2016-09-20","e":"xandy-break","p":0,"k":0,"n":2},"Premium Champion Pack EX x M x BREAK":{"d":"2016-04-16","e":"xandy-break","p":0,"k":0,"n":1},"Starter Pack":{"d":"2016-02-27","e":"xandy-break","p":0,"k":0,"n":1},"Pokékyun Collection":{"d":"2016-01-29","e":"xandy-break","p":0,"k":0,"n":1},"BREAK Evolution Pack Raichu BREAK":{"d":"2015-09-26","e":"xandy-break","p":0,"k":0,"n":1},"M Master Deck Build Box Speed Style":{"d":"2015-08-07","e":"xandy","p":0,"k":0,"n":1},"Legendary Holo Collection":{"d":"2015-07-18","e":"xandy","p":0,"k":0,"n":1},"Collection X":{"d":"2013-12-13","e":"xandy","p":0,"k":0,"n":1},"XY Promos (세트 미지정)":{"d":"2013-08-01","e":"xandy","p":1,"k":0,"n":1},"BW-P Promotional cards":{"d":"2010-12-01","e":"black-and-white","p":1,"k":0,"n":5},"Shiny Collection":{"d":"2013-02-01","e":"black-and-white","p":0,"k":0,"n":1},"Everyone's Exciting Battle":{"d":"2012-11-16","e":"black-and-white","p":0,"k":0,"n":1},"National Beginning Set":{"d":"2012-04-20","e":"black-and-white","p":0,"k":0,"n":1},"Hail Blizzard":{"d":"2011-09-16","e":"black-and-white","p":0,"k":0,"n":1},"White Collection":{"d":"2010-12-17","e":"black-and-white","p":0,"k":0,"n":1},"Black Collection":{"d":"2010-12-17","e":"black-and-white","p":0,"k":0,"n":1},"Legend Promos":{"d":"2009-09-01","e":"legend","p":1,"k":0,"n":3},"Pikachu World Collection 2010":{"d":"2010-07-08","e":"legend","p":0,"k":0,"n":2},"Battle Starter Deck Raichu":{"d":"2009-11-20","e":"legend","p":0,"k":0,"n":1},"SoulSilver Collection":{"d":"2009-10-09","e":"legend","p":0,"k":0,"n":1},"2009 Movie Commemoration Random Pack":{"d":"2009-07-18","e":"dpt","p":0,"k":0,"n":1},"Melee! Pokémon Scramble x Pokémon Card Game":{"d":"2009-07-10","e":"dpt","p":0,"k":0,"n":1},"Advent of Arceus":{"d":"2009-07-08","e":"dpt","p":0,"k":0,"n":1},"Collection Pack Shaymin LV.X":{"d":"2009-04-18","e":"dpt","p":0,"k":0,"n":1},"Bonds to the End of Time":{"d":"2008-12-26","e":"dpt","p":0,"k":0,"n":1},"Gift Box DPt":{"d":"2008-11-20","e":"dpt","p":0,"k":0,"n":2},"DPt-P Promotional cards":{"d":"2008-10-01","e":"dpt","p":1,"k":0,"n":2},"DP-P Promotional Cards":{"d":"2006-11-15","e":"dp","p":1,"k":0,"n":10},"11th Movie Commemoration Set":{"d":"2008-07-19","e":"dp","p":0,"k":0,"n":1},"Intense Fight in the Destroyed Sky":{"d":"2008-07-10","e":"dp","p":0,"k":0,"n":1},"Entry Pack '08":{"d":"2007-11-30","e":"dp","p":0,"k":0,"n":1},"Secret of the Lake":{"d":"2007-03-02","e":"dp","p":0,"k":0,"n":1},"Constructed Half Deck Rampardos the Attacker":{"d":"2007-03-02","e":"dp","p":0,"k":0,"n":1},"PCG Promotional Cards":{"d":"2004-04-09","e":"pcg","p":1,"k":0,"n":12},"Holon Phantom":{"d":"2006-01-27","e":"pcg","p":0,"k":0,"n":1},"Gift Box Mew & Lucario":{"d":"2005-11-16","e":"pcg","p":0,"k":0,"n":1},"Master Kit":{"d":"2005-07-15","e":"pcg","p":0,"k":0,"n":1},"World Champions Pack":{"d":"2005-07-05","e":"pcg","p":0,"k":0,"n":1},"PokéPark Premium File - Forest (Green) Version":{"d":"2005-03-18","e":"pcg","p":0,"k":0,"n":1},"Quick Construction Pack Lightning":{"d":"2005-01-16","e":"pcg","p":0,"k":0,"n":1},"Poké Card Creator Pack":{"d":"2004-07-01","e":"","p":0,"k":0,"n":1},"Flight of Legends":{"d":"2004-04-09","e":"pcg","p":0,"k":0,"n":1},"ADV Promotional cards":{"d":"2003-01-15","e":"adv","p":1,"k":0,"n":3},"Miracle of the Desert":{"d":"2003-04-18","e":"adv","p":0,"k":0,"n":1},"Split Earth":{"d":"2002-08-23","e":"e-card","p":0,"k":0,"n":1},"P Promotional Cards":{"d":"2001-07-07","e":"e-card","p":1,"k":0,"n":1},"e Promotional Cards":{"d":"2001-07-07","e":"e-card","p":1,"k":0,"n":4},"McDonald's Pokémon-e Minimum Pack":{"d":"2002-01-26","e":"e-card","p":0,"k":0,"n":1},"Base Expansion Pack":{"d":"2001-12-01","e":"e-card","p":0,"k":0,"n":1},"Pokémon Card★web":{"d":"2001-10-20","e":"vs-and-web","p":0,"k":0,"n":1},"Intro Pack Neo":{"d":"2001-04-06","e":"neo","p":0,"k":0,"n":1},"Gold, Silver, to a New World...":{"d":"2000-02-04","e":"neo","p":0,"k":0,"n":1},"Intro Pack":{"d":"1999-07-30","e":"pmcg","p":0,"k":0,"n":1},"Quick Starter Gift Set":{"d":"1998-12-04","e":"pmcg","p":0,"k":0,"n":2},"Expansion Sheet No. 3 (Green Version)":{"d":"1998-11-24","e":"pmcg","p":0,"k":0,"n":1},"Gym Expansion 1: Gym Leader Stadiums":{"d":"1998-10-24","e":"pmcg","p":0,"k":0,"n":1},"Vermillion City Gym–Lt. Surge":{"d":"1998-07-25","e":"pmcg","p":0,"k":0,"n":2},"Expansion Sheet No. 1 (Blue Version)":{"d":"1998-03-23","e":"pmcg","p":0,"k":0,"n":1},"PMCG Promos":{"d":"1996-10-15","e":"pmcg","p":1,"k":0,"n":21},"Pokémon Jungle":{"d":"1997-03-05","e":"pmcg","p":0,"k":0,"n":1},"Base Set":{"d":"1996-10-20","e":"pmcg","p":0,"k":0,"n":1}};
+/* artofpkm 이 세트 중간에 카드를 끼워 넣으면 /sets/{id}/card/{n} 뒤 번호가 밀린다.
+   그때 바뀐 key 를 예전 저장분에 딱 한 번만 적용한다 { 예전 key: 지금 key } */
+const KEYFIX  = {"sets/592/card/2":"sets/592/card/7","sets/592/card/3":"sets/592/card/8","sets/592/card/4":"sets/592/card/9","sets/592/card/5":"sets/592/card/10","sets/592/card/6":"sets/592/card/11","sets/592/card/7":"sets/592/card/12","sets/592/card/8":"sets/592/card/13","sets/592/card/9":"sets/592/card/14","sets/592/card/10":"sets/592/card/15","sets/592/card/11":"sets/592/card/16","sets/592/card/12":"sets/592/card/17","sets/592/card/13":"sets/592/card/18","sets/592/card/14":"sets/592/card/19","sets/592/card/15":"sets/592/card/20","sets/592/card/16":"sets/592/card/21","sets/592/card/17":"sets/592/card/23","sets/592/card/18":"sets/592/card/24","sets/592/card/19":"sets/592/card/25","sets/592/card/20":"sets/592/card/26","sets/592/card/21":"sets/592/card/27","sets/592/card/22":"sets/592/card/28","sets/592/card/38":"sets/592/card/58"};
+
+/* 시대 이름 — artofpkm 의 세트 분류를 그대로 따른다 */
+const ERANAME = {
+  "mega":"메가진화", "scarlet-and-violet":"스칼렛&바이올렛", "sword-and-shield":"소드&실드",
+  "sun-and-moon":"썬&문", "xandy-break":"XY BREAK", "xandy":"XY", "black-and-white":"블랙&화이트",
+  "legend":"LEGEND (HGSS)", "dpt":"DP 플래티나", "dp":"다이아몬드&펄", "pcg":"PCG",
+  "adv":"ADV (루비&사파이어)", "e-card":"e카드", "vs-and-web":"VS · web", "neo":"네오", "pmcg":"구판 (원조)"
+};
+
+const imgUrl = h => h.startsWith("http") ? h : CDN + h;
+/* 카드번호 정규화 — artofpkm은 3자리 0패딩(013/SM-P), BOX 데이터는 비패딩(13/SM-P) */
+const normNum = n => { const p=(n||"").split("/"); return p.length===2 ? String(Number(p[0]))+"/"+p[1] : n; };
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+const fmtDate = d => d ? d.replace(/-/g,".") : "";
+
+/* CARDS 의 순서는 원본 데이터 순서 그대로 유지한다 —
+   🔗 링크 백업이 이 순서의 비트맵이라 바뀌면 예전 링크가 깨진다. 정렬은 화면에서만 한다. */
+const CARDS = RAW.split("\n").map(l=>{
+  const [key,num,name,src,th,big,ja,ko] = l.split("|");
+  const bx = BOXIMG[normNum(num)] || null;
+  const ex = EXTRA[normNum(num)] || null;
+  const dt = DIST[normNum(num)] || null;
+  const dk = DISTKEY[key] || null;
+  const dj=(dk&&dk.d) || (dt&&dt.d) || "";
+  const pd = bx || (dj ? (PRODIMG[dj]||null) : null);
+  const ch = CHRONO[key] || [9999,"",2,"",0];
+  return {key,num,name,src,th,big, ja: ja || (dt&&dt.ja) || "", dist:dj, distKo:(dk&&dk.k) || (DISTKO[dj]||""), fromImg:!!dk, ko: ko || (ex&&ex.ko) || "",
+          rarity: (ex&&ex.r) || "", price: (ex&&ex.p) || 0,
+          promo:/promo/i.test(src), box:pd, inBox:!!pd, boxOnly:!!bx, mine:key.startsWith("own/"),
+          ord:ch[0], date:ch[1], est:ch[2]===1, year:(ch[1]||"").slice(0,4), era:ch[3], pocket:!!ch[4]};
+});
+
+const CHRONO_ORDER = CARDS.slice().sort((a,b)=>a.ord-b.ord);   // 최신 → 과거
+
+/* 시대별 구간 — 시대 바와 연도 구분선에 쓴다 */
+const ERAS = (()=>{
+  const m=new Map();
+  for(const c of CHRONO_ORDER){
+    if(!m.has(c.era)) m.set(c.era,{id:c.era, name:ERANAME[c.era]||c.era, n:0, from:c.year, to:c.year});
+    const e=m.get(c.era); e.n++;
+    if(c.year<e.from) e.from=c.year; if(c.year>e.to) e.to=c.year;
+  }
+  return [...m.values()];
+})();
+
+const TABS = [
+  {id:"all",   label:"전체",         badge:"全", test:()=>true},
+  {id:"promo", label:"프로모 계열",   badge:"P",  test:c=>c.promo},
+  {id:"set",   label:"확장팩 · 상품", badge:"S",  test:c=>!c.promo},
+];
+
+/* 보유 ✓ 와 「목록에서 빼기」 ✕ 는 별개다. 뺀 카드는 연표에서 사라지고 장수 계산에서도
+   빠진다 — 안 모으기로 한 카드까지 분모에 들어가면 진행률이 영영 100%가 안 되기 때문이다.
+   지운 게 아니라 「🚫 뺀 카드」 필터에 그대로 남아 있어서 언제든 되돌릴 수 있다. */
+const KEY  = "pkmpika-checklist-v1";
+const SKEY = "pkmpika-skip-v1";
+localStorage.removeItem("pkmpika-wish-v1");   /* 없앤 위시 기능이 남긴 찌꺼기 정리 */
+const FKEY = "pkmpika-keyfix-v1";          /* key 갱신을 이미 적용했는가 */
+const fixKeys = a => a.map(k => KEYFIX[k] || k);
+const needFix = localStorage.getItem(FKEY) !== "1";
+let own  = load(KEY);
+let skip = load(SKEY);
+if(needFix){ localStorage.setItem(FKEY,"1"); save(); }   /* 한 번 적용하면 다시 하지 않는다 */
+function load(k){ try{ const a=JSON.parse(localStorage.getItem(k));
+                       if(Array.isArray(a)) return new Set(needFix ? fixKeys(a) : a); }catch(e){}
+                  return new Set(); }
+function save(){ localStorage.setItem(KEY, JSON.stringify([...own]));
+                 localStorage.setItem(SKEY, JSON.stringify([...skip])); }
+
+/* 연표를 연도로 끊어 볼지, 구분선 없이 죽 이어서 볼지 — 선택은 localStorage 에 남는다 */
+const YKEY="pkmpika-yeardiv-v1";
+let curTab="all", filterSt="all", query="", srcFilter="", boxOnly=false, noPocket=false, newestFirst=true,
+    byYear = localStorage.getItem(YKEY) !== "0";
+
+const tabsEl=document.getElementById("tabs");
+tabsEl.innerHTML = TABS.map((t,i)=>
+  `<button class="tab${i===0?" on":""}" data-tab="${t.id}"><span class="gnum ${t.id==="all"?"all":""}">${t.badge}</span>
+   <span>${t.label}<br><b id="tc-${t.id}"></b></span></button>`).join("");
+
+const erasEl=document.getElementById("eras");
+function paintEras(){
+  const list = newestFirst ? ERAS : ERAS.slice().reverse();
+  erasEl.innerHTML = `<span class="lbl">시대로 이동</span>` + list.map(e=>
+    `<button class="era" data-era="${e.id}">${esc(e.name)}<i>${e.from===e.to?e.from:e.from+"~"+e.to}</i></button>`).join("");
+}
+
+const srcSel=document.getElementById("srcSel");
+const SRCS = Object.keys(SRCINFO).sort((a,b)=> (SRCINFO[b].n-SRCINFO[a].n) || a.localeCompare(b));
+srcSel.innerHTML = `<option value="">출처 전체 (${SRCS.length}곳)</option>` +
+  SRCS.map(s=>`<option value="${esc(s)}">${esc(s)} (${SRCINFO[s].n})</option>`).join("");
+
+/* ── 카드 한 장의 HTML ─────────────────────────────────────────────── */
+function cardHtml(c){
+  const si = SRCINFO[c.src] || {};
+  const kind = c.pocket ? ["d","POCKET"] : c.promo ? ["p","PROMO"] : ["","SET"];
+  return `<div class="card" data-k="${esc(c.key)}" data-era="${esc(c.era)}">
+      <div class="thumb">
+        <img loading="lazy" decoding="async" src="${imgUrl(c.th)}" alt="${esc(c.name)}">
+        ${c.num||c.rarity?`<div class="tags">${c.num?`<span class="no">${esc(c.num)}</span>`:``}${c.rarity?`<span class="rar">${esc(c.rarity)}</span>`:``}</div>`:``}
+        ${c.inBox?`<button class="boxmark" data-boximg="${esc(c.box.i)}" title="상품 사진 보기 — ${esc(c.box.n)}">📦</button>`:``}
+        ${c.mine?`<span class="mine" title="artofpkm 목록에 없어 직접 보강한 카드">+</span>`:``}
+        <button class="zoom" title="크게 보기">&#128269;</button>
+        <div class="acts">
+          <button class="drop" title="수집 목록에서 빼기 / 되돌리기">&#10005;</button>
+          <button class="tick" title="보유 체크 / 해제">&#10003;</button>
+        </div>
+      </div>
+      <div class="dt${c.est?" est":""}" title="${c.est?"앞뒤 카드에서 추정한 연도입니다":"세트 발매일"}">${c.est?"≈ "+c.year:fmtDate(c.date)}</div>
+      <div class="nm">${esc(c.name)}</div>
+      ${c.ja?`<div class="n2">${esc(c.ja)}</div>`:``}
+      ${c.ko?`<div class="n3 ko">${esc(c.ko)}</div>`:``}
+      <button class="src" data-src="${esc(c.src)}" title="이 출처 자세히 보기">
+        <span class="k ${kind[0]}">${kind[1]}</span><span>${esc(c.src)}</span></button>
+      ${c.inBox && !c.dist?`<div class="n4">📦 ${esc(c.box.n)}</div>`:``}
+      ${c.dist?`<div class="n5">🎁 ${esc(c.dist)}</div>`:``}
+      ${c.distKo?`<div class="n5 ko">🎁 ${esc(c.distKo)}</div>`:``}
+      ${c.price?`<div class="pr">${c.price.toLocaleString("ko-KR")}원 <i>한국판</i></div>`:``}
+    </div>`;
+}
+
+/* ── 연표 그리기 — 연도가 바뀌는 자리에만 구분선을 끼운다 ────────────── */
+const stream=document.getElementById("stream");
+/* artofpkm 목록에 없어 직접 채워 넣은 카드는 연표에 섞지 않고 맨 끝 별도 섹션에 모은다.
+   출처가 artofpkm 하나로 통일돼 있어야 「이 목록 = artofpkm 기준」이 그대로 읽힌다. */
+const MINE = CHRONO_ORDER.filter(c=>c.mine);
+let view=[];
+function buildStream(){
+  const all = newestFirst ? CHRONO_ORDER : CHRONO_ORDER.slice().reverse();
+  view = all.filter(c=>!c.mine);
+  let html="", y=null;
+  for(const c of view){
+    if(byYear && c.year!==y){
+      y=c.year;
+      html += `<div class="ydiv" data-year="${y}" data-era="${c.era}">
+        <b>${y}</b><span class="ename">${esc(ERANAME[c.era]||c.era)}</span>
+        <span class="ycnt" data-ycnt="${y}"></span></div>`;
+    }
+    html += cardHtml(c);
+  }
+  if(MINE.length){
+    html += `<div class="ydiv extra"><b>+</b>
+      <span class="ename">artofpkm 미수록 · 직접 보강</span>
+      <span class="ycnt" data-xcnt="1"></span></div>`;
+    for(const c of all.filter(c=>c.mine)) html += cardHtml(c);
+  }
+  stream.innerHTML = html;
+}
+
+const byKey=new Map(CARDS.map(c=>[c.key,c]));
+const TOT=CARDS.length, TOT_P=CARDS.filter(c=>c.promo).length;
+document.getElementById("allTot").textContent=TOT;
+document.getElementById("pTot").textContent=TOT_P;
+
+/* 뺀 카드는 「🚫 뺀 카드」 필터에서만 보인다. 다른 모든 화면에서는 아예 없는 셈 친다. */
+function inScope(c){ return filterSt==="skip" ? skip.has(c.key) : !skip.has(c.key); }
+
+function match(c){
+  const q=query.trim().toLowerCase();
+  const has=own.has(c.key);
+  if(!inScope(c)) return false;
+  if(!TABS.find(t=>t.id===curTab).test(c)) return false;
+  if(filterSt==="have" && !has) return false;
+  if(filterSt==="none" && has) return false;
+  if(boxOnly && !c.inBox) return false;
+  if(noPocket && c.pocket) return false;
+  if(srcFilter && c.src!==srcFilter) return false;
+  if(q && !(c.name.toLowerCase().includes(q) || c.src.toLowerCase().includes(q)
+            || (c.num||"").toLowerCase().includes(q) || (c.ja||"").toLowerCase().includes(q)
+            || (c.ko||"").toLowerCase().includes(q) || (c.dist||"").includes(query.trim())
+            || (c.distKo||"").includes(query.trim()) || (c.date||"").includes(q)
+            || (c.rarity||"").toLowerCase()===q)) return false;
+  return true;
+}
+
+function render(){
+  let shown=0;
+  const perYear={};
+  let div=null, divCount=0, xShown=0;
+  for(const el of stream.children){
+    if(el.classList.contains("ydiv")){
+      if(div) div.hidden = divCount===0;
+      div=el; divCount=0; continue;
+    }
+    const c=byKey.get(el.dataset.k);
+    el.classList.toggle("have",own.has(c.key));
+    el.classList.toggle("skip",skip.has(c.key));
+    const ok=match(c);
+    el.hidden=!ok;
+    if(ok){ shown++; divCount++;
+            if(c.mine) xShown++; else perYear[c.year]=(perYear[c.year]||0)+1; }
+  }
+  if(div) div.hidden = divCount===0;
+  for(const s of stream.querySelectorAll("[data-ycnt]")){
+    const y=s.dataset.ycnt, all=view.filter(c=>c.year===y && inScope(c)).length;
+    s.textContent = `${(perYear[y]||0)} / ${all}장`;
+  }
+  const xEl=stream.querySelector("[data-xcnt]");
+  if(xEl) xEl.textContent = `${xShown} / ${MINE.filter(inScope).length}장`;
+  document.getElementById("empty").hidden = shown>0;
+
+  /* 장수 계산에는 뺀 카드를 넣지 않는다 — 분모도 함께 줄어든다 */
+  const live=CARDS.filter(c=>!skip.has(c.key));
+  for(const t of TABS){
+    const list=live.filter(t.test);
+    document.getElementById("tc-"+t.id).textContent=`${list.filter(c=>own.has(c.key)).length}/${list.length}`;
+  }
+  const tot =live.length,            total=live.filter(c=>own.has(c.key)).length;
+  const pTot=live.filter(c=>c.promo).length, pOwn=live.filter(c=>c.promo&&own.has(c.key)).length;
+  document.getElementById("allOwn").textContent=total;
+  document.getElementById("allTot").textContent=tot;
+  document.getElementById("pOwn").textContent=pOwn;
+  document.getElementById("pTot").textContent=pTot;
+  document.getElementById("xOut").textContent=skip.size;
+  document.getElementById("xLeft").textContent=tot;
+  document.getElementById("allBar").style.width=(tot?total/tot*100:0)+"%";
+  document.getElementById("pBar").style.width=(pTot?pOwn/pTot*100:0)+"%";
+  document.getElementById("xBar").style.width=(skip.size/TOT*100)+"%";
+}
+
+/* ── 출처 상세 ─────────────────────────────────────────────────────── */
+const srcDlg=document.getElementById("srcDlg");
+function openSrc(src){
+  const si=SRCINFO[src]||{}, prods=SRCPROD[src]||[];
+  const kind = si.k ? "Pokémon TCG Pocket (디지털 전용)" : si.p ? "프로모 계열" : "확장팩 · 상품";
+  document.getElementById("srcBody").innerHTML = `
+    <h3>${esc(src)}</h3>
+    <div class="meta"><b>${kind}</b> · 발매 <b>${si.d?fmtDate(si.d):"—"}</b>
+      · 시대 <b>${esc(ERANAME[si.e]||si.e||"—")}</b> · 이 목록에 <b>${si.n}장</b></div>
+    ${prods.length
+      ? `<div class="prodrow">${prods.map(p=>
+          `<button class="prod" data-img="${CDN}${p.i}" title="${esc(p.t)}">
+             <img loading="lazy" decoding="async" src="${CDN}${p.i}" alt="${esc(p.t)}">
+             <span>${esc(p.t)}</span></button>`).join("")}</div>`
+      : `<div class="noprod">${si.p
+          ? "프로모 계열이라 팩 · 박스 단위 상품이 없습니다. 매장 배포 · 구매 특전 · 상품 동봉 · 잡지 부록으로 흩어져 나온 카드를 번호만 이어서 부르는 이름이라, <b>카드마다 붙은 🎁 배포처</b>가 실제 출처입니다."
+          : si.k ? "스마트폰 앱 <b>Pokémon TCG Pocket</b> 전용 카드라 실물 상품이 없습니다."
+          : "이 출처의 상품 사진이 없습니다."}</div>`}
+    <div class="acts">
+      <button class="btn" id="onlyThis">이 출처만 보기</button>
+      <button class="btn" id="closeSrc">닫기</button>
+    </div>`;
+  srcDlg.showModal();
+  document.getElementById("closeSrc").onclick=()=>srcDlg.close();
+  document.getElementById("onlyThis").onclick=()=>{
+    srcFilter=src; srcSel.value=src; srcDlg.close(); window.scrollTo({top:0}); render();
+  };
+}
+srcDlg.addEventListener("click",e=>{
+  const p=e.target.closest(".prod");
+  if(p){ document.getElementById("lbimg").src=p.dataset.img; document.getElementById("lb").showModal(); return; }
+  if(e.target===srcDlg) srcDlg.close();
+});
+
+/* ── 이벤트 ────────────────────────────────────────────────────────── */
+tabsEl.addEventListener("click",e=>{
+  const b=e.target.closest(".tab"); if(!b) return;
+  curTab=b.dataset.tab;
+  [...tabsEl.children].forEach(x=>x.classList.toggle("on",x===b));
+  window.scrollTo({top:0}); render();
+});
+
+erasEl.addEventListener("click",e=>{
+  const b=e.target.closest(".era"); if(!b) return;
+  const sel = byYear ? ".ydiv" : ".card";      /* 구분선이 없으면 그 시대의 첫 카드로 */
+  const t=[...stream.querySelectorAll(sel)].find(x=>x.dataset.era===b.dataset.era && !x.hidden);
+  if(t) t.scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+stream.addEventListener("click",e=>{
+  const sb=e.target.closest(".src");
+  if(sb){ openSrc(sb.dataset.src); return; }
+  const bm=e.target.closest(".boxmark");
+  if(bm){ document.getElementById("lbimg").src=bm.dataset.boximg; document.getElementById("lb").showModal(); return; }
+  if(e.target.closest(".zoom")){
+    const c=byKey.get(e.target.closest(".card").dataset.k);
+    document.getElementById("lbimg").src=imgUrl(c.big);
+    document.getElementById("lb").showModal(); return;
+  }
+  const card=e.target.closest(".card"); if(!card) return;
+  const k=card.dataset.k;
+  const set = e.target.closest(".drop") ? skip : own;   /* ✕ 버튼만 빼기, 나머지는 보유 */
+  set.has(k)?set.delete(k):set.add(k);
+  save(); render();
+});
+document.getElementById("lb").addEventListener("click",e=>e.currentTarget.close());
+
+/* 「지금 어느 쪽인가」가 아니라 「어느 쪽으로 볼까」를 고르는 버튼이라 둘로 나눠 뒀다.
+   켜진 쪽에 .on 이 붙는다 — 보유 · 미보유 같은 다른 필터 칩과 같은 방식이다. */
+const viewBtns=[...document.querySelectorAll("[data-view]")];
+function applyYear(){ viewBtns.forEach(b=>b.classList.toggle("on", (b.dataset.view==="year")===byYear)); }
+viewBtns.forEach(b=>b.addEventListener("click",()=>{
+  const want = b.dataset.view==="year";
+  if(want===byYear) return;
+  byYear=want; localStorage.setItem(YKEY, byYear?"1":"0"); applyYear();
+  buildStream(); window.scrollTo({top:0}); render();
+}));
+applyYear();
+
+const sortBtn=document.getElementById("sortBtn");
+sortBtn.addEventListener("click",()=>{
+  newestFirst=!newestFirst;
+  sortBtn.textContent = newestFirst ? "↓ 최신순" : "↑ 오래된순";
+  buildStream(); paintEras(); window.scrollTo({top:0}); render();
+});
+
+document.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{
+  filterSt=b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+}));
+document.getElementById("boxOnly").addEventListener("click",e=>{
+  boxOnly=!boxOnly; e.currentTarget.classList.toggle("on",boxOnly); render();
+});
+document.getElementById("pocketBtn").addEventListener("click",e=>{
+  noPocket=!noPocket; e.currentTarget.classList.toggle("on",noPocket); render();
+});
+srcSel.addEventListener("change",e=>{ srcFilter=e.target.value; window.scrollTo({top:0}); render(); });
+document.getElementById("q").addEventListener("input",e=>{ query=e.target.value; render(); });
+
+/* 한국어 번역 표시 토글 (기본 켬, 선택은 localStorage에 남는다) */
+const KOKEY="pkmpika-ko-v1";
+let showKo = localStorage.getItem(KOKEY) !== "0";
+const koBtn=document.getElementById("koBtn");
+function applyKo(){ document.body.classList.toggle("no-ko", !showKo); koBtn.classList.toggle("on", showKo); }
+koBtn.addEventListener("click", ()=>{ showKo=!showKo; localStorage.setItem(KOKEY, showKo?"1":"0"); applyKo(); });
+applyKo();
+document.getElementById("rstBtn").addEventListener("click",()=>{
+  const n=own.size, w=skip.size;
+  if(!n && !w) return;
+  const what = prompt(`무엇을 되돌릴까요?\n  1 = 보유 체크만 (${n}장)\n  2 = 뺀 카드만 되돌리기 (${w}장)\n  3 = 둘 다\n\n번호를 입력하세요 (취소하면 아무것도 지우지 않습니다)`, "1");
+  if(what==="1"||what==="3") own=new Set();
+  if(what==="2"||what==="3") skip=new Set();
+  if(what==="1"||what==="2"||what==="3"){ save(); render(); }
+});
+document.getElementById("prnBtn").addEventListener("click",()=>window.print());
+document.getElementById("expBtn").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify({v:3, own:[...own].sort(), skip:[...skip].sort()},null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="pikachu-checklist.json"; a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById("impBtn").addEventListener("click",()=>document.getElementById("impFile").click());
+document.getElementById("impFile").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ const d=JSON.parse(rd.result);          /* 예전 파일은 보유 배열 하나뿐이다 */
+                       const fx = a => (!Array.isArray(d) && d.v>=2) ? a : fixKeys(a);
+                       own =new Set(fx(Array.isArray(d)?d:(d.own||[])));
+                       /* v3 이전 파일에는 위시가 들어 있는데, 없앤 기능이라 버린다 */
+                       skip=new Set(fx(Array.isArray(d)?[]:(d.skip||[])));
+                       save(); render(); }
+                  catch(err){ alert("파일을 읽을 수 없습니다."); } };
+  rd.readAsText(f); e.target.value="";
+});
+
+/* ---- 링크(URL)로 체크 상태 백업 / 복원 ---- */
+const KEYS=CARDS.map(c=>c.key);
+function b64e(a){ let s=""; for(const b of a) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(t){ t=t.replace(/-/g,"+").replace(/_/g,"/");
+  const s=atob(t), a=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+function pack(set,keys){ const a=new Uint8Array(Math.ceil(keys.length/8));
+  keys.forEach((k,i)=>{ if(set.has(k)) a[i>>3]|=1<<(i&7); }); return b64e(a); }
+function unpack(str,keys){ const a=b64d(str), s=new Set();
+  keys.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
+
+document.getElementById("lnkBtn").addEventListener("click", async ()=>{
+  /* v3 = 보유 비트맵 + 뺀 카드 비트맵. v1(보유만) · v2(보유+위시) 링크도 계속 열린다. */
+  const url=location.href.split("#")[0]+"#s=3."+pack(own,KEYS)+"."+pack(skip,KEYS);
+  try{
+    await navigator.clipboard.writeText(url);
+    alert(`보유 ${own.size}장 · 뺀 카드 ${skip.size}장이 담긴 링크를 복사했습니다.\n다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+  }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
+});
+
+(function applyHash(){
+  const m=location.hash.match(/^#s=([123])\.([^.]+)(?:\.([^.]+))?$/);
+  if(!m) return;
+  try{
+    const o=unpack(m[2],KEYS);
+    /* v2 의 둘째 비트맵은 없앤 위시라서 버린다 — 뺀 카드는 v3 부터다 */
+    const w=(m[1]==="3" && m[3]) ? unpack(m[3],KEYS) : new Set();
+    const eq=(a,b)=> a.size===b.size && [...a].every(x=>b.has(x));
+    if(!(eq(o,own) && eq(w,skip)) &&
+       confirm(`링크에 담긴 상태(보유 ${o.size}장 · 뺀 카드 ${w.size}장)를 불러올까요?\n`+
+               `이 브라우저에 저장된 현재 상태(보유 ${own.size}장 · 뺀 카드 ${skip.size}장)는 덮어써집니다.`)){
+      own=o; skip=w; save();
+    }
+  }catch(e){}
+  history.replaceState(null,"",location.href.split("#")[0]);
+})();
+
+buildStream();
+paintEras();
+render();
+</script>
+</body>
+</html>

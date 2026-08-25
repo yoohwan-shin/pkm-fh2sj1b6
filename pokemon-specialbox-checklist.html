@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스페셜 BOX 봉입 프로모 체크리스트 (일본판)</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#fff; --line:#e2e6ef; --text:#1b1f2a; --muted:#6b7385;
+    --accent:#e8452c; --accent2:#2f6fd0; --gold:#c8951b;
+    --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
+    --have:#e6f6ec; --haveline:#1f9d55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12151c; --panel:#1a1f29; --line:#2b3240; --text:#e8ecf3; --muted:#98a1b3;
+      --accent:#ff6a4d; --accent2:#6ba4ef; --gold:#e0b445;
+      --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      --have:#163325; --haveline:#43c07a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif}
+  header{position:sticky;top:0;z-index:30;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .wrap{max-width:1500px;margin:0 auto;padding:0 16px}
+  .title-row{display:flex;align-items:center;gap:16px;padding:13px 0 9px;flex-wrap:wrap}
+  h1{font-size:19px;margin:0;letter-spacing:-.3px}
+  h1 small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:3px}
+  .stats{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  .stat{min-width:150px}
+  .stat .lab{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .stat .val{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25}
+  .stat .val i{font-style:normal;font-size:13px;font-weight:600;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;width:0;transition:width .25s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar.sh i{background:linear-gradient(90deg,var(--gold),var(--accent))}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:9px}
+  .tab{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;
+    padding:7px 12px;font-size:13px;cursor:pointer;font-weight:700;font-family:inherit;transition:.15s;
+    display:flex;align-items:center;gap:7px;line-height:1.3}
+  .tab:hover{border-color:var(--accent2)}
+  .tab.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .tab .gnum{font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:var(--accent2);color:#fff;letter-spacing:.3px}
+  .tab.on .gnum{background:var(--bg);color:var(--text)}
+  .tab .gnum.all{background:var(--gold)}
+  .tab .gnum.grey{background:var(--muted)}
+  .tab b{font-weight:700;font-size:11px;opacity:.72;font-variant-numeric:tabular-nums}
+
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:11px}
+  input[type=search]{flex:1;min-width:180px;max-width:300px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+  .chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;transition:.15s}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip.ko-chip.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+
+  /* 한국어 번역 줄 — 토글로 켜고 끈다 */
+  body.no-ko .ko{display:none !important}
+  .h2ko{font-size:12.5px;font-weight:700;color:var(--muted);margin:-1px 0 5px;line-height:1.4}
+  .ev.ko{color:var(--muted);font-weight:600;font-size:11.5px;margin-top:1px}
+  .meta.ko{margin-top:2px}
+  .n2.ko{color:var(--accent2);font-weight:600}
+  .n3.ko{color:var(--muted);font-weight:600}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;
+    font-size:13px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn:hover{border-color:var(--accent2)}
+  .btn.danger:hover{border-color:var(--accent);color:var(--accent)}
+
+  main{max-width:1500px;margin:0 auto;padding:18px 16px 90px}
+  .catpane{margin-bottom:8px}
+  .cat-title{font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.3px;margin:26px 0 14px;
+    padding-bottom:7px;border-bottom:2px solid var(--line)}
+  .cat-title:first-child{margin-top:4px}
+
+  section.box{margin:0 0 26px;background:var(--panel);border:1px solid var(--line);border-radius:13px;
+    padding:15px 15px 17px;box-shadow:var(--shadow)}
+  .box-head{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .box-head .ti{flex:1;min-width:240px}
+  .boxpic{width:186px;flex:0 0 186px;aspect-ratio:16/11;border:1px solid var(--line);border-radius:9px;
+    background:var(--bg);padding:0;overflow:hidden;cursor:zoom-in;display:grid;place-items:center;
+    font-family:inherit;transition:border-color .15s}
+  .boxpic:hover{border-color:var(--accent2)}
+  .boxpic img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+  .boxpic.none{cursor:default;color:var(--muted);font-size:10.5px;font-weight:600;text-align:center;line-height:1.5}
+  .boxwrap{width:186px;flex:0 0 186px}
+  .boxwrap .boxpic{width:100%;flex:none}
+  .boxcap{font-size:10px;color:var(--muted);font-weight:600;text-align:center;margin-top:4px;line-height:1.4}
+  @media (max-width:560px){ .boxpic,.boxwrap{width:100%;flex:1 1 100%} }
+
+  .nocards{border:1px dashed var(--line);border-radius:9px;padding:12px 14px;color:var(--muted);
+    font-size:11.5px;line-height:1.7}
+  .nocards b{display:block;color:var(--gold);font-size:12.5px;margin-bottom:4px}
+  .nocards .ko{color:var(--accent2)}
+  .nocards.boxfoot{margin-top:12px}
+  .nocards.boxfoot b{color:var(--muted)}
+  .box-head h2{font-size:15px;margin:0 0 4px;letter-spacing:-.2px;line-height:1.4}
+  .box-head .ev{font-size:12px;color:var(--accent2);font-weight:700}
+  .box-head .meta{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+  .pricetag{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.3px;padding:1px 5px;
+    border-radius:4px;background:var(--line);color:var(--muted);vertical-align:1px}
+  .box-head .cnt{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+  .boxchk{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:12px;cursor:pointer;font-weight:700;font-family:inherit;transition:.15s;white-space:nowrap}
+  .boxchk:hover{border-color:var(--accent2)}
+  .boxchk.on{background:var(--haveline);border-color:var(--haveline);color:#fff}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(134px,1fr));gap:11px}
+  .card{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:7px;
+    cursor:pointer;transition:transform .12s,border-color .12s;user-select:none}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+  .card.have{background:var(--have);border-color:var(--haveline)}
+  .thumb{position:relative;aspect-ratio:245/342;border-radius:6px;overflow:hidden;background:var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  /* TCGplayer 이미지는 여백이 있는 정사각형이라 잘라내지 않고 맞춘다 */
+  .thumb img.fit{object-fit:contain;background:#fff}
+  .card.have .thumb img{filter:grayscale(.85) opacity(.5)}
+  .noimg{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:5px;padding:8px;text-align:center;background:
+      repeating-linear-gradient(45deg,transparent,transparent 7px,rgba(127,137,158,.09) 7px,rgba(127,137,158,.09) 14px)}
+  .noimg span{font-size:11px;font-weight:700;line-height:1.35;word-break:break-word;color:var(--text)}
+  .noimg small{font-size:9px;color:var(--muted);font-weight:600}
+  .card.have .noimg{opacity:.45}
+  .no{position:absolute;top:4px;left:4px;background:rgba(15,18,28,.82);color:#fff;font-size:9px;font-weight:700;
+    padding:2px 5px;border-radius:4px;font-variant-numeric:tabular-nums}
+  .tick{position:absolute;right:5px;bottom:5px;width:22px;height:22px;border-radius:50%;background:var(--panel);
+    border:2px solid var(--line);display:grid;place-items:center;font-size:12px;color:transparent;font-weight:900}
+  .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff}
+  .zoom{position:absolute;left:5px;bottom:5px;width:22px;height:22px;border-radius:6px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);font-size:11px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
+  .card:hover .zoom{opacity:1}
+  .nm{margin-top:6px;font-size:11.5px;font-weight:700;line-height:1.3;word-break:break-word}
+  .n2{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35;word-break:break-word}
+  .n3{font-size:9.5px;color:var(--gold);margin-top:3px;font-weight:700}
+
+  .empty{color:var(--muted);font-size:13px;padding:18px 0;text-align:center}
+  dialog{border:none;border-radius:14px;padding:0;background:transparent;max-width:92vw}
+  dialog::backdrop{background:rgba(8,10,16,.78)}
+  dialog img{max-width:min(760px,90vw);max-height:85vh;border-radius:12px;display:block;background:#fff}
+  .note{max-width:1500px;margin:0 auto;padding:0 16px 44px;color:var(--muted);font-size:12px;line-height:1.75}
+  .note b{color:var(--text)}
+  .note h3{font-size:13px;color:var(--text);margin:20px 0 6px}
+  @media print{ header{position:static;box-shadow:none} .tools,.tabs,.zoom,.tick,.boxchk{display:none}
+    .grid{grid-template-columns:repeat(8,1fr);gap:4px} .card{break-inside:avoid} section.box{break-inside:avoid;box-shadow:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title-row">
+      <h1>스페셜 BOX 봉입 프로모 체크리스트 <small>포켓몬센터 지점 기념 · 캠페인 콜라보 · 일본판</small></h1>
+      <div class="stats">
+        <div class="stat">
+          <div class="lab">미개봉 BOX</div>
+          <div class="val"><span id="boxOwn">0</span> <i>/ <span id="boxTot">0</span></i></div>
+          <div class="bar sh"><i id="boxBar"></i></div>
+        </div>
+        <div class="stat">
+          <div class="lab">프로모 카드</div>
+          <div class="val"><span id="allOwn">0</span> <i>/ <span id="allTot">0</span></i></div>
+          <div class="bar"><i id="allBar"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="카드명 · 상품명 · 번호 검색 (예: レックウザ, カナザワ, 231)">
+      <button class="chip on" data-st="all">전체</button>
+      <button class="chip" data-st="have">보유</button>
+      <button class="chip" data-st="none">미보유</button>
+      <button class="chip ko-chip on" id="koBtn">한국어 번역</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="lnkBtn">🔗 링크로 백업</button>
+      <button class="btn" id="expBtn">내보내기</button>
+      <button class="btn" id="impBtn">가져오기</button>
+      <button class="btn" id="prnBtn">인쇄</button>
+      <button class="btn danger" id="rstBtn">초기화</button>
+      <input type="file" id="impFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="note">
+  <p><b>사용법</b> — 카드를 클릭하면 보유(회색 + 초록 체크) ↔ 미보유(컬러)로 전환됩니다. 상품 헤더의 <b>미개봉 BOX 보유</b> 버튼은 카드와 별개로 박스 자체의 보유 여부를 기록합니다. 카드 왼쪽 아래 🔍 는 고해상도 이미지를 띄웁니다.</p>
+  <p><b>상품 이미지</b>는 각 상품 헤더 왼쪽에 있습니다. 클릭하면 크게 볼 수 있습니다. 名探偵ピカチュウ 점보 카드팩 두 상품만 패키지 사진을 못 구해서 <b>동봉 점보 카드</b> 이미지를 대신 넣고 그렇게 표시했습니다. マリオ / ルイージ 스페셜 BOX 두 상품은 아직 「상품 이미지 없음」입니다.</p>
+  <p><b>한국어 번역</b> 버튼을 끄면 일본어 + 영문만 남습니다. 선택은 브라우저에 저장되어 다음에 열 때도 유지됩니다. 여기 실린 카드는 전부 <b>일본판 전용 프로모</b>라 한국판이 존재하지 않습니다. 한국어 줄은 어디까지나 읽기 편하라고 붙인 <b>비공식 번역</b>이며, 실제 카드에 인쇄된 이름은 일본어입니다. 검색창은 일본어 · 영문 · 한국어 어느 쪽으로도 찾을 수 있습니다.</p>
+
+  <h3>가격은 전부 「정가」입니다 — 시세가 아닙니다</h3>
+  <p>각 상품에 적힌 금액은 <b>발매 당시 공식 희망소매가격</b>을 그대로 옮긴 것입니다. <b>지금 거래되는 가격이 아닙니다.</b> 절판된 상품은 대부분 정가를 크게 웃돕니다 — 예를 들어 トウキョーDX(정가 ¥2,600)나 カナザワ(정가 ¥5,104)는 중고 시장에서 수만 엔대에 거래됩니다. 구매 판단은 반드시 실제 시세를 따로 확인하고 하세요.</p>
+  <p><b>「+세」 표기</b>는 원문이 세금 별도(本体価格)로 발표한 상품입니다. 2015~2016년 상품이 여기 해당하고, 2018년 이후 상품은 공식 표기가 세금 포함(税込)입니다. <b>Pokémon GO 카드파일 세트</b>와 <b>名探偵ピカチュウ 점보 카드팩 2종</b>은 공식 가격 표기를 확인하지 못해 「정가 확인 못 함」으로 뒀습니다.</p>
+
+  <h3>같은 이름, 다른 카드 — 꼭 구분해야 하는 것들</h3>
+  <p><b>カナザワのピカチュウ</b>는 두 종류입니다. <b>147/S-P</b>가 스페셜 BOX 봉입판, <b>144/S-P</b>가 오픈 기간에 포켓몬센터·포켓몬스토어 방문객에게 나눠준 배포판입니다. BOX를 사야만 얻을 수 있는 147 쪽이 훨씬 비쌉니다. 144는 슬리브에 넣어 그냥 건네주는 방식이라 미개봉 개체가 존재하지 않습니다.</p>
+  <p><b>ヒロシマ</b>는 박스가 두 번 나왔습니다. 2015년 오픈 기념(コイキングごっこ / ギャラドスごっこ)과 2025년 리뉴얼 기념(ヒロシマのピカチュウ)은 완전히 다른 상품입니다.</p>
+  <p><b>ヨコハマのピカチュウ</b>는 네 장(280–283/SM-P)인데 <b>280 · 281만 스페셜 BOX 봉입판</b>이고, 282 · 283은 「潮風にのって」 캠페인으로 매장에서 배포한 것입니다. 같은 이름이라 섞이기 쉽습니다.</p>
+  <p><b>トウホクのピカチュウ</b>도 <b>88/SM-P</b>와 <b>260/SV-P</b> 두 장이 있습니다. 스페셜 BOX 봉입판은 260 쪽입니다.</p>
+  <p><b>ポンチョを着たピカチュウ</b>는 카드명이 전부 같습니다. 박스 봉입판은 <b>207(メガリザードンX) · 208(メガリザードンY) · 230(レックウザ) · 231(黒いレックウザ)</b> 네 장이고, 203 · 274 · 275는 여러 마리가 함께 그려진 캠페인 배포판이라 박스와 무관합니다.</p>
+
+  <h3>박스가 아닌 것 — 배포 프로모</h3>
+  <p>「배포 프로모」탭은 두 묶음입니다. <b>매장 배포 지역 한정</b>은 シブヤ · オーサカDX · サッポロ · キョウト · オキナワ 처럼 지점 기념 카드는 나왔지만 박스 상품이 발매되지 않은 케이스이고, <b>구매 특전 · 동봉</b>은 명탐정 피카츄 관련(영화 팸플릿 · 무비 스페셜팩 구매 특전 · Switch 조기구매 특전)과 YU NAGABA 콜라보 프로모입니다. 전부 박스를 찾아도 안 나오는 게 정상입니다.</p>
+
+  <h3>25th ANNIVERSARY GOLDEN BOX — 카드는 나옵니다</h3>
+  <p>전용 <b>프로모</b>는 없지만 <b>박스 한정 카드는 있습니다.</b> 동봉된 특제 피카츄 덱 60장이 <b>15종(S8a-G)</b>으로 구성되고, 전부 미러 킬라 사양이라 다른 곳에서 같은 사양을 구할 수 없습니다. 그 중 <b>001/015 ピカチュウV</b>가 카드 전체가 금색인 통칭 <b>「골든 피카츄」</b>이고, <b>002/015 モンスターボール</b>도 골드 풀아트입니다. 피카츄 계열은 001 · 003 · 005 · 006 네 장(005는 001과 기술이 다른 별개 카드)이고 004는 ライチュウ입니다. 15종 전부 체크 대상으로 넣었습니다.</p>
+  <p>같이 들어 있는 <b>프로모카드팩 25th ANNIVERSARY edition</b> 5팩은 별개입니다 — 전 25종(S8a-P) 중 랜덤 1장이라 무엇이 나올지 정해져 있지 않고, 확장팩 25th ANNIVERSARY COLLECTION 4팩 구매 특전으로도 배포됐습니다. 25종 안에도 「ピカチュウ」가 있지만 박스 한정이 아니라 목록에 넣지 않았습니다.</p>
+
+  <h3>YU NAGABA 이브이즈 스페셜 BOX — 이쪽은 정말 카드가 없습니다</h3>
+  <p>공식 상품 구성이 덱실드 · 덱케이스 · 러버 플레이매트 · 카드박스뿐인 <b>서플라이 전용</b> 상품입니다. 나가바 유의 이브이 프로모 9종(62–70/SV-P)은 이 박스가 아니라 1,000엔 이상 구매 특전으로 배포됐고, 피카츄(208/S-P)는 2021년 1차 콜라보 구매 특전입니다. 셋 다 「배포 프로모」탭에 넣었습니다.</p>
+
+  <h3>확장팩에서 나오는 카드는 넣지 않았습니다</h3>
+  <p>여러 BOX에 확장팩이 같이 들어 있지만(카나자와 19팩, 히로시마 5팩 등) 그 안에서 나오는 카드는 <b>랜덤</b>이고 박스 한정도 아니라서 목록에서 뺐습니다. 이 페이지에 실린 것은 <b>봉입이 확정된 박스 한정 카드</b>뿐입니다.</p>
+
+  <h3>목록을 어떻게 채웠나</h3>
+  <p>스페셜 BOX는 공식 홈페이지에 상품 페이지가 남아 있지 않은 것이 많아 빠지기 쉽습니다. <b>artofpkm.com</b>의 상품 분류(<b>Product type = Special Box</b>)와 포켓몬별 상품 목록을 교차해서 훑은 뒤, 각 상품의 봉입 프로모를 공식 발표 · ポケブーン으로 하나씩 확인해 넣었습니다.</p>
+  <p>그 과정에서 걸러낸 것도 있습니다 — <b>Pokémon GO 스페셜세트</b>(¥3,700)는 봉입 프로모가 <b>ミュウツーV</b>라 피카츄 상품이 아니고, <b>仰天のボルテッカー / タッグボルト 포켓몬센터 한정세트</b>는 부스터 박스와 서플라이 구성이라 봉입이 확정된 피카츄 카드가 없습니다. 패키지에 피카츄가 그려져 있을 뿐입니다. 셋 다 목록에서 뺐습니다.</p>
+
+  <h3>데이터 출처</h3>
+  <p>상품 구성·발매일·가격은 <b>포켓몬카드 공식 홈페이지</b> 상품 페이지 및 공식 뉴스, 우표 BOX는 <b>일본우편 공식 발표</b>. 카드 번호·이미지는 <b>Limitless TCG</b> 일본판 프로모 세트(XY-P / SM-P / S-P / SV-P). 어느 공개 DB에도 세트가 없는 <b>S8a-G</b>(골든박스 덱 15종)만 <b>TCGplayer</b> 상품 이미지를 씁니다. 상품 이미지는 공식 상품 페이지 · TCGplayer · Amazon.co.jp에서 가져옵니다. ポンチョ 계열 4종은 기술명과 카드 일러스트를 직접 대조해 지정했습니다. 일본판 전용 프로모라 공식 영문명이 없는 카드가 많아, 영문명 일부는 <b>비공식 통용 표기</b>입니다. 이미지 표시에는 인터넷 연결이 필요합니다.</p>
+  <p><b>아직 못 채운 것</b> — <b>マリオピカチュウ / ルイージピカチュウ 스페셜 BOX</b> 두 상품의 패키지 사진뿐입니다. 공식 상품 페이지가 남아 있지 않고 TCGplayer · Amazon에도 미개봉 상품이 없습니다. 두 상품의 봉입 프로모 카드(293–296/XY-P)는 정상적으로 나옵니다.</p>
+</div>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+
+<script>
+/* boxId|세트|번호|일본어명|영문명|비고 */
+const RAW = `
+hiroshima15|XYP|150|コイキングごっこピカチュウ|Magikarp Cosplay Pikachu|잉어킹 흉내 피카츄|プレミアムキラ|프리미엄 킬라
+hiroshima15|XYP|151|ギャラドスごっこピカチュウ|Gyarados Cosplay Pikachu|갸라도스 흉내 피카츄|プレミアムキラ|프리미엄 킬라
+skytree16|XYP|230|ポンチョを着たピカチュウ（レックウザ）|Poncho-wearing Pikachu (Rayquaza)|판초를 입은 피카츄 (레쿠쟈)|プレミアムキラ|프리미엄 킬라
+skytree16|XYP|231|ポンチョを着たピカチュウ（黒いレックウザ）|Poncho-wearing Pikachu (Shiny Rayquaza)|판초를 입은 피카츄 (검은 레쿠쟈)|プレミアムキラ|프리미엄 킬라
+tokyodx18|SMP|208|袴姿のピカチュウ|Hakama Pikachu|하카마 차림의 피카츄|キラ|킬라
+tokyodx18|SMP|209|火消し姿のピカチュウ|Firefighter Pikachu|소방수 차림의 피카츄|キラ|킬라
+kanazawa20|SP|147|カナザワのピカチュウ|Kanazawa's Pikachu|카나자와의 피카츄|キラ · BOX封入版|킬라 · BOX 봉입판
+kanazawa20|SP|145|ミロカロス|Milotic|밀로틱|キラ|킬라
+kanazawa20|SP|146|メッソン|Sobble|울머기|キラ|킬라
+tohoku25|SVP|260|トウホクのピカチュウ|Tohoku's Pikachu|도호쿠의 피카츄|キラ|킬라
+hiroshima25|SVP|261|ヒロシマのピカチュウ|Hiroshima's Pikachu|히로시마의 피카츄|キラ|킬라
+fukuoka25|SVP|289|フクオカのピカチュウ|Fukuoka's Pikachu|후쿠오카의 피카츄|キラ|킬라
+megax16|XYP|207|ポンチョを着たピカチュウ（メガリザードンX）|Poncho-wearing Pikachu (Mega Charizard X)|판초를 입은 피카츄 (메가리자몽 X)|プレミアムキラ|프리미엄 킬라
+megax16|XYP|206|ピカチュウ|Pikachu|피카츄|スペシャルキラ · X/Y 共通|스페셜 킬라 · X/Y 양쪽 공통
+megay16|XYP|208|ポンチョを着たピカチュウ（メガリザードンY）|Poncho-wearing Pikachu (Mega Charizard Y)|판초를 입은 피카츄 (메가리자몽 Y)|プレミアムキラ|프리미엄 킬라
+megay16|XYP|206|ピカチュウ|Pikachu|피카츄|スペシャルキラ · X/Y 共通|스페셜 킬라 · X/Y 양쪽 공통
+mario16|XYP|293|マリオピカチュウ|Mario Pikachu|마리오 피카츄|プレミアムキラ|프리미엄 킬라
+mario16|XYP|294|マリオピカチュウ|Mario Pikachu|마리오 피카츄|オリジナルキラ|오리지널 킬라
+luigi16|XYP|295|ルイージピカチュウ|Luigi Pikachu|루이지 피카츄|プレミアムキラ|프리미엄 킬라
+luigi16|XYP|296|ルイージピカチュウ|Luigi Pikachu|루이지 피카츄|オリジナルキラ|오리지널 킬라
+stamp21|SP|227|ピカチュウ|Pikachu|피카츄|キラ · 見返り美人|킬라 · 우키요에 「미카에리 미인」
+stamp21|SP|226|ウッウ|Cramorant|윽우지|キラ · 月に雁|킬라 · 우키요에 「달에 기러기」
+go22|SP|272|ピカチュウ|Pikachu|피카츄|キラ|킬라
+jumboriza19|SMP|338|名探偵ピカチュウ|Detective Pikachu|명탐정 피카츄|リザードンGX ver.|리자몽GX ver.
+jumbomew19|SMP|339|名探偵ピカチュウ|Detective Pikachu|명탐정 피카츄|ミュウツーGX ver.|뮤츠GX ver.
+distlocal|XYP|204|メガトウキョーのピカチュウ|Mega Tokyo's Pikachu|메가도쿄의 피카츄|メガトウキョー|메가도쿄
+distlocal|XYP|221|お公家さまと舞妓はんピカチュウ|Nobleman & Maiko Pikachu|귀족님과 마이코 피카츄|キョウト|교토
+distlocal|SMP|5|サッポロのピカチュウ|Sapporo's Pikachu|삿포로의 피카츄|サッポロ|삿포로
+distlocal|SMP|88|トウホクのピカチュウ|Tohoku's Pikachu|도호쿠의 피카츄|トウホク · 2025年版とは別|도호쿠 · 2025년판과 별개
+distlocal|SMP|282|ヨコハマのピカチュウ|Yokohama's Pikachu|요코하마의 피카츄|ヨコハマ · 店頭配布版|요코하마 · 매장 배포판
+distlocal|SMP|283|ヨコハマのピカチュウ|Yokohama's Pikachu|요코하마의 피카츄|ヨコハマ · 店頭配布版|요코하마 · 매장 배포판
+distlocal|SMP|325|お茶会ごっこピカチュウ|Tea Party Pikachu|다과회 놀이 피카츄|キョウト|교토
+distlocal|SP|2|シブヤのピカチュウ|Shibuya Pikachu|시부야의 피카츄|シブヤ|시부야
+distlocal|SP|144|カナザワのピカチュウ|Kanazawa's Pikachu|카나자와의 피카츄|カナザワ · 店頭配布版|카나자와 · 매장 배포판
+distbonus|SMP|337|名探偵ピカチュウ|Detective Pikachu|명탐정 피카츄|映画パンフレット同梱 (2019)|영화 팸플릿 동봉 (2019)
+distbonus|SP|99|名探偵ピカチュウ|Detective Pikachu|명탐정 피카츄|ムービースペシャルパック購入特典 (2020.05)|무비 스페셜팩 구매 특전 (2020.05)
+distbonus|SVP|98|名探偵ピカチュウ|Detective Pikachu|명탐정 피카츄|『帰ってきた名探偵ピカチュウ』早期購入特典|『돌아온 명탐정 피카츄』 조기구매 특전
+distbonus|SP|208|ピカチュウ|Pikachu|피카츄|YU NAGABA · 購入特典 (2021.07)|YU NAGABA · 구매 특전 (2021.07)
+distbonus|SVP|62|イーブイ|Eevee|이브이|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|63|シャワーズ|Vaporeon|샤미드|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|64|サンダース|Jolteon|쥬피썬더|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|65|ブースター|Flareon|부스터|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|66|エーフィ|Espeon|에브이|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|67|ブラッキー|Umbreon|블래키|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|68|リーフィア|Leafeon|리피아|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|69|グレイシア|Glaceon|글레이시아|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+distbonus|SVP|70|ニンフィア|Sylveon|님피아|YU NAGABA · 購入特典 (2023.05)|YU NAGABA · 구매 특전 (2023.05)
+golden21|S8AG|001|ピカチュウV|Pikachu V|피카츄V|ゴールド仕様 フルアート|골드 사양 풀아트 · 통칭 「골든 피카츄」
+golden21|S8AG|002|モンスターボール|Poké Ball|몬스터볼|ゴールド仕様 フルアート|골드 사양 풀아트
+golden21|S8AG|003|ピカチュウ|Pikachu|피카츄|ミラーキラ|미러 킬라
+golden21|S8AG|004|ライチュウ|Raichu|라이츄|ミラーキラ|미러 킬라
+golden21|S8AG|005|ピカチュウV|Pikachu V|피카츄V|ミラーキラ · 001とはワザが違う|미러 킬라 · 001과 기술이 다름
+golden21|S8AG|006|ピカチュウVMAX|Pikachu VMAX|피카츄VMAX|ミラーキラ|미러 킬라
+golden21|S8AG|007|きずぐすり|Potion|상처약|ミラーキラ|미러 킬라
+golden21|S8AG|008|スーパーボール|Great Ball|슈퍼볼|ミラーキラ|미러 킬라
+golden21|S8AG|009|ポケモンいれかえ|Switch|포켓몬 교체|ミラーキラ|미러 킬라
+golden21|S8AG|010|ポケモンキャッチャー|Pokémon Catcher|포켓몬 캐처|ミラーキラ|미러 킬라
+golden21|S8AG|011|モンスターボール|Poké Ball|몬스터볼|ミラーキラ|미러 킬라
+golden21|S8AG|012|博士の研究（マグノリア博士）|Professor's Research (Professor Magnolia)|박사의 연구(매그놀리아 박사)|ミラーキラ|미러 킬라
+golden21|S8AG|013|ビート|Bede|비트|ミラーキラ|미러 킬라
+golden21|S8AG|014|ポケモンごっこ|Poké Kid|포켓몬 놀이|ミラーキラ|미러 킬라
+golden21|S8AG|015|ホップ|Hop|홉|ミラーキラ|미러 킬라
+grunt16|SMP|13|スカル団ごっこピカチュウ|Team Skull Grunt Cosplay Pikachu|스컬단 흉내 피카츄|キラ|킬라
+grunt16|SMP|14|団員ごっこピカチュウ|Grunt Cosplay Pikachu|단원 흉내 피카츄|キラ|킬라
+alola17|SMP|37|ポンチョを着たピカチュウ（アローラロコン）|Poncho-wearing Pikachu (Alolan Vulpix)|판초를 입은 피카츄 (알로라 식스테일)|キラ · こなゆき|킬라 · 「こなゆき」
+alola17|SMP|38|ポンチョを着たピカチュウ（ロコン）|Poncho-wearing Pikachu (Vulpix)|판초를 입은 피카츄 (식스테일)|キラ · こがす|킬라 · 「こがす」
+yokohama18|SMP|280|ヨコハマのピカチュウ|Yokohama's Pikachu|요코하마의 피카츄|キラ · BOX封入版|킬라 · BOX 봉입판
+yokohama18|SMP|281|ヨコハマのピカチュウ|Yokohama's Pikachu|요코하마의 피카츄|キラ · BOX封入版|킬라 · BOX 봉입판
+`.trim();
+
+const CATS = [
+  {id:"center",   label:"포켓몬센터 기념", badge:"PC"},
+  {id:"campaign", label:"캠페인 · 콜라보", badge:"CP"},
+  {id:"set",      label:"기타 BOX · 세트", badge:"SET"},
+  {id:"promo",    label:"배포 프로모",     badge:"P", grey:true},
+];
+
+const PCARD = "https://www.pokemon-card.com";
+
+const BOXES = [
+  {id:"hiroshima15", cat:"center", isBox:true,
+   name:"スペシャルBOX コイキングごっこ&ギャラドスごっこピカチュウ",
+   nameKo:"스페셜 BOX 「잉어킹 흉내 & 갸라도스 흉내 피카츄」",
+   ev:"ポケモンセンターヒロシマ オープン記念", evKo:"포켓몬센터 히로시마 오픈 기념",
+   date:"2015.06.26", price:"¥2,500+세",
+   img:PCARD+"/products/xy/images/hiroshima_img_01.png",
+   extra:"확장팩「バンデットリング」5팩 · 덱케이스 · 덱실드 62매 · 롱카드박스",
+   extraKo:"확장팩 「밴디트 링」 5팩 · 덱케이스 · 덱실드 62매 · 롱카드박스"},
+  {id:"skytree16", cat:"center", isBox:true,
+   name:"XY BREAK スペシャルBOX レックウザポンチョを着たピカチュウ",
+   nameKo:"XY BREAK 스페셜 BOX 「레쿠쟈 판초를 입은 피카츄」",
+   ev:"ポケモンセンタースカイツリータウン オープン記念", evKo:"포켓몬센터 스카이트리타운 오픈 기념",
+   date:"2016.07.06", price:"¥2,500+세",
+   img:PCARD+"/products/xy/images/skytree_img_01.png",
+   extra:"확장팩「爆熱の闘士」「冷酷の反逆者」각 2팩 · 덱케이스 · 덱실드 62매 · 롱카드박스",
+   extraKo:"확장팩 「폭열의 투사」「냉혹한 반역자」 각 2팩 · 덱케이스 · 덱실드 62매 · 롱카드박스"},
+  {id:"tokyodx18", cat:"center", isBox:true,
+   name:"サン&ムーン スペシャルBOX ポケモンセンタートウキョーDX",
+   nameKo:"썬&문 스페셜 BOX 「포켓몬센터 도쿄DX」",
+   ev:"ポケモンセンタートウキョーDX オープン記念", evKo:"포켓몬센터 도쿄DX 오픈 기념",
+   date:"2018.03.14", price:"¥2,600",
+   img:"https://m.media-amazon.com/images/I/61JxIlqIV7L._AC_SX385_.jpg",
+   extra:"확장팩「禁断の光」5팩 · 덱케이스 · 덱실드 64매 · 롱카드박스",
+   extraKo:"확장팩 「금단의 빛」 5팩 · 덱케이스 · 덱실드 64매 · 롱카드박스"},
+  {id:"yokohama18", cat:"center", isBox:true,
+   name:"サン&ムーン スペシャルBOX ポケモンセンターヨコハマ",
+   nameKo:"썬&문 스페셜 BOX 「포켓몬센터 요코하마」",
+   ev:"ポケモンセンターヨコハマ リニューアル記念", evKo:"포켓몬센터 요코하마 리뉴얼 기념",
+   date:"2018.11.09", price:"¥3,135",
+   img:"https://cdn.artofpkm.com/arrs0yvns606c3iqedkl71ru9wv2",
+   extra:"プロモ2種(280 · 281/SM-P) · 拡張パック · デッキケース · デッキシールド · カードボックス",
+   extraKo:"프로모 2종(280 · 281/SM-P) · 확장팩 · 덱케이스 · 덱실드 · 카드박스"},
+  {id:"kanazawa20", cat:"center", isBox:true,
+   name:"ソード&シールド スペシャルBOX ポケモンセンターカナザワオープン記念",
+   nameKo:"소드&실드 스페셜 BOX 「포켓몬센터 카나자와 오픈 기념」",
+   ev:"ポケモンセンターカナザワ オープン記念", evKo:"포켓몬센터 카나자와 오픈 기념",
+   date:"2020.11.20", price:"¥5,104",
+   img:PCARD+"/info/2020/10/images/8801e9f1f30765728d8df4e16cf842a6c9e4f5b9.jpg",
+   extra:"팩 19개(반역크래시·무한존·전설의고동·폭염워커·비비드볼테이지 각 3 + 샤이니스타V 4) · 카드박스 · 카나자와 덱실드 64매",
+   extraKo:"팩 19개(반역크래시·무한존·전설의고동·폭염워커·비비드볼테이지 각 3 + 샤이니스타V 4) · 카드박스 · 카나자와 덱실드 64매"},
+  {id:"tohoku25", cat:"center", isBox:true,
+   name:"スカーレット&バイオレット スペシャルBOX ポケモンセンタートウホク",
+   nameKo:"스칼렛&바이올렛 스페셜 BOX 「포켓몬센터 도호쿠」",
+   ev:"ポケモンセンタートウホク リニューアル記念", evKo:"포켓몬센터 도호쿠 리뉴얼 기념",
+   date:"2025.06.13", price:"¥2,090",
+   img:PCARD+"/info/2025/06/images/005043_7.jpg",
+   extra:"덱실드 64매 · 덱케이스 · 롱카드박스 · 포켓몬센터 온라인 추첨 판매",
+   extraKo:"덱실드 64매 · 덱케이스 · 롱카드박스 · 포켓몬센터 온라인 추첨 판매"},
+  {id:"hiroshima25", cat:"center", isBox:true,
+   name:"スカーレット&バイオレット スペシャルBOX ポケモンセンターヒロシマ",
+   nameKo:"스칼렛&바이올렛 스페셜 BOX 「포켓몬센터 히로시마」",
+   ev:"ポケモンセンターヒロシマ リニューアル記念", evKo:"포켓몬센터 히로시마 리뉴얼 기념",
+   date:"2025.06.13", price:"¥2,090",
+   img:PCARD+"/info/2025/06/images/005053_10.jpg",
+   extra:"덱실드 64매 · 덱케이스 · 롱카드박스 · 포켓몬센터 온라인 추첨 판매",
+   extraKo:"덱실드 64매 · 덱케이스 · 롱카드박스 · 포켓몬센터 온라인 추첨 판매"},
+  {id:"fukuoka25", cat:"center", isBox:true,
+   name:"スカーレット&バイオレット スペシャルBOX ポケモンセンターフクオカ",
+   nameKo:"스칼렛&바이올렛 스페셜 BOX 「포켓몬센터 후쿠오카」",
+   ev:"ポケモンセンターフクオカ リニューアル記念", evKo:"포켓몬센터 후쿠오카 리뉴얼 기념",
+   date:"2025.06.13", price:"¥2,090",
+   img:PCARD+"/info/2025/06/images/005053_9.jpg",
+   extra:"덱실드 64매 · 덱케이스 · 롱카드박스 · 포켓몬센터 온라인 추첨 판매",
+   extraKo:"덱실드 64매 · 덱케이스 · 롱카드박스 · 포켓몬센터 온라인 추첨 판매"},
+
+  {id:"grunt16", cat:"campaign", isBox:true,
+   name:"サン&ムーン スペシャルBOX 団員ごっこピカチュウ",
+   nameKo:"썬&문 스페셜 BOX 「단원 흉내 피카츄」",
+   ev:"悪の組織ごっこ ピカチュウ", evKo:"악의 조직 흉내 피카츄 시리즈",
+   date:"2016.12.17", price:"¥2,915",
+   img:"https://cdn.artofpkm.com/s3sb7263wktqwwd1uwnn14n41d2i",
+   extra:"プロモ2種 · 拡張パック · デッキケース · デッキシールド · カードボックス",
+   extraKo:"프로모 2종 · 확장팩 · 덱케이스 · 덱실드 · 카드박스"},
+  {id:"alola17", cat:"campaign", isBox:true,
+   name:"サン&ムーン スペシャルBOX アローラロコン&ロコンポンチョのピカチュウ",
+   nameKo:"썬&문 스페셜 BOX 「알로라 식스테일 & 식스테일 판초 피카츄」",
+   ev:"ポンチョを着たピカチュウ シリーズ", evKo:"판초를 입은 피카츄 시리즈",
+   date:"2017.02.01", price:"¥1,980",
+   img:"https://cdn.artofpkm.com/0a8gsinb08m6s01qsyz6zbg5fh1b",
+   extra:"プロモ2種 · 拡張パック · デッキケース · デッキシールド · カードボックス",
+   extraKo:"프로모 2종 · 확장팩 · 덱케이스 · 덱실드 · 카드박스"},
+  {id:"megax16", cat:"campaign", isBox:true,
+   name:"XY BREAK スペシャルBOX メガリザードンXのポンチョを着たピカチュウ",
+   nameKo:"XY BREAK 스페셜 BOX 「메가리자몽 X의 판초를 입은 피카츄」",
+   ev:"つよ★カワ ピカチュウ メガキャンペーン 第2弾", evKo:"강해★귀여워 피카츄 메가 캠페인 제2탄",
+   date:"2016.01.01", price:"¥2,500+세",
+   img:PCARD+"/products/xy/images/boxlz_img_01.png",
+   extra:"확장팩「烈空のカリスマ」2팩 외 3종 각 1팩 · 덱케이스 · 덱실드 62매 · 롱카드박스",
+   extraKo:"확장팩 「열공의 카리스마」 2팩 외 3종 각 1팩 · 덱케이스 · 덱실드 62매 · 롱카드박스"},
+  {id:"megay16", cat:"campaign", isBox:true,
+   name:"XY BREAK スペシャルBOX メガリザードンYのポンチョを着たピカチュウ",
+   nameKo:"XY BREAK 스페셜 BOX 「메가리자몽 Y의 판초를 입은 피카츄」",
+   ev:"つよ★カワ ピカチュウ メガキャンペーン 第2弾", evKo:"강해★귀여워 피카츄 메가 캠페인 제2탄",
+   date:"2016.01.01", price:"¥2,500+세",
+   img:PCARD+"/products/xy/images/boxlz_img_01.png",
+   extra:"구성은 X판과 동일. スペシャルキラ「ピカチュウ」(206/XY-P)는 양쪽 공통",
+   extraKo:"구성은 X판과 동일. 스페셜 킬라 「피카츄」(206/XY-P)는 양쪽 공통"},
+  {id:"mario16", cat:"campaign", isBox:true,
+   name:"XY BREAK マリオピカチュウ スペシャルBOX",
+   nameKo:"XY BREAK 마리오 피카츄 스페셜 BOX",
+   ev:"全国のポケモンセンター · スーパーマリオ コラボ", evKo:"전국 포켓몬센터 · 슈퍼마리오 콜라보",
+   date:"2016.10.29", price:"¥1,500+세",
+   img:"https://cdn.artofpkm.com/scgbui7e1i6uh7jhjjlta9tz24af",
+   extra:"덱케이스 · 덱실드 64매 · 카드박스", extraKo:"덱케이스 · 덱실드 64매 · 카드박스"},
+  {id:"luigi16", cat:"campaign", isBox:true,
+   name:"XY BREAK ルイージピカチュウ スペシャルBOX",
+   nameKo:"XY BREAK 루이지 피카츄 스페셜 BOX",
+   ev:"全国のポケモンセンター · スーパーマリオ コラボ", evKo:"전국 포켓몬센터 · 슈퍼마리오 콜라보",
+   date:"2016.10.29", price:"¥1,500+세",
+   img:"https://cdn.artofpkm.com/7fdg8hhyc7qm3dsgzlrypvpc1ino",
+   extra:"덱케이스 · 덱실드 64매 · 카드박스", extraKo:"덱케이스 · 덱실드 64매 · 카드박스"},
+
+  {id:"stamp21", cat:"set", isBox:true,
+   name:"ポケモン切手BOX ～ポケモンカードゲーム 見返り美人・月に雁セット～",
+   nameKo:"포켓몬 우표 BOX 「포켓몬카드게임 미카에리 미인 · 달에 기러기 세트」",
+   ev:"日本郵便 · グリーティング切手「ポケモン」発行記念",
+   evKo:"일본우편(日本郵便) · 그리팅 우표 「포켓몬」 발행 기념",
+   date:"2021.08.25", price:"¥4,000",
+   img:"https://www.post.japanpost.jp/kitte/collection/archive/2021/0825_01/img_item_01.jpg",
+   extra:"郵便切手1シート(84円×8 · 120円×2) · 変形カード3種 · ファミリーポケモンカードゲーム1点 · プロモ2種",
+   extraKo:"우표 시트 1장(84엔×8 · 120엔×2) · 변형 카드 3종 · 패밀리 포켓몬카드게임 1점 · 프로모 2종 · 추첨 판매",
+   foot:"체크 대상은 대전에 쓸 수 있는 프로모 2종입니다. 이 외에 리자몽 · 피카츄 · 이브이 모양으로 잘린 변형 카드 3종도 들어 있지만 대전용 카드가 아니라 목록에서 뺐습니다.",
+   footJa:"チェック対象は対戦で使えるプロモ2種です。ほかにリザードン・ピカチュウ・イーブイの変形カード3種も入っていますが、対戦用カードではないためリストから外しています。"},
+  {id:"go22", cat:"set", isBox:true,
+   name:"Pokémon GO カードファイルセット",
+   nameKo:"포켓몬 GO 카드파일 세트",
+   ev:"ポケモンカードゲーム × Pokémon GO コラボ", evKo:"포켓몬카드게임 × 포켓몬 GO 콜라보",
+   date:"2022.06.17", price:"¥1,760",
+   img:"https://product-images.tcgplayer.com/fit-in/437x437/627702.jpg",
+   extra:"カードファイル1個 · 強化拡張パック「Pokémon GO」4パック · プロモ1種",
+   extraKo:"카드파일 1개 · 강화확장팩 「Pokémon GO」 4팩 · 프로모 1종"},
+  {id:"jumboriza19", cat:"set", isBox:true,
+   name:"スペシャルジャンボカードパック 名探偵ピカチュウ リザードンGX ver.",
+   nameKo:"스페셜 점보 카드팩 「명탐정 피카츄 리자몽GX ver.」",
+   ev:"映画『名探偵ピカチュウ』前売券セット", evKo:"영화 『명탐정 피카츄』 전매권 세트",
+   date:"2019", price:"—",
+   img:"https://product-images.tcgplayer.com/fit-in/437x437/707531.jpg",
+   imgCap:"동봉 점보 카드 「リザードンGX」",
+   extra:"ジャンボカード · プロモ「名探偵ピカチュウ」338/SM-P",
+   extraKo:"점보 카드 · 프로모 「명탐정 피카츄」 338/SM-P"},
+  {id:"jumbomew19", cat:"set", isBox:true,
+   name:"スペシャルジャンボカードパック 名探偵ピカチュウ ミュウツーGX ver.",
+   nameKo:"스페셜 점보 카드팩 「명탐정 피카츄 뮤츠GX ver.」",
+   ev:"映画『名探偵ピカチュウ』公開記念", evKo:"영화 『명탐정 피카츄』 공개 기념",
+   date:"2019", price:"—",
+   img:"https://product-images.tcgplayer.com/fit-in/437x437/707532.jpg",
+   imgCap:"동봉 점보 카드 「ミュウツーGX」",
+   extra:"ジャンボカード · プロモ「名探偵ピカチュウ」339/SM-P",
+   extraKo:"점보 카드 · 프로모 「명탐정 피카츄」 339/SM-P"},
+  {id:"golden21", cat:"set", isBox:true,
+   name:"ソード&シールド 25th ANNIVERSARY GOLDEN BOX",
+   nameKo:"소드&실드 25th ANNIVERSARY GOLDEN BOX",
+   ev:"ポケモンカードゲーム25周年記念 · 特製ピカチュウデッキ同梱",
+   evKo:"포켓몬카드게임 25주년 기념 · 특제 피카츄 덱 동봉",
+   date:"2021.10.22 발표 · 추첨 → 수주생산(2022.08~ 발송)", price:"¥17,600",
+   img:"https://product-images.tcgplayer.com/fit-in/437x437/647455.jpg",
+   extra:"デッキ(キラカード60枚 / 15種 · S8a-G) · プロモカードパック 25th ANNIVERSARY edition 5パック · 箔押しラバープレイマット · 金属製ダメカンサイコロ12個 · 合皮デッキケース 등",
+   extraKo:"덱(킬라 카드 60장 / 15종 · S8a-G) · 프로모카드팩 25th ANNIVERSARY edition 5팩 · 박압 러버 플레이매트 · 금속제 데미지 주사위 12개 · 합피 덱케이스 등",
+   foot:"동봉된 프로모카드팩 5팩은 별개입니다 — 「프로모카드팩 25th ANNIVERSARY edition」(S8a-P) 전 25종 중 랜덤 1장이라 무엇이 나올지 정해져 있지 않고, 이 팩 자체는 확장팩 25th ANNIVERSARY COLLECTION 4팩 구매 특전으로도 배포됐습니다. 25종 안에도 「ピカチュウ」가 있습니다.",
+   footJa:"同梱のプロモカードパック5パックは別枠です。「プロモカードパック 25th ANNIVERSARY edition」(S8a-P) 全25種からランダム1枚で、拡張パック25th ANNIVERSARY COLLECTION 4パック購入特典としても配布されました。25種の中にも「ピカチュウ」があります。"},
+  {id:"nagaba23", cat:"set", isBox:true, noCards:true,
+   name:"YU NAGABA × ポケモンカードゲーム イーブイズ スペシャルBOX",
+   nameKo:"YU NAGABA × 포켓몬카드게임 「이브이즈 스페셜 BOX」",
+   ev:"長場雄 コラボ 第2弾", evKo:"나가바 유(長場雄) 콜라보 제2탄",
+   date:"2023.05.24", price:"¥4,800",
+   img:"https://www.pokemon-card.com/info/2023/04/images/b56766f5afe2af3ed6a443395efdbacd0d904365.png",
+   extra:"デッキシールド64枚 · 仕切り板付きデッキケース · ラバープレイマット · カードボックス",
+   extraKo:"덱실드 64매 · 칸막이 포함 덱케이스 · 러버 플레이매트 · 카드박스",
+   noCardsNote:"카드가 들어 있지 않은 서플라이 전용 BOX입니다. 나가바 유의 이브이 프로모 9종은 이 박스가 아니라 1,000엔 이상 구매 특전으로 배포됐습니다 — 「배포 프로모」 탭에 있습니다.",
+   noCardsNoteJa:"カードが入っていないサプライのみのBOXです。YU NAGABAのイーブイズ プロモ9種はこのBOXではなく、1,000円以上購入特典として配布されました（「배포 프로모」タブ）。"},
+
+  {id:"distlocal", cat:"promo", isBox:false,
+   name:"ご当地ピカチュウ プロモ（店頭配布）",
+   nameKo:"매장 배포 지역 한정 피카츄 프로모",
+   ev:"BOX商品ではない — 来店 · 購入特典", evKo:"박스 상품 아님 — 방문 · 구매 특전 배포",
+   date:"2014–2020", price:"무료 배포",
+   extra:"지점 기념 카드는 나왔지만 스페셜 BOX 상품은 발매되지 않은 케이스들. 참고용으로 함께 실었습니다.",
+   extraKo:"지점 기념 카드는 나왔지만 스페셜 BOX 상품은 발매되지 않은 케이스들. 참고용으로 함께 실었습니다."},
+  {id:"distbonus", cat:"promo", isBox:false,
+   name:"購入特典 · 同梱プロモ",
+   nameKo:"구매 특전 · 동봉 프로모",
+   ev:"BOX商品ではない — 購入特典 · 商品同梱", evKo:"박스 상품 아님 — 구매 특전 · 상품 동봉",
+   date:"2019–2023", price:"특전 배포",
+   extra:"名探偵ピカチュウ 관련과 YU NAGABA 콜라보 프로모. 박스가 아니라 구매 특전·게임 동봉으로 나온 것들입니다.",
+   extraKo:"명탐정 피카츄 관련과 YU NAGABA 콜라보 프로모. 박스가 아니라 구매 특전·게임 동봉으로 나온 것들입니다."},
+];
+
+const CARDS = RAW.split("\n").map(l=>{
+  const [box,set,num,ja,en,ko,note,noteKo] = l.split("|");
+  const b = BOXES.find(x=>x.id===box);
+  return {box, cat:b.cat, set, num, ja, en, ko, note, noteKo, key:set+"-"+num};
+});
+
+const CDN = "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/";
+/* Limitless CDN이 커버하는 세트 */
+const CDN_SETS = new Set(["XYP","SMP","SP","SVP"]);
+
+/* S8a-G(25th GOLDEN BOX 덱)는 Limitless·TCGdex 어느 쪽에도 세트가 없다.
+   TCGplayer 상품 이미지로 대체한다. key = 카드키, value = TCGplayer productId */
+const TCG_IMG = {
+  "S8AG-001":594175, "S8AG-002":594171, "S8AG-003":594172, "S8AG-004":647445,
+  "S8AG-005":594173, "S8AG-006":594174, "S8AG-007":647446, "S8AG-008":647447,
+  "S8AG-009":647448, "S8AG-010":647449, "S8AG-011":649593, "S8AG-012":647450,
+  "S8AG-013":647451, "S8AG-014":647452, "S8AG-015":647453,
+};
+const TCGIMG = "https://product-images.tcgplayer.com/";
+
+const hasImg = c => CDN_SETS.has(c.set) || TCG_IMG[c.key] !== undefined;
+const isTcg  = c => TCG_IMG[c.key] !== undefined;
+const img = (c,size) => isTcg(c)
+  ? (size==="SM" ? `${TCGIMG}fit-in/437x437/${TCG_IMG[c.key]}.jpg` : `${TCGIMG}${TCG_IMG[c.key]}.jpg`)
+  : (CDN_SETS.has(c.set) ? `${CDN}${c.set}/${c.set}_${c.num}_R_JP_${size}.png` : "");
+const setLabel = s => ({XYP:"XY-P", SMP:"SM-P", SP:"S-P", SVP:"SV-P", S8AG:"S8a-G"})[s] || s;
+
+/* 가격은 전부 발매 당시 희망소매가격(정가)이다. 시세가 아니라는 걸 화면에서 바로 알 수 있게 라벨을 붙인다.
+   금액이 아닌 값(무료 배포 · — 등)에는 붙이지 않는다 */
+const priceText = p => p && p.startsWith("¥")
+  ? `<span class="pricetag">정가</span> ${p}`
+  : (p === "—" ? '<span class="pricetag">정가</span> 확인 못 함' : p);
+
+const KEY = "pkmbox-checklist-v1";
+let st = load();
+function load(){
+  try{ const d=JSON.parse(localStorage.getItem(KEY));
+       if(d && typeof d==="object" && !Array.isArray(d))
+         return {cards:new Set(d.cards||[]), boxes:new Set(d.boxes||[])};
+       if(Array.isArray(d)) return {cards:new Set(d), boxes:new Set()};
+  }catch(e){}
+  return {cards:new Set(), boxes:new Set()};
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify({cards:[...st.cards], boxes:[...st.boxes]})); }
+
+let curCat = "all", filterSt = "all", query = "";
+
+const tabsEl = document.getElementById("tabs");
+tabsEl.innerHTML =
+  `<button class="tab on" data-cat="all"><span class="gnum all">全</span><span>전체<br><b id="tc-all"></b></span></button>` +
+  CATS.map(c=>
+  `<button class="tab" data-cat="${c.id}"><span class="gnum ${c.grey?'grey':''}">${c.badge}</span>
+   <span>${c.label}<br><b id="tc-${c.id}"></b></span></button>`).join("");
+
+const main = document.getElementById("main");
+main.innerHTML = CATS.map(cat=>`
+  <div class="catpane" id="cp-${cat.id}">
+    <div class="cat-title" id="ct-${cat.id}">${cat.label}</div>
+    ${BOXES.filter(b=>b.cat===cat.id).map(b=>`
+      <section class="box" id="b-${b.id}">
+        <div class="box-head">
+          ${b.img?`<div class="boxwrap">
+             <button class="boxpic" data-boximg="${b.img}" title="상품 이미지 크게 보기">
+               <img loading="lazy" decoding="async" src="${b.img}" alt="${b.name}"></button>
+             ${b.imgCap?`<div class="boxcap">${b.imgCap}</div>`:``}</div>`
+           :`<div class="boxpic none">상품 이미지<br>없음</div>`}
+          <div class="ti">
+            <h2>${b.name}</h2>
+            <div class="h2ko ko">${b.nameKo}</div>
+            <div class="ev">${b.ev}</div>
+            <div class="ev ko">${b.evKo}</div>
+            <div class="meta">${b.date} · ${priceText(b.price)}<br>${b.extra}</div>
+            ${b.extraKo!==b.extra?`<div class="meta ko">${b.extraKo}</div>`:``}
+          </div>
+          ${b.isBox?`<button class="boxchk" data-box="${b.id}">미개봉 BOX 보유</button>`:``}
+          <span class="cnt" id="bc-${b.id}"></span>
+        </div>
+        <div class="grid" id="g-${b.id}"></div>
+        ${b.noCards?`<div class="nocards">
+            <b>봉입 카드 없음</b>
+            <div>${b.noCardsNoteJa}</div>
+            <div class="ko">${b.noCardsNote}</div>
+          </div>`:``}
+        ${b.foot?`<div class="nocards boxfoot">
+            <b>같이 들어 있지만 내용이 정해지지 않은 것</b>
+            <div>${b.footJa}</div>
+            <div class="ko">${b.foot}</div>
+          </div>`:``}
+        <div class="empty" id="e-${b.id}" hidden>조건에 맞는 카드가 없습니다.</div>
+      </section>`).join("")}
+  </div>`).join("");
+
+for(const b of BOXES){
+  const list = CARDS.filter(c=>c.box===b.id);
+  document.getElementById("g-"+b.id).innerHTML = list.map(c=>`
+    <div class="card" data-k="${c.key}">
+      <div class="thumb">
+        ${hasImg(c)
+          ? `<img class="${isTcg(c)?'fit':''}" loading="lazy" decoding="async" src="${img(c,'SM')}" alt="${c.ja}">
+             <button class="zoom" title="크게 보기">&#128269;</button>`
+          : `<div class="noimg"><span>${c.ja}</span><small>이미지 없음</small></div>`}
+        <span class="no">${setLabel(c.set)} ${c.num}</span>
+        <span class="tick">&#10003;</span>
+      </div>
+      <div class="nm">${c.ja}</div>
+      <div class="n2">${c.en}</div>
+      <div class="n2 ko">${c.ko}</div>
+      ${c.note?`<div class="n3">${c.note}</div>`:``}
+      ${c.noteKo?`<div class="n3 ko">${c.noteKo}</div>`:``}
+    </div>`).join("");
+}
+
+const byKey = new Map(CARDS.map(c=>[c.key,c]));
+const UNIQ = [...byKey.keys()];
+const TOT_CARDS = UNIQ.length;
+const TOT_BOXES = BOXES.filter(b=>b.isBox).length;
+document.getElementById("allTot").textContent = TOT_CARDS;
+document.getElementById("boxTot").textContent = TOT_BOXES;
+
+function render(){
+  const q = query.trim().toLowerCase();
+  const catSeen = {};
+  for(const b of BOXES){
+    const grid = document.getElementById("g-"+b.id);
+    let shown=0, o=0, t=0;
+    for(const el of grid.children){
+      const c = byKey.get(el.dataset.k), has = st.cards.has(c.key);
+      t++; if(has) o++;
+      el.classList.toggle("have", has);
+      let ok = true;
+      if(filterSt==="have" && !has) ok=false;
+      if(filterSt==="none" && has) ok=false;
+      if(q && !(c.ja.toLowerCase().includes(q) || c.en.toLowerCase().includes(q)
+                || (c.ko||"").toLowerCase().includes(q)
+                || String(c.num).includes(q) || setLabel(c.set).toLowerCase().includes(q)
+                || (c.note||"").toLowerCase().includes(q) || (c.noteKo||"").toLowerCase().includes(q)
+                || b.name.toLowerCase().includes(q) || (b.nameKo||"").toLowerCase().includes(q)
+                || b.ev.toLowerCase().includes(q) || (b.evKo||"").toLowerCase().includes(q))) ok=false;
+      el.hidden = !ok; if(ok) shown++;
+    }
+    document.getElementById("bc-"+b.id).textContent = b.noCards ? "카드 없음" : `${o} / ${t}`;
+    document.getElementById("e-"+b.id).hidden = shown>0 || b.noCards;
+    const sec = document.getElementById("b-"+b.id);
+    /* 카드가 없는 상품은 상품명 자체가 검색어에 걸릴 때만 남긴다 */
+    const nameHit = !q || b.name.toLowerCase().includes(q) || (b.nameKo||"").toLowerCase().includes(q)
+                  || b.ev.toLowerCase().includes(q) || (b.evKo||"").toLowerCase().includes(q);
+    const visible = (curCat==="all" || b.cat===curCat) && (b.noCards ? nameHit : shown>0);
+    sec.style.display = visible ? "" : "none";
+    catSeen[b.cat] = (catSeen[b.cat]||0) + (visible?1:0);
+    if(b.isBox){
+      const btn = sec.querySelector(".boxchk");
+      btn.classList.toggle("on", st.boxes.has(b.id));
+      btn.textContent = st.boxes.has(b.id) ? "✓ 미개봉 BOX 보유" : "미개봉 BOX 보유";
+    }
+  }
+  for(const cat of CATS){
+    document.getElementById("cp-"+cat.id).style.display =
+      (curCat==="all" || cat.id===curCat) ? "" : "none";
+    document.getElementById("ct-"+cat.id).style.display = catSeen[cat.id] ? "" : "none";
+    const keys = new Set(CARDS.filter(c=>c.cat===cat.id).map(c=>c.key));
+    const o = [...keys].filter(k=>st.cards.has(k)).length;
+    document.getElementById("tc-"+cat.id).textContent = `${o}/${keys.size}`;
+  }
+  const total = UNIQ.filter(k=>st.cards.has(k)).length;
+  document.getElementById("tc-all").textContent = `${total}/${TOT_CARDS}`;
+  document.getElementById("allOwn").textContent = total;
+  document.getElementById("boxOwn").textContent = st.boxes.size;
+  document.getElementById("allBar").style.width = (total/TOT_CARDS*100)+"%";
+  document.getElementById("boxBar").style.width = (st.boxes.size/TOT_BOXES*100)+"%";
+}
+
+tabsEl.addEventListener("click", e=>{
+  const b=e.target.closest(".tab"); if(!b) return;
+  curCat=b.dataset.cat;
+  [...tabsEl.children].forEach(x=>x.classList.toggle("on",x===b));
+  window.scrollTo({top:0}); render();
+});
+
+main.addEventListener("click", e=>{
+  const pic = e.target.closest(".boxpic[data-boximg]");
+  if(pic){ document.getElementById("lbimg").src = pic.dataset.boximg;
+           document.getElementById("lb").showModal(); return; }
+  const bx = e.target.closest(".boxchk");
+  if(bx){ const id=bx.dataset.box;
+    st.boxes.has(id)?st.boxes.delete(id):st.boxes.add(id); save(); render(); return; }
+  if(e.target.closest(".zoom")){
+    const c = byKey.get(e.target.closest(".card").dataset.k);
+    document.getElementById("lbimg").src = img(c,"LG");
+    document.getElementById("lb").showModal(); return;
+  }
+  const card = e.target.closest(".card"); if(!card) return;
+  const k = card.dataset.k;
+  st.cards.has(k)?st.cards.delete(k):st.cards.add(k);
+  save(); render();
+});
+document.getElementById("lb").addEventListener("click", e=>e.currentTarget.close());
+
+document.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{
+  filterSt=b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+}));
+document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; render(); });
+
+/* 한국어 번역 표시 토글 (기본 켬, 선택은 localStorage에 남는다) */
+const KOKEY = "pkmbox-ko-v1";
+let showKo = localStorage.getItem(KOKEY) !== "0";
+const koBtn = document.getElementById("koBtn");
+function applyKo(){
+  document.body.classList.toggle("no-ko", !showKo);
+  koBtn.classList.toggle("on", showKo);
+}
+koBtn.addEventListener("click", ()=>{
+  showKo = !showKo; localStorage.setItem(KOKEY, showKo?"1":"0"); applyKo();
+});
+applyKo();
+document.getElementById("rstBtn").addEventListener("click", ()=>{
+  if(confirm("체크한 내용을 모두 지울까요?")){ st={cards:new Set(),boxes:new Set()}; save(); render(); }
+});
+document.getElementById("prnBtn").addEventListener("click", ()=>window.print());
+document.getElementById("expBtn").addEventListener("click", ()=>{
+  const blob=new Blob([JSON.stringify({cards:[...st.cards].sort(),boxes:[...st.boxes].sort()},null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="specialbox-checklist.json"; a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById("impBtn").addEventListener("click", ()=>document.getElementById("impFile").click());
+document.getElementById("impFile").addEventListener("change", e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ const d=JSON.parse(rd.result);
+                       st = Array.isArray(d) ? {cards:new Set(d),boxes:new Set()}
+                                             : {cards:new Set(d.cards||[]),boxes:new Set(d.boxes||[])};
+                       save(); render(); }
+                  catch(err){ alert("파일을 읽을 수 없습니다."); } };
+  rd.readAsText(f); e.target.value="";
+});
+
+/* ---- 링크(URL)로 체크 상태 백업 / 복원 ---- */
+const BOXIDS = BOXES.filter(b=>b.isBox).map(b=>b.id);
+const KEYS = UNIQ.concat(BOXIDS.map(id=>"BOX:"+id));
+function cur(){ const s=new Set(st.cards); st.boxes.forEach(b=>s.add("BOX:"+b)); return s; }
+function b64e(a){ let s=""; for(const b of a) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(t){ t=t.replace(/-/g,"+").replace(/_/g,"/");
+  const s=atob(t), a=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+function pack(set,keys){ const a=new Uint8Array(Math.ceil(keys.length/8));
+  keys.forEach((k,i)=>{ if(set.has(k)) a[i>>3]|=1<<(i&7); }); return b64e(a); }
+function unpack(str,keys){ const a=b64d(str), s=new Set();
+  keys.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
+
+document.getElementById("lnkBtn").addEventListener("click", async ()=>{
+  const url = location.href.split("#")[0] + "#s=1." + pack(cur(),KEYS);
+  try{
+    await navigator.clipboard.writeText(url);
+    alert(`체크 상태(카드 ${st.cards.size}장 · BOX ${st.boxes.size}개)가 담긴 링크를 복사했습니다.\n다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+  }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
+});
+
+(function applyHash(){
+  const m = location.hash.match(/^#s=1\.(.+)$/);
+  if(!m) return;
+  try{
+    const o = unpack(m[1],KEYS), c = cur();
+    const same = o.size===c.size && [...o].every(x=>c.has(x));
+    if(!same){
+      const nc = [...o].filter(k=>!k.startsWith("BOX:"));
+      const nb = [...o].filter(k=>k.startsWith("BOX:")).map(k=>k.slice(4));
+      if(confirm(`링크에 담긴 체크 상태(카드 ${nc.length}장 · BOX ${nb.length}개)를 불러올까요?\n이 브라우저에 저장된 현재 상태는 덮어써집니다.`)){
+        st = {cards:new Set(nc), boxes:new Set(nb)}; save();
+      }
+    }
+  }catch(e){}
+  history.replaceState(null,"",location.href.split("#")[0]);
+})();
+
+render();
+</script>
+</body>
+</html>
