@@ -12,6 +12,7 @@
     --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
     --have:#e8f7ee; --haveline:#1f9d55;
     --skip:#f1f2f6; --skipline:#98a1b3;
+    --wish:#fff6e2; --wishline:#c8951b;
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -20,6 +21,7 @@
       --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
       --have:#15321f; --haveline:#43c07a;
       --skip:#1c2029; --skipline:#767f92;
+      --wish:#2e2614; --wishline:#e0b445;
     }
   }
   *{box-sizing:border-box}
@@ -41,6 +43,7 @@
   .bar i{display:block;height:100%;width:0;transition:width .25s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
   .bar.sh i{background:linear-gradient(90deg,var(--gold),var(--accent))}
   .bar.sk i{background:linear-gradient(90deg,var(--skipline),var(--muted))}
+  .bar.wi i{background:linear-gradient(90deg,var(--wishline),var(--gold))}
 
   .tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:9px}
   .tab{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;
@@ -101,6 +104,9 @@
     border-radius:11px 11px 0 0;background:transparent;transition:background .15s}
   .card.have{background:var(--have);border-color:var(--haveline)}
   .card.have::before{background:var(--haveline)}
+  /* ★ 위시 — 아직 없지만 살 카드. 이미 보유한 카드면 초록이 이기고 ★ 배지만 남는다 */
+  .card.wish:not(.have){background:var(--wish);border-color:var(--wishline)}
+  .card.wish:not(.have)::before{background:var(--wishline)}
   /* 수집 목록에서 뺀 카드 — 점선 테두리로 「여기 있긴 하지만 내 라인은 아니다」를 보인다 */
   .card.skip{background:var(--skip);border-color:var(--skipline);border-style:dashed;opacity:.6}
   .card.skip::before{background:var(--skipline)}
@@ -120,16 +126,18 @@
   .card:hover .mine{opacity:0}
   .rar{background:rgba(15,18,28,.82);color:#fff;font-size:8.5px;font-weight:800;padding:2px 5px;
     border-radius:4px;letter-spacing:.2px}
-  /* 빼기 ✕ · 보유 ✓ — 두 개를 따로 누른다 */
-  .acts{position:absolute;right:5px;bottom:5px;display:flex;gap:4px}
-  .drop,.tick{width:22px;height:22px;border-radius:50%;background:var(--panel);border:2px solid var(--line);
+  /* 빼기 ✕ · 위시 ★ · 보유 ✓ — 세 개를 따로 누른다 */
+  .acts{position:absolute;right:5px;bottom:5px;display:flex;gap:3px}
+  .drop,.star,.tick{width:22px;height:22px;border-radius:50%;background:var(--panel);border:2px solid var(--line);
     display:grid;place-items:center;font-size:12px;font-weight:900;line-height:1;padding:0;
     font-family:inherit;cursor:pointer;color:var(--muted);opacity:.5;transition:.15s}
-  .card:hover .drop,.card:hover .tick{opacity:.95}
+  .star{font-size:11px}
+  .card:hover .drop,.card:hover .star,.card:hover .tick{opacity:.95}
   .card.skip .drop{background:var(--skipline);border-color:var(--skipline);color:#fff;opacity:1}
+  .card.wish .star{background:var(--wishline);border-color:var(--wishline);color:#fff;opacity:1}
   .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff;opacity:1}
   /* 한 장도 안 고른 카드에서도 버튼이 보이도록 — 다만 눈에 거슬리지 않게 */
-  .card.skip .drop,.card.have .tick{opacity:1}
+  .card.skip .drop,.card.wish .star,.card.have .tick{opacity:1}
   .zoom{position:absolute;left:5px;bottom:5px;width:22px;height:22px;border-radius:6px;border:1px solid var(--line);
     background:var(--panel);color:var(--muted);font-size:11px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
   .card:hover .zoom{opacity:1}
@@ -198,7 +206,7 @@
   .note h3{font-size:13px;color:var(--text);margin:20px 0 6px}
   .note a{color:var(--accent2)}
   @media print{ header{position:static;box-shadow:none} .tools,.tabs,.eras,.zoom{display:none}
-    .drop,.tick{opacity:1 !important}
+    .drop,.star,.tick{opacity:1 !important}
     .stream{grid-template-columns:repeat(8,1fr);gap:4px} .card{break-inside:avoid;box-shadow:none} }
 </style>
 </head>
@@ -208,6 +216,11 @@
     <div class="title-row">
       <h1>피카츄 카드 전량 체크리스트 <small id="sub">일본판 · artofpkm 수록 394장 + 직접 보강 4장 = <b>398장</b>을 <b>출시일 순</b>으로 · 출처와 배포처는 카드마다</small></h1>
       <div class="stats">
+        <div class="stat">
+          <div class="lab">★ 위시</div>
+          <div class="val"><span id="wOwn">0</span> <i>/ <span id="wTot">0</span> 장 샀음</i></div>
+          <div class="bar wi"><i id="wBar"></i></div>
+        </div>
         <div class="stat">
           <div class="lab">🚫 목록에서 뺌</div>
           <div class="val"><span id="xOut">0</span> <i>장 · 남은 <span id="xLeft">0</span></i></div>
@@ -236,6 +249,7 @@
       <button class="chip on" data-st="all">전체</button>
       <button class="chip" data-st="have">보유</button>
       <button class="chip" data-st="none">미보유</button>
+      <button class="chip" data-st="wish">★ 위시</button>
       <button class="chip" data-st="skip">🚫 뺀 카드</button>
       <button class="chip gold only-main" id="boxOnly">📦 상품에서 나온 것</button>
       <button class="chip" id="pocketBtn">📱 Pocket 제외</button>
@@ -261,19 +275,22 @@
 <dialog id="srcDlg"><div id="srcBody"></div></dialog>
 
 <div class="note">
-  <p><b>사용법</b> — 카드는 <b>나온 순서대로 한 줄로 죽 이어져</b> 있고, 연도가 바뀌는 자리에만 구분선이 들어갑니다. 버튼 <b>📅 연도별</b> · <b>📃 구분 없이</b> 로 두 가지 뷰를 고릅니다. <b>📃 구분 없이</b> 를 고르면 구분선 없이 전체를 한 덩어리로 봅니다 — 카드마다 발매일이 붙어 있으니 연도 정보가 사라지지는 않습니다. 선택은 다음에 열 때도 그대로입니다. 위쪽 <b>시대 바</b>를 누르면 그 시대의 첫 카드로 바로 이동합니다(구분 없이 볼 때도 됩니다). 카드 왼쪽 아래 🔍 는 고해상도 이미지를 띄웁니다. 연표가 끝나면 맨 아래에 <b>artofpkm 미수록 · 직접 보강</b> 섹션이 따로 붙습니다. 안 모을 카드는 카드 오른쪽 아래 <b>✕</b> 로 연표에서 빼 둘 수 있습니다.</p>
+  <p><b>사용법</b> — 카드는 <b>나온 순서대로 한 줄로 죽 이어져</b> 있고, 연도가 바뀌는 자리에만 구분선이 들어갑니다. 버튼 <b>📅 연도별</b> · <b>📃 구분 없이</b> 로 두 가지 뷰를 고릅니다. <b>📃 구분 없이</b> 를 고르면 구분선 없이 전체를 한 덩어리로 봅니다 — 카드마다 발매일이 붙어 있으니 연도 정보가 사라지지는 않습니다. 선택은 다음에 열 때도 그대로입니다. 위쪽 <b>시대 바</b>를 누르면 그 시대의 첫 카드로 바로 이동합니다(구분 없이 볼 때도 됩니다). 카드 왼쪽 아래 🔍 는 고해상도 이미지를 띄웁니다. 연표가 끝나면 맨 아래에 <b>artofpkm 미수록 · 직접 보강</b> 섹션이 따로 붙습니다. 살 카드는 <b>★</b>, 안 모을 카드는 <b>✕</b> 로 카드 오른쪽 아래에서 표시해 둘 수 있습니다.</p>
 
-  <h3>보유 ✓ 와 목록에서 빼기 ✕</h3>
-  <p>카드 오른쪽 아래에 동그란 버튼이 <b>두 개</b> 있습니다.</p>
+  <h3>보유 ✓ · 위시 ★ · 목록에서 빼기 ✕</h3>
+  <p>카드 오른쪽 아래에 동그란 버튼이 <b>세 개</b> 있고, 서로 별개의 축입니다.</p>
   <ul style="margin:6px 0 10px;padding-left:18px">
-    <li><b>✓ 보유</b> — 이미 가진 카드를 체크합니다. 체크하면 테두리와 윗줄이 <b>초록</b>이 됩니다. <b>카드 아무 데나 눌러도</b> 보유가 켜집니다(✕ 버튼만 예외).</li>
+    <li><b>✓ 보유</b> — 이미 가진 카드를 체크합니다. 체크하면 테두리와 윗줄이 <b>초록</b>이 됩니다. <b>카드 아무 데나 눌러도</b> 보유가 켜집니다(★ · ✕ 버튼만 예외).</li>
+    <li><b>★ 위시</b> — <b>아직 없지만 살 카드</b>를 담아 둡니다. 테두리와 윗줄이 <b>금색</b>이 됩니다.</li>
     <li><b>✕ 목록에서 빼기</b> — <b>안 모으기로 한 카드</b>를 수집 목록에서 뺍니다. 누르면 그 자리에서 <b>연표에서 사라집니다.</b></li>
   </ul>
+  <p><b>★ 위시는 진행률을 건드리지 않습니다.</b> 「언젠가 살 것」 목록이라 분모와는 무관한 별개 축입니다. 대신 위쪽 <b>★ 위시</b> 게이지가 <b>위시에 담아 둔 카드 중 몇 장을 실제로 샀는지</b>를 보여줍니다. 필터 칩 <b>★ 위시</b>를 누르면 담아 둔 카드만 남으니, 그대로 <b>구매 목록</b>으로 씁니다. 이미 보유한 카드를 위시에 담아 둬도 되고, 그때는 <b>초록이 우선</b>이라 ★ 버튼만 금색으로 남습니다.</p>
+  <p><b>★ 와 ✕ 는 같이 설 수 없습니다</b> — 안 모으기로 한 카드를 사고 싶을 리 없으니, 한쪽을 켜면 다른 쪽이 자동으로 꺼집니다.</p>
   <p><b>뺀 카드는 장수 계산에서도 빠집니다</b> — 분자(보유)뿐 아니라 <b>분모(전체)도 함께 줄어듭니다.</b> 안 모을 카드까지 분모에 남아 있으면 진행률이 영영 100%가 되지 않으니까요. 위쪽 <b>전체 · 프로모 계열</b> 게이지, 탭 옆 숫자, 연도 구분선의 <code>N / M장</code> 이 전부 뺀 카드를 제외한 값입니다. <b>🚫 목록에서 뺌</b> 게이지가 몇 장을 뺐고 몇 장이 남았는지 보여줍니다.</p>
-  <p><b>지우는 게 아닙니다.</b> 뺀 카드는 필터 칩 <b>🚫 뺀 카드</b>를 누르면 점선 테두리로 그대로 나오고, 거기서 <b>✕ 를 한 번 더 누르면 되돌아옵니다.</b> 「초기화」에서 <b>뺀 카드만 한꺼번에 되돌리기</b>도 할 수 있습니다.</p>
+  <p><b>지우는 게 아닙니다.</b> 뺀 카드는 필터 칩 <b>🚫 뺀 카드</b>를 누르면 점선 테두리로 그대로 나오고, 거기서 <b>✕ 를 한 번 더 누르면 되돌아옵니다.</b> 「초기화」에서 <b>보유만 · 위시만 · 뺀 카드만 · 전부</b> 중에서 골라 되돌릴 수 있습니다.</p>
   <p>Pokémon TCG Pocket 30장처럼 <b>애초에 실물이 없는 카드</b>나 트로피 카드를 아예 빼 두면, 남은 장수가 곧 <b>실제로 모을 수 있는 장수</b>가 됩니다.</p>
   <p><b>카드 그림은 어느 상태에서도 원본 컬러 그대로</b> 둡니다. 흑백으로 바꾸면 일러스트를 못 보게 되니까요. 상태는 테두리 · 윗줄 · 배지 색으로만 알립니다.</p>
-  <p><b>내보내기 · 🔗 링크 백업 · 초기화</b>는 보유와 뺀 카드를 <b>둘 다</b> 다룹니다. 예전에 만들어 둔 백업 파일이나 링크도 그대로 열립니다 — 다만 <b>거기 들어 있던 위시는 없앤 기능이라 버려집니다.</b></p>
+  <p><b>내보내기 · 🔗 링크 백업 · 초기화</b>는 보유 · 위시 · 뺀 카드를 <b>셋 다</b> 다룹니다. 예전에 만들어 둔 백업 파일이나 링크도 그대로 열립니다 — 위시가 들어 있던 <b>예전 백업의 위시도 다시 복원됩니다.</b> 그 판에 없던 축(예: 위시가 없던 백업의 위시)은 <b>지금 상태를 덮어쓰지 않고 그대로 둡니다.</b></p>
 
   <h3>출처는 카드마다 붙어 있습니다</h3>
   <p>예전에는 출처(수록처)별로 섹션을 나눠 놨지만, 그렇게 하면 <b>같은 해에 나온 카드가 여기저기 흩어집니다.</b> 프로모 시리즈 하나가 몇 년에 걸쳐 있기 때문입니다. 그래서 지금은 카드를 <b>출시일 순 한 줄</b>로 세우고, 출처는 카드 밑에 <b>버튼</b>으로 붙였습니다. 누르면 그 출처의 발매일 · 시대 · 카드 수와 <b>팩 · 박스 사진</b>이 뜨고, 「이 출처만 보기」로 걸러낼 수도 있습니다.</p>
@@ -981,30 +998,39 @@ const TABS = [
   {id:"sec",   label:"곁들이 카드",   badge:"副", test:()=>true, sec:true},
 ];
 
-/* 보유 ✓ 와 「목록에서 빼기」 ✕ 는 별개다. 뺀 카드는 연표에서 사라지고 장수 계산에서도
-   빠진다 — 안 모으기로 한 카드까지 분모에 들어가면 진행률이 영영 100%가 안 되기 때문이다.
-   지운 게 아니라 「🚫 뺀 카드」 필터에 그대로 남아 있어서 언제든 되돌릴 수 있다. */
+/* 카드 한 장에 축이 셋이고 서로 별개다.
+   ✓ 보유 — 이미 가진 카드
+   ★ 위시 — 아직 없지만 살 카드. 진행률과는 무관한 「살 것 목록」이라 분모를 건드리지 않는다
+   ✕ 뺀 카드 — 안 모으기로 한 카드. 연표에서 사라지고 장수 계산의 분자 · 분모 양쪽에서 빠진다
+     (안 모을 카드까지 분모에 들어가면 진행률이 영영 100%가 안 되기 때문이다)
+   지운 게 아니라 「★ 위시」 · 「🚫 뺀 카드」 필터에 그대로 남아 있어서 언제든 되돌릴 수 있다.
+   ★ 와 ✕ 는 같이 설 수 없다 — 안 모으기로 한 카드를 사고 싶을 리 없다. 한쪽을 켜면 다른 쪽이 꺼진다. */
 const KEY  = "pkmpika-checklist-v1";
+const WKEY = "pkmpika-wish-v1";
 const SKEY = "pkmpika-skip-v1";
 /* 곁들이 카드는 저장 칸이 따로다. 두 목록에 같은 key 가 한 장 겹쳐서(031/L-P)
    한 칸에 섞으면 서로를 덮어쓴다. KEYFIX 도 본 목록 전용이라 적용하지 않는다. */
 const XKEY  = "pkmpika-sec-v1";
+const XWKEY = "pkmpika-secwish-v1";
 const XSKEY = "pkmpika-secskip-v1";
-localStorage.removeItem("pkmpika-wish-v1");   /* 없앤 위시 기능이 남긴 찌꺼기 정리 */
 const FKEY = "pkmpika-keyfix-v1";          /* key 갱신을 이미 적용했는가 */
 const fixKeys = a => a.map(k => KEYFIX[k] || k);
 const needFix = localStorage.getItem(FKEY) !== "1";
 let own  = load(KEY);
+let wish = load(WKEY);
 let skip = load(SKEY);
 let xOwn  = load(XKEY,  true);
+let xWish = load(XWKEY, true);
 let xSkip = load(XSKEY, true);
 if(needFix){ localStorage.setItem(FKEY,"1"); save(); }   /* 한 번 적용하면 다시 하지 않는다 */
 function load(k, raw){ try{ const a=JSON.parse(localStorage.getItem(k));
                        if(Array.isArray(a)) return new Set((needFix && !raw) ? fixKeys(a) : a); }catch(e){}
                   return new Set(); }
 function save(){ localStorage.setItem(KEY,  JSON.stringify([...own]));
+                 localStorage.setItem(WKEY, JSON.stringify([...wish]));
                  localStorage.setItem(SKEY, JSON.stringify([...skip]));
                  localStorage.setItem(XKEY, JSON.stringify([...xOwn]));
+                 localStorage.setItem(XWKEY,JSON.stringify([...xWish]));
                  localStorage.setItem(XSKEY,JSON.stringify([...xSkip])); }
 
 /* 연표를 연도로 끊어 볼지, 구분선 없이 죽 이어서 볼지 — 선택은 localStorage 에 남는다 */
@@ -1013,12 +1039,12 @@ let curTab="all", filterSt="all", query="", srcFilter="", boxOnly=false, noPocke
     byYear = localStorage.getItem(YKEY) !== "0";
 
 /* 지금 보고 있는 목록 — 화면 코드는 전부 이 한 곳을 통해 데이터와 체크 상태를 본다.
-   own · skip 은 가져오기 · 초기화로 통째로 갈아치우므로 부를 때마다 새로 읽는다. */
+   own · wish · skip 은 가져오기 · 초기화로 통째로 갈아치우므로 부를 때마다 새로 읽는다. */
 let secMode=false;
 const D = () => secMode
-  ? {cards:SECCARDS, order:SEC_ORDER,    eras:SEC_ERAS, srcinfo:SECSRC,  byKey:secByKey, mine:SEC_MINE, own:xOwn, skip:xSkip,
+  ? {cards:SECCARDS, order:SEC_ORDER,    eras:SEC_ERAS, srcinfo:SECSRC,  byKey:secByKey, mine:SEC_MINE, own:xOwn, wish:xWish, skip:xSkip,
      mineLabel:"artofpkm 곁들이 목록 미수록 · 직접 보강"}
-  : {cards:CARDS,    order:CHRONO_ORDER, eras:ERAS,     srcinfo:SRCINFO, byKey:byKey,    mine:MINE,     own,      skip,
+  : {cards:CARDS,    order:CHRONO_ORDER, eras:ERAS,     srcinfo:SRCINFO, byKey:byKey,    mine:MINE,     own,      wish,       skip,
      mineLabel:"artofpkm 미수록 · 직접 보강"};
 
 const tabsEl=document.getElementById("tabs");
@@ -1079,6 +1105,7 @@ function cardHtml(c){
         <button class="zoom" title="크게 보기">&#128269;</button>
         <div class="acts">
           <button class="drop" title="수집 목록에서 빼기 / 되돌리기">&#10005;</button>
+          <button class="star" title="위시(살 카드) 담기 / 빼기">&#9733;</button>
           <button class="tick" title="보유 체크 / 해제">&#10003;</button>
         </div>
       </div>
@@ -1134,11 +1161,12 @@ function inScope(c){ const sk=D().skip; return filterSt==="skip" ? sk.has(c.key)
 
 function match(c){
   const q=query.trim().toLowerCase();
-  const has=D().own.has(c.key);
+  const d=D(), has=d.own.has(c.key);
   if(!inScope(c)) return false;
   if(!TABS.find(t=>t.id===curTab).test(c)) return false;
   if(filterSt==="have" && !has) return false;
   if(filterSt==="none" && has) return false;
+  if(filterSt==="wish" && !d.wish.has(c.key)) return false;
   if(boxOnly && !c.inBox) return false;
   if(noPocket && c.pocket) return false;
   if(srcFilter && c.src!==srcFilter) return false;
@@ -1162,6 +1190,7 @@ function render(){
     }
     const c=d.byKey.get(el.dataset.k);
     el.classList.toggle("have",d.own.has(c.key));
+    el.classList.toggle("wish",d.wish.has(c.key));
     el.classList.toggle("skip",d.skip.has(c.key));
     const ok=match(c);
     el.hidden=!ok;
@@ -1193,8 +1222,14 @@ function render(){
   document.getElementById("pTot").textContent=pTot;
   document.getElementById("xOut").textContent=d.skip.size;
   document.getElementById("xLeft").textContent=tot;
+  /* 위시는 「살 것 목록」이라 전체 진행률과 무관하다. 대신 위시 안에서 몇 장을 샀는지를 센다 */
+  const wTot=live.filter(c=>d.wish.has(c.key)).length;
+  const wOwn=live.filter(c=>d.wish.has(c.key)&&d.own.has(c.key)).length;
+  document.getElementById("wOwn").textContent=wOwn;
+  document.getElementById("wTot").textContent=wTot;
   document.getElementById("allBar").style.width=(tot?total/tot*100:0)+"%";
   document.getElementById("pBar").style.width=(pTot?pOwn/pTot*100:0)+"%";
+  document.getElementById("wBar").style.width=(wTot?wOwn/wTot*100:0)+"%";
   document.getElementById("xBar").style.width=(d.skip.size/d.cards.length*100)+"%";
 }
 
@@ -1268,8 +1303,16 @@ stream.addEventListener("click",e=>{
   const card=e.target.closest(".card"); if(!card) return;
   const k=card.dataset.k;
   const d=D();
-  const set = e.target.closest(".drop") ? d.skip : d.own;   /* ✕ 버튼만 빼기, 나머지는 보유 */
-  set.has(k)?set.delete(k):set.add(k);
+  /* ✕ 는 빼기, ★ 는 위시, 나머지(카드 아무 데나)는 보유 */
+  const which = e.target.closest(".drop") ? "skip" : e.target.closest(".star") ? "wish" : "own";
+  const set = d[which];
+  if(set.has(k)) set.delete(k);
+  else{
+    set.add(k);
+    /* ★ 와 ✕ 는 같이 설 수 없다 — 한쪽을 켜면 다른 쪽을 끈다 */
+    if(which==="wish") d.skip.delete(k);
+    if(which==="skip") d.wish.delete(k);
+  }
   save(); render();
 });
 document.getElementById("lb").addEventListener("click",e=>e.currentTarget.close());
@@ -1315,19 +1358,21 @@ function applyKo(){ document.body.classList.toggle("no-ko", !showKo); koBtn.clas
 koBtn.addEventListener("click", ()=>{ showKo=!showKo; localStorage.setItem(KOKEY, showKo?"1":"0"); applyKo(); });
 applyKo();
 document.getElementById("rstBtn").addEventListener("click",()=>{
-  const d=D(), n=d.own.size, w=d.skip.size, where=secMode?"곁들이 카드":"본 목록";
-  if(!n && !w) return;
-  const what = prompt(`${where}에서 무엇을 되돌릴까요?\n  1 = 보유 체크만 (${n}장)\n  2 = 뺀 카드만 되돌리기 (${w}장)\n  3 = 둘 다\n\n번호를 입력하세요 (취소하면 아무것도 지우지 않습니다)`, "1");
-  if(what!=="1" && what!=="2" && what!=="3") return;
-  if(what==="1"||what==="3"){ if(secMode) xOwn =new Set(); else own =new Set(); }
-  if(what==="2"||what==="3"){ if(secMode) xSkip=new Set(); else skip=new Set(); }
+  const d=D(), n=d.own.size, w=d.wish.size, s=d.skip.size, where=secMode?"곁들이 카드":"본 목록";
+  if(!n && !w && !s) return;
+  const what = prompt(`${where}에서 무엇을 되돌릴까요?\n  1 = 보유 체크만 (${n}장)\n  2 = 위시만 비우기 (${w}장)\n  3 = 뺀 카드만 되돌리기 (${s}장)\n  4 = 전부\n\n번호를 입력하세요 (취소하면 아무것도 지우지 않습니다)`, "1");
+  if(!["1","2","3","4"].includes(what)) return;
+  if(what==="1"||what==="4"){ if(secMode) xOwn =new Set(); else own =new Set(); }
+  if(what==="2"||what==="4"){ if(secMode) xWish=new Set(); else wish=new Set(); }
+  if(what==="3"||what==="4"){ if(secMode) xSkip=new Set(); else skip=new Set(); }
   save(); render();
 });
 document.getElementById("prnBtn").addEventListener("click",()=>window.print());
 document.getElementById("expBtn").addEventListener("click",()=>{
-  /* v4 부터 곁들이 카드가 함께 담긴다 */
-  const blob=new Blob([JSON.stringify({v:4, own:[...own].sort(), skip:[...skip].sort(),
-    secOwn:[...xOwn].sort(), secSkip:[...xSkip].sort()},null,1)],{type:"application/json"});
+  /* v4 부터 곁들이 카드, v5 부터 ★ 위시가 함께 담긴다 */
+  const blob=new Blob([JSON.stringify({v:5,
+    own:[...own].sort(), wish:[...wish].sort(), skip:[...skip].sort(),
+    secOwn:[...xOwn].sort(), secWish:[...xWish].sort(), secSkip:[...xSkip].sort()},null,1)],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
   a.download="pikachu-checklist.json"; a.click(); URL.revokeObjectURL(a.href);
 });
@@ -1338,10 +1383,12 @@ document.getElementById("impFile").addEventListener("change",e=>{
   rd.onload=()=>{ try{ const d=JSON.parse(rd.result);          /* 예전 파일은 보유 배열 하나뿐이다 */
                        const fx = a => (!Array.isArray(d) && d.v>=2) ? a : fixKeys(a);
                        own =new Set(fx(Array.isArray(d)?d:(d.own||[])));
-                       /* v3 이전 파일에는 위시가 들어 있는데, 없앤 기능이라 버린다 */
+                       /* 위시는 v3 이전 파일에도 들어 있다 — 그대로 되살린다 */
+                       wish=new Set(fx(Array.isArray(d)?[]:(d.wish||[])));
                        skip=new Set(fx(Array.isArray(d)?[]:(d.skip||[])));
-                       /* 곁들이 카드는 v4 부터다. 없는 파일이면 지금 상태를 건드리지 않는다 */
+                       /* 곁들이 카드는 v4 부터, 그 위시는 v5 부터다. 없는 파일이면 지금 상태를 건드리지 않는다 */
                        if(!Array.isArray(d) && d.v>=4){ xOwn=new Set(d.secOwn||[]); xSkip=new Set(d.secSkip||[]); }
+                       if(!Array.isArray(d) && d.v>=5){ xWish=new Set(d.secWish||[]); }
                        save(); render(); }
                   catch(err){ alert("파일을 읽을 수 없습니다."); } };
   rd.readAsText(f); e.target.value="";
@@ -1360,37 +1407,40 @@ function unpack(str,keys){ const a=b64d(str), s=new Set();
   keys.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
 
 document.getElementById("lnkBtn").addEventListener("click", async ()=>{
-  /* v4 = 보유 · 뺀 카드 · 곁들이 보유 · 곁들이 뺀 카드 네 비트맵.
-     v1(보유만) · v2(보유+위시) · v3(보유+뺀 카드) 링크도 계속 열린다. */
-  const url=location.href.split("#")[0]+"#s=4."+pack(own,KEYS)+"."+pack(skip,KEYS)
-            +"."+pack(xOwn,XKEYS)+"."+pack(xSkip,XKEYS);
+  /* v5 = 보유 · 위시 · 뺀 카드 · 곁들이 보유 · 곁들이 위시 · 곁들이 뺀 카드 여섯 비트맵.
+     v1(보유만) · v2(보유+위시) · v3(보유+뺀 카드) · v4(v3+곁들이) 링크도 계속 열린다. */
+  const url=location.href.split("#")[0]+"#s=5."+pack(own,KEYS)+"."+pack(wish,KEYS)+"."+pack(skip,KEYS)
+            +"."+pack(xOwn,XKEYS)+"."+pack(xWish,XKEYS)+"."+pack(xSkip,XKEYS);
   try{
     await navigator.clipboard.writeText(url);
-    alert(`본 목록 보유 ${own.size}장 · 뺀 카드 ${skip.size}장\n곁들이 카드 보유 ${xOwn.size}장 · 뺀 카드 ${xSkip.size}장\n이 담긴 링크를 복사했습니다. 다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+    alert(`본 목록 보유 ${own.size}장 · 위시 ${wish.size}장 · 뺀 카드 ${skip.size}장\n곁들이 카드 보유 ${xOwn.size}장 · 위시 ${xWish.size}장 · 뺀 카드 ${xSkip.size}장\n이 담긴 링크를 복사했습니다. 다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
   }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
 });
 
 (function applyHash(){
-  const m=location.hash.match(/^#s=([1-4])\.(.+)$/);
+  const m=location.hash.match(/^#s=([1-5])\.(.+)$/);
   if(!m) return;
   try{
     const v=Number(m[1]), p=m[2].split(".");
-    const o=unpack(p[0],KEYS);
-    /* v2 의 둘째 비트맵은 없앤 위시라서 버린다 — 뺀 카드는 v3 부터다 */
-    const w=(v>=3 && p[1]) ? unpack(p[1],KEYS) : new Set();
-    /* 곁들이 카드는 v4 부터다. 예전 링크는 곁들이 카드를 건드리지 않는다 */
-    const xo=(v>=4 && p[2]) ? unpack(p[2],XKEYS) : new Set();
-    const xw=(v>=4 && p[3]) ? unpack(p[3],XKEYS) : new Set();
+    const P =i=> p[i] ? unpack(p[i],KEYS)  : new Set();
+    const XP=i=> p[i] ? unpack(p[i],XKEYS) : new Set();
+    /* 비트맵 자리는 판마다 다르다. 그 판에 없던 축은 지금 상태를 그대로 두고 덮어쓰지 않는다.
+       v1 [보유] · v2 [보유·위시] · v3 [보유·뺀] · v4 [보유·뺀·곁보유·곁뺀]
+       v5 [보유·위시·뺀·곁보유·곁위시·곁뺀] */
+    const o   = P(0);
+    const w   = v===5 ? P(1)  : v===2 ? P(1)  : wish;
+    const sk  = v===5 ? P(2)  : v>=3  ? P(1)  : skip;
+    const xo  = v===5 ? XP(3) : v===4 ? XP(2) : xOwn;
+    const xw  = v===5 ? XP(4) :                 xWish;
+    const xsk = v===5 ? XP(5) : v===4 ? XP(3) : xSkip;
     const eq=(a,b)=> a.size===b.size && [...a].every(x=>b.has(x));
-    const secSame = v>=4 ? (eq(xo,xOwn) && eq(xw,xSkip)) : true;
-    const line = (t,a,b)=> `${t} 보유 ${a}장 · 뺀 카드 ${b}장`;
-    if(!(eq(o,own) && eq(w,skip) && secSame) &&
-       confirm(`링크에 담긴 상태(${line("본 목록",o.size,w.size)}`+
-               (v>=4 ? `, ${line("곁들이 카드",xo.size,xw.size)}` : ``)+`)를 불러올까요?\n`+
-               `이 브라우저에 저장된 현재 상태(${line("본 목록",own.size,skip.size)}`+
-               (v>=4 ? `, ${line("곁들이 카드",xOwn.size,xSkip.size)}` : ``)+`)는 덮어써집니다.`)){
-      own=o; skip=w;
-      if(v>=4){ xOwn=xo; xSkip=xw; }
+    const line = (t,a,b,c)=> `${t} 보유 ${a}장 · 위시 ${b}장 · 뺀 카드 ${c}장`;
+    if(!(eq(o,own) && eq(w,wish) && eq(sk,skip) && eq(xo,xOwn) && eq(xw,xWish) && eq(xsk,xSkip)) &&
+       confirm(`링크에 담긴 상태(${line("본 목록",o.size,w.size,sk.size)}`+
+               (v>=4 ? `, ${line("곁들이 카드",xo.size,xw.size,xsk.size)}` : ``)+`)를 불러올까요?\n`+
+               `이 브라우저에 저장된 현재 상태(${line("본 목록",own.size,wish.size,skip.size)}`+
+               (v>=4 ? `, ${line("곁들이 카드",xOwn.size,xWish.size,xSkip.size)}` : ``)+`)는 덮어써집니다.`)){
+      own=o; wish=w; skip=sk; xOwn=xo; xWish=xw; xSkip=xsk;
       save();
     }
   }catch(e){}
