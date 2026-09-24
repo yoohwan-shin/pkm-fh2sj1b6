@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>포켓몬 카드 30th CELEBRATION (M6a) 보유 체크리스트</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --line:#e2e6ef; --text:#1b1f2a; --muted:#6b7385;
+    --accent:#e8452c; --accent2:#2f6fd0; --ok:#1f9d55;
+    --shadow:0 1px 3px rgba(20,25,40,.08),0 8px 24px rgba(20,25,40,.06);
+    --have:#e6f6ec; --haveline:#1f9d55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12151c; --panel:#1a1f29; --line:#2b3240; --text:#e8ecf3; --muted:#98a1b3;
+      --accent:#ff6a4d; --accent2:#6ba4ef; --ok:#43c07a;
+      --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      --have:#163325; --haveline:#43c07a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif;}
+  header{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .wrap{max-width:1400px;margin:0 auto;padding:0 16px}
+  .title-row{display:flex;align-items:center;gap:14px;padding:14px 0 10px;flex-wrap:wrap}
+  h1{font-size:20px;margin:0;letter-spacing:-.3px}
+  h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:3px}
+  .total{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .bignum{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+  .bignum span{font-size:15px;font-weight:600;color:var(--muted)}
+  .bar{width:200px;height:9px;border-radius:99px;background:var(--line);overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .25s}
+
+  .chips{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:10px}
+  .chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:99px;
+    padding:6px 13px;font-size:13px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px;
+    font-family:inherit;transition:.15s}
+  .chip:hover{border-color:var(--accent2)}
+  .chip[hidden],.card[hidden]{display:none}
+  .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip b{font-weight:700;font-size:11px;opacity:.7;font-variant-numeric:tabular-nums}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:12px}
+  input[type=search]{flex:1;min-width:180px;max-width:320px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;
+    font-size:13px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn:hover{border-color:var(--accent2)}
+  .btn.danger:hover{border-color:var(--accent);color:var(--accent)}
+  label.sw{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+
+  main{max-width:1400px;margin:0 auto;padding:18px 16px 80px}
+  section{margin-bottom:34px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+  .sec-head h2{font-size:16px;margin:0}
+  .sec-head .cnt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto}
+  .sec-head .desc{font-size:12px;color:var(--muted)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;
+    cursor:pointer;transition:.15s;box-shadow:var(--shadow);user-select:none}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+  .card.have{background:var(--have);border-color:var(--haveline)}
+  .thumb{position:relative;aspect-ratio:245/342;border-radius:7px;overflow:hidden;background:var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:.2s}
+  .card.have .thumb img{filter:grayscale(.85) opacity(.55)}
+  .noimg{width:100%;height:100%;display:grid;place-items:center;text-align:center;font-size:10.5px;
+    color:var(--muted);line-height:1.5;padding:6px;
+    background:repeating-linear-gradient(135deg,transparent,transparent 7px,rgba(127,140,170,.13) 7px,rgba(127,140,170,.13) 14px)}
+  .no{position:absolute;top:5px;left:5px;background:rgba(15,18,28,.82);color:#fff;font-size:10px;font-weight:700;
+    padding:2px 6px;border-radius:5px;font-variant-numeric:tabular-nums;letter-spacing:.3px}
+  .rar{position:absolute;top:5px;right:5px;font-size:9.5px;font-weight:800;padding:2px 5px;border-radius:5px;color:#fff;letter-spacing:.4px}
+  .r-N{background:#7b8496}.r-E{background:#5a6270}.r-H{background:#e0a409;color:#2a1d00}
+  .r-RR{background:#9b3fbf}.r-AR{background:#0f9fa8}.r-SAR{background:#d33b7d}
+  .r-FUR{background:linear-gradient(135deg,#4f46e5,#06b6d4)}
+  .r-CC{background:#a9762b}
+  .r-RGB{background:linear-gradient(100deg,#e02424 33%,#12924a 33%,#12924a 66%,#1f5fd0 66%)}
+  .tick{position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:var(--panel);
+    border:2px solid var(--line);display:grid;place-items:center;font-size:13px;color:transparent;font-weight:900}
+  .card.have .tick{background:var(--haveline);border-color:var(--haveline);color:#fff}
+  .nm{margin-top:7px;font-size:12.5px;font-weight:700;line-height:1.25;word-break:keep-all}
+  .en{font-size:10.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pr{font-size:10.5px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+  .pr b{color:var(--accent);font-weight:700}
+  body:not(.price-mode) .pr{display:none}
+  .zoom{position:absolute;left:6px;bottom:6px;width:24px;height:24px;border-radius:7px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);font-size:12px;display:grid;place-items:center;cursor:zoom-in;opacity:0;transition:.15s}
+  .card:hover .zoom{opacity:1}
+
+  .empty{color:var(--muted);font-size:14px;padding:30px 0;text-align:center}
+  dialog{border:none;border-radius:14px;padding:0;background:transparent;max-width:92vw}
+  dialog::backdrop{background:rgba(8,10,16,.75)}
+  dialog img{max-width:min(430px,86vw);max-height:82vh;border-radius:12px;display:block}
+  .note{max-width:1400px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:12px;line-height:1.7}
+  .note b{color:var(--text)}
+  @media print{
+    header{position:static;box-shadow:none}
+    .tools,.chips,.zoom,.tick{display:none}
+    .grid{grid-template-columns:repeat(8,1fr);gap:5px}
+    .card{break-inside:avoid;box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title-row">
+      <h1>30th CELEBRATION <small>MEGA 확장팩 M6a · 30주년 기념 · 한국판 보유 체크리스트</small></h1>
+      <div class="total">
+        <div class="bar"><i id="bar"></i></div>
+        <div class="bignum"><span id="own">0</span> <span>/ <span id="tot">0</span></span></div>
+      </div>
+    </div>
+    <div class="chips" id="secChips"></div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="이름 · 번호 검색 (예: 리자몽, 137, Pikachu, SAR)">
+      <button class="chip" data-st="all" id="stAll">전체</button>
+      <button class="chip" data-st="have">보유</button>
+      <button class="chip" data-st="none">미보유</button>
+      <label class="sw"><input type="checkbox" id="baseTgl"> 일반 카드도 표시</label>
+      <label class="sw"><input type="checkbox" id="priceTgl" checked> 시세 표시</label>
+      <span style="flex:1"></span>
+      <button class="btn" id="lnkBtn">🔗 링크로 백업</button>
+      <button class="btn" id="expBtn">내보내기</button>
+      <button class="btn" id="impBtn">가져오기</button>
+      <button class="btn" id="prnBtn">인쇄</button>
+      <button class="btn danger" id="rstBtn">전체 초기화</button>
+      <input type="file" id="impFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="note">
+  <p><b>사용법</b> — 카드를 클릭하면 보유(회색 처리 + 초록 체크) ↔ 미보유(컬러)로 전환됩니다. 아직 없는 카드가 컬러로 눈에 띕니다. 체크 상태는 이 브라우저에 자동 저장되므로 창을 닫아도 유지됩니다. 다른 기기로 옮기려면 <b>내보내기</b>로 JSON을 저장한 뒤 <b>가져오기</b> 하거나, <b>링크로 백업</b>으로 주소를 복사해 옮기세요. 돋보기 버튼은 큰 이미지로 보기입니다.</p>
+  <p><b>구성</b> — 이 체크리스트는 <b>일반(레어도 표기 없는) 카드를 기본으로 제외</b>하고, 팩에서 노리게 되는 105종만 보여줍니다. 피카츄 30종(017–046, 일러스트레이터 30인의 홀로 카드), RR 10종, AR 20종(104–123), SAR 10종(124–133), <b>FUR 2종(134–135, 이번 팩에서 신설된 등급)</b>, 재록 Classic Collection 30종(136–165), 그리고 시크릿 <b>RGB 뮤 3종</b>입니다. 상단 <b>일반 카드도 표시</b>를 켜면 나머지 63종 + 기본 에너지 8종(YOSHIROTTEN 일러스트)까지 합쳐 전 176종을 관리할 수 있습니다.</p>
+  <p><b>참고</b> — 총 수록 번호는 165번까지이며 여기에 RGB 뮤 3종과 기본 에너지 8종이 더해집니다. 151·152번(다크라이&amp;크레세리아 LEGEND)은 위·아래 2장이 한 쌍입니다. RGB 뮤는 공개된 한국판 이미지가 없어 이미지 없이 칸만 제공합니다.</p>
+  <p><b>이미지·시세 출처</b> — Collectory(한국판 M6a) CDN 이미지와 시세이며, 한국판 이미지가 아직 없는 일부 카드는 일본판 이미지로 대체됩니다(일러스트·번호는 동일). 재록 카드 등 일부는 돋보기로 열면 포켓몬스토어 코리아의 한국판 고화질 이미지가 표시됩니다. 시세는 <b>2026년 9월 24일 기준</b> 스냅샷으로 참고용이며 실제 시세와 다를 수 있습니다. 이미지 표시에는 인터넷 연결이 필요합니다.</p>
+</div>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+
+<script>
+const CARDS = [{"id":"001/103","n":1,"d":"001","ko":"아라리","en":"Exeggcute","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/001_103_ko-3ed474d0.webp","hi":null,"p":0},{"id":"002/103","n":2,"d":"002","ko":"알로라 나시","en":"Alolan Exeggutor","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/002_103_ko-87dbd3dc.webp","hi":null,"p":0},{"id":"003/103","n":3,"d":"003","ko":"볼비트","en":"Volbeat","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/003_103_ko-fb5b967b.webp","hi":null,"p":0},{"id":"004/103","n":4,"d":"004","ko":"네오비트","en":"Illumise","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/004_103_ko-d8425005.webp","hi":null,"p":0},{"id":"005/103","n":5,"d":"005","ko":"비비용","en":"Vivillon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/005_103_ko-186008e4.webp","hi":null,"p":0},{"id":"006/103","n":6,"d":"006","ko":"파이어","en":"Moltres","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/006_103_ko-9232f557.webp","hi":null,"p":500},{"id":"007/103","n":7,"d":"007","ko":"칠색조","en":"Ho-Oh","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/007_103_ko-effe22a7.webp","hi":null,"p":500},{"id":"008/103","n":8,"d":"008","ko":"레시라무","en":"Reshiram","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/008_103_ko-7430277e.webp","hi":null,"p":0},{"id":"009/103","n":9,"d":"009","ko":"뜨아거 ex","en":"Fuecoco ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/009_103_ko-ce12ca77.webp","hi":null,"p":21000},{"id":"010/103","n":10,"d":"010","ko":"야돈","en":"Slowpoke","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/010_103_ko-faf6a56c.webp","hi":null,"p":500},{"id":"011/103","n":11,"d":"011","ko":"라프라스","en":"Lapras","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/011_103_ko-3742609c.webp","hi":null,"p":500},{"id":"012/103","n":12,"d":"012","ko":"프리져","en":"Articuno","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/012_103_ko-b1e6a278.webp","hi":null,"p":500},{"id":"013/103","n":13,"d":"013","ko":"가이오가","en":"Kyogre","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/013_103_ko-7381c86e.webp","hi":null,"p":500},{"id":"014/103","n":14,"d":"014","ko":"펄기아","en":"Palkia","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/014_103_ko-8dbcff0f.webp","hi":null,"p":1000},{"id":"015/103","n":15,"d":"015","ko":"개굴닌자 ex","en":"Greninja ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/015_103_ko-e747df5b.webp","hi":null,"p":2500},{"id":"016/103","n":16,"d":"016","ko":"약어리","en":"Wishiwashi","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/016_103_ko-e2f15929.webp","hi":null,"p":500},{"id":"017/103","n":17,"d":"017","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/017_103_ko-39b20c82.webp","hi":null,"p":20000},{"id":"018/103","n":18,"d":"018","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/018_103_ko-5a6b7696.webp","hi":null,"p":0},{"id":"019/103","n":19,"d":"019","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/019_103_ko-78a70278.webp","hi":null,"p":3000},{"id":"020/103","n":20,"d":"020","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/020_103_ko-b683c535.webp","hi":null,"p":3000},{"id":"021/103","n":21,"d":"021","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/021_103_ko-2fbbfa67.webp","hi":null,"p":0},{"id":"022/103","n":22,"d":"022","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/022_103_ko-0ded1da9.webp","hi":null,"p":0},{"id":"023/103","n":23,"d":"023","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/023_103_ko-86405c92.webp","hi":null,"p":0},{"id":"024/103","n":24,"d":"024","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/024_103_ko-138ca034.webp","hi":null,"p":0},{"id":"025/103","n":25,"d":"025","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/025_103_ko-71fe63bf.webp","hi":null,"p":0},{"id":"026/103","n":26,"d":"026","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/026_103_ko-6cc092d0.webp","hi":null,"p":0},{"id":"027/103","n":27,"d":"027","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/027_103_ko-5ff710c3.webp","hi":null,"p":3000},{"id":"028/103","n":28,"d":"028","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/028_103_ko-352a1c22.webp","hi":null,"p":500},{"id":"029/103","n":29,"d":"029","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/029_103_ko-2e7c85c6.webp","hi":null,"p":500},{"id":"030/103","n":30,"d":"030","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/030_103_ko-14072b68.webp","hi":null,"p":2000},{"id":"031/103","n":31,"d":"031","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/031_103_ko-dc9e98ad.webp","hi":null,"p":2000},{"id":"032/103","n":32,"d":"032","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/032_103_ko-3a04c30b.webp","hi":null,"p":0},{"id":"033/103","n":33,"d":"033","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/033_103_ko-546cccb5.webp","hi":null,"p":20000},{"id":"034/103","n":34,"d":"034","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/034_103_ko-a38255aa.webp","hi":null,"p":20000},{"id":"035/103","n":35,"d":"035","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/035_103_ko-a4e28ea9.webp","hi":null,"p":0},{"id":"036/103","n":36,"d":"036","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/036_103_ko-6f430672.webp","hi":null,"p":0},{"id":"037/103","n":37,"d":"037","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/037_103_ko-1148aa77.webp","hi":null,"p":3000},{"id":"038/103","n":38,"d":"038","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/038_103_ko-0edf5944.webp","hi":null,"p":3000},{"id":"039/103","n":39,"d":"039","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/039_103_ko-b212d152.webp","hi":null,"p":0},{"id":"040/103","n":40,"d":"040","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/040_103_ko-670e40b0.webp","hi":null,"p":0},{"id":"041/103","n":41,"d":"041","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/041_103_ko-7e2dbedd.webp","hi":null,"p":0},{"id":"042/103","n":42,"d":"042","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/042_103_ko-9216de60.webp","hi":null,"p":0},{"id":"043/103","n":43,"d":"043","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/043_103_ko-171517c4.webp","hi":null,"p":3000},{"id":"044/103","n":44,"d":"044","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/044_103_ko-f7b21139.webp","hi":null,"p":20000},{"id":"045/103","n":45,"d":"045","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/045_103_ko-26fb9fff.webp","hi":null,"p":0},{"id":"046/103","n":46,"d":"046","ko":"피카츄","en":"Pikachu","r":"H","sec":"pika","img":"https://cdn.collectory.cc/cards/kr/M6a/046_103_ko-d6b0ba05.webp","hi":null,"p":6000},{"id":"047/103","n":47,"d":"047","ko":"피카츄 ex","en":"Pikachu ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/047_103_ko-2e72372b.webp","hi":null,"p":3500},{"id":"048/103","n":48,"d":"048","ko":"피카츄 ex","en":"Pikachu ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/048_103_ko-ed23ab6f.webp","hi":null,"p":20000},{"id":"049/103","n":49,"d":"049","ko":"썬더","en":"Zapdos","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/049_103_ko-b9c5e5e8.webp","hi":null,"p":500},{"id":"050/103","n":50,"d":"050","ko":"제크로무","en":"Zekrom","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/050_103_ko-b66403ab.webp","hi":null,"p":500},{"id":"051/103","n":51,"d":"051","ko":"스트린더","en":"Toxtricity","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/051_103_ko-ea322e85.webp","hi":null,"p":500},{"id":"052/103","n":52,"d":"052","ko":"모르페코","en":"Morpeko","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/052_103_ko-498a8339.webp","hi":null,"p":0},{"id":"053/103","n":53,"d":"053","ko":"미라이돈","en":"Miraidon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/053_103_ko-20511c58.webp","hi":null,"p":500},{"id":"054/103","n":54,"d":"054","ko":"뮤츠","en":"Mewtwo","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/054_103_ko-a265a9bb.webp","hi":null,"p":51500},{"id":"055/103","n":55,"d":"055","ko":"뮤츠 EX","en":"Mewtwo ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/055_103_ko-7efe2b06.webp","hi":null,"p":20000},{"id":"056/103","n":56,"d":"056","ko":"뮤","en":"Mew","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/056_103_ko-c2a514fe.webp","hi":null,"p":1000},{"id":"057/103","n":57,"d":"057","ko":"뮤 EX","en":"Mew ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/057_103_ko-3544e838.webp","hi":null,"p":20000},{"id":"058/103","n":58,"d":"058","ko":"에브이","en":"Espeon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/058_103_ko-b57a46b2.webp","hi":null,"p":67000},{"id":"059/103","n":59,"d":"059","ko":"님피아 ex","en":"Sylveon ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/059_103_ko-8cc92776.webp","hi":null,"p":0},{"id":"060/103","n":60,"d":"060","ko":"안농","en":"Unown","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/060_103_ko-6a8a059e.webp","hi":null,"p":500},{"id":"061/103","n":61,"d":"061","ko":"흔들풍손","en":"Drifloon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/061_103_ko-4a7e992d.webp","hi":null,"p":500},{"id":"062/103","n":62,"d":"062","ko":"샹델라","en":"Chandelure","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/062_103_ko-1ea659d8.webp","hi":null,"p":500},{"id":"063/103","n":63,"d":"063","ko":"제르네아스","en":"Xerneas","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/063_103_ko-fc4983d1.webp","hi":null,"p":500},{"id":"064/103","n":64,"d":"064","ko":"코스모그","en":"Cosmog","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/064_103_ko-0c25bf0b.webp","hi":null,"p":0},{"id":"065/103","n":65,"d":"065","ko":"코스모움","en":"Cosmoem","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/065_103_ko-526729ff.webp","hi":null,"p":500},{"id":"066/103","n":66,"d":"066","ko":"루나아라","en":"Lunala","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/066_103_ko-06de2364.webp","hi":null,"p":500},{"id":"067/103","n":67,"d":"067","ko":"모으령","en":"Gimmighoul","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/067_103_ko-ff3bfcdf.webp","hi":null,"p":500},{"id":"068/103","n":68,"d":"068","ko":"그란돈","en":"Groudon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/068_103_ko-a527c2b9.webp","hi":null,"p":500},{"id":"069/103","n":69,"d":"069","ko":"루카리오","en":"Lucario","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/069_103_ko-6c7327da.webp","hi":null,"p":500},{"id":"070/103","n":70,"d":"070","ko":"두빅굴","en":"Seismitoad","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/070_103_ko-d22e50db.webp","hi":null,"p":500},{"id":"071/103","n":71,"d":"071","ko":"루가루암","en":"Lycanroc","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/071_103_ko-a1ccb0a9.webp","hi":null,"p":500},{"id":"072/103","n":72,"d":"072","ko":"코라이돈","en":"Koraidon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/072_103_ko-f4d13574.webp","hi":null,"p":500},{"id":"073/103","n":73,"d":"073","ko":"니드런♀","en":"Nidoran(Female)","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/073_103_ko-23289340.webp","hi":null,"p":0},{"id":"074/103","n":74,"d":"074","ko":"니드리나","en":"Nidorina","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/074_103_ko-80b79c61.webp","hi":null,"p":500},{"id":"075/103","n":75,"d":"075","ko":"알로라 나옹","en":"Alolan Meowth","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/075_103_ko-165fd34a.webp","hi":null,"p":500},{"id":"076/103","n":76,"d":"076","ko":"팬텀 EX","en":"Gengar ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/076_103_ko-aeba21e0.webp","hi":null,"p":0},{"id":"077/103","n":77,"d":"077","ko":"블래키","en":"Umbreon","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/077_103_ko-868bebca.webp","hi":null,"p":500},{"id":"078/103","n":78,"d":"078","ko":"곤율랭","en":"Scraggy","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/078_103_ko-d99e29d8.webp","hi":null,"p":500},{"id":"079/103","n":79,"d":"079","ko":"이벨타르","en":"Yveltal","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/079_103_ko-69419f45.webp","hi":null,"p":500},{"id":"080/103","n":80,"d":"080","ko":"가라르 나옹","en":"Galarian Meowth","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/080_103_ko-20a2882e.webp","hi":null,"p":500},{"id":"081/103","n":81,"d":"081","ko":"지라치 ex","en":"Jirachi ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/081_103_ko-715f40f0.webp","hi":null,"p":1000},{"id":"082/103","n":82,"d":"082","ko":"디아루가","en":"Dialga","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/082_103_ko-b944459b.webp","hi":null,"p":1000},{"id":"083/103","n":83,"d":"083","ko":"너트령","en":"Ferrothorn","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/083_103_ko-2af4aee3.webp","hi":null,"p":0},{"id":"084/103","n":84,"d":"084","ko":"솔가레오","en":"Solgaleo","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/084_103_ko-3e6b5a6e.webp","hi":null,"p":0},{"id":"085/103","n":85,"d":"085","ko":"자시안","en":"Zacian","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/085_103_ko-0fd99001.webp","hi":null,"p":20000},{"id":"086/103","n":86,"d":"086","ko":"자마젠타","en":"Zamazenta","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/086_103_ko-aa8fefd5.webp","hi":null,"p":500},{"id":"087/103","n":87,"d":"087","ko":"타부자고","en":"Gholdengo","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/087_103_ko-849e865d.webp","hi":null,"p":0},{"id":"088/103","n":88,"d":"088","ko":"보만다 EX","en":"Salamence ex","r":"RR","sec":"rr","img":"https://cdn.collectory.cc/cards/kr/M6a/088_103_ko-d8a8dfba.webp","hi":null,"p":500},{"id":"089/103","n":89,"d":"089","ko":"짜랑꼬","en":"Jangmo-o","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/089_103_ko-eac9215b.webp","hi":null,"p":500},{"id":"090/103","n":90,"d":"090","ko":"짜랑고우","en":"Hakamo-o","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/090_103_ko-820df3f4.webp","hi":null,"p":500},{"id":"091/103","n":91,"d":"091","ko":"짜랑고우거","en":"Kommo-o","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/091_103_ko-2c7c91ad.webp","hi":null,"p":500},{"id":"092/103","n":92,"d":"092","ko":"나옹","en":"Meowth","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/092_103_ko-dfe853ac.webp","hi":null,"p":500},{"id":"093/103","n":93,"d":"093","ko":"메타몽","en":"Ditto","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/093_103_ko-9d485d8c.webp","hi":null,"p":20000},{"id":"094/103","n":94,"d":"094","ko":"이브이","en":"Eevee","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/094_103_ko-ba9b43ef.webp","hi":null,"p":1000},{"id":"095/103","n":95,"d":"095","ko":"잠만보","en":"Snorlax","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/095_103_ko-76575cad.webp","hi":null,"p":750},{"id":"096/103","n":96,"d":"096","ko":"푸푸린","en":"Igglybuff","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/096_103_ko-be915db1.webp","hi":null,"p":500},{"id":"097/103","n":97,"d":"097","ko":"루기아","en":"Lugia","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/097_103_ko-a4a1b121.webp","hi":null,"p":50000},{"id":"098/103","n":98,"d":"098","ko":"히스이조로아","en":"Hisuian Zorua","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/098_103_ko-e76bd6c9.webp","hi":null,"p":0},{"id":"099/103","n":99,"d":"099","ko":"히스이조로아크","en":"Hisuian Zoroark","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/099_103_ko-3a5f0c73.webp","hi":null,"p":500},{"id":"100/103","n":100,"d":"100","ko":"파밀리쥐","en":"Maushold","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/100_103_ko-17363f65.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_100_1xj9h1s5.png","p":1000},{"id":"101/103","n":101,"d":"101","ko":"포켓몬 교체","en":"Switch","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/101_103_ko-ab63608b.webp","hi":null,"p":0},{"id":"102/103","n":102,"d":"102","ko":"포켓패드","en":"Poke Pad","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/102_103_ko-ea0a3048.webp","hi":null,"p":1000},{"id":"103/103","n":103,"d":"103","ko":"하이퍼볼","en":"Ultra Ball","r":"N","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/103_103_ko-b03d941a.webp","hi":null,"p":0},{"id":"104/103","n":104,"d":"104","ko":"알로라 나시","en":"Alolan Exeggutor","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/104_103-c5f32451.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_104_wtwf8lme.png","p":0},{"id":"105/103","n":105,"d":"105","ko":"파이어","en":"Moltres","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/105_103-7d569b85.webp","hi":null,"p":2000},{"id":"106/103","n":106,"d":"106","ko":"라프라스","en":"Lapras","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/kr/M6a/106_103_ko-bd068b6c.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_106_kizt5zx8.png","p":5000},{"id":"107/103","n":107,"d":"107","ko":"프리져","en":"Articuno","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/107_103-23cedf1d.webp","hi":null,"p":2750},{"id":"108/103","n":108,"d":"108","ko":"썬더","en":"Zapdos","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/108_103-095d8624.webp","hi":null,"p":4000},{"id":"109/103","n":109,"d":"109","ko":"스트린더","en":"Toxtricity","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/109_103-8188e071.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_109_ae67sejz.png","p":6000},{"id":"110/103","n":110,"d":"110","ko":"모르페코","en":"Morpeko","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/110_103-2e7b19c9.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_110_oacwz7zy.png","p":6000},{"id":"111/103","n":111,"d":"111","ko":"흔들풍손","en":"Drifloon","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/kr/M6a/111_103_ko-0cf30e83.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_111_6a91uf8q.png","p":1000},{"id":"112/103","n":112,"d":"112","ko":"샹델라","en":"Chandelure","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/112_103-f4aa214a.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_112_pcekpggz.png","p":2500},{"id":"113/103","n":113,"d":"113","ko":"루가루암","en":"Lycanroc","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/kr/M6a/113_103_ko-4241aceb.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_113_4612818g.png","p":1500},{"id":"114/103","n":114,"d":"114","ko":"니드리나","en":"Nidorina","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/kr/M6a/114_103_ko-a23f6830.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_114_jx7biz6a.png","p":3500},{"id":"115/103","n":115,"d":"115","ko":"알로라 나옹","en":"Alolan Meowth","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/115_103-f2a386b1.webp","hi":null,"p":5000},{"id":"116/103","n":116,"d":"116","ko":"곤율랭","en":"Scraggy","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/116_103-cc44b9f1.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_116_57rirpnq.png","p":3500},{"id":"117/103","n":117,"d":"117","ko":"가라르 나옹","en":"Galarian Meowth","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/117_103-f6fe2280.webp","hi":null,"p":4000},{"id":"118/103","n":118,"d":"118","ko":"타부자고","en":"Gholdengo","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/118_103-768c8f48.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_118_bwrymr92.png","p":1500},{"id":"119/103","n":119,"d":"119","ko":"짜랑고우거","en":"Kommo-o","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/119_103-340653f2.webp","hi":null,"p":0},{"id":"120/103","n":120,"d":"120","ko":"나옹","en":"Meowth","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/120_103-51badf48.webp","hi":null,"p":7000},{"id":"121/103","n":121,"d":"121","ko":"메타몽","en":"Ditto","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/121_103-96aab789.webp","hi":null,"p":8000},{"id":"122/103","n":122,"d":"122","ko":"히스이조로아","en":"Hisuian Zorua","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/kr/M6a/122_103_ko-63538042.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_122_0qpxqty0.png","p":20000},{"id":"123/103","n":123,"d":"123","ko":"파밀리쥐","en":"Maushold","r":"AR","sec":"ar","img":"https://cdn.collectory.cc/cards/jp/M6a/123_103-d16fa7b1.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_123_2hkuyafl.png","p":11000},{"id":"124/103","n":124,"d":"124","ko":"뜨아거 ex","en":"Fuecoco ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/kr/M6a/124_103_ko-d74424d5.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_124_4cigmvlq.png","p":7000},{"id":"125/103","n":125,"d":"125","ko":"개굴닌자 ex","en":"Greninja ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/125_103-6c77b9a4.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_125_p40v4zkg.png","p":22000},{"id":"126/103","n":126,"d":"126","ko":"피카츄 ex","en":"Pikachu ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/kr/M6a/126_103_ko-b1a29943.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_126_nwjyseh9.png","p":54000},{"id":"127/103","n":127,"d":"127","ko":"피카츄 ex","en":"Pikachu ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/kr/M6a/127_103_ko-92b5b0eb.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_127_ji4tzv00.png","p":63000},{"id":"128/103","n":128,"d":"128","ko":"뮤츠 EX","en":"Mewtwo ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/128_103-c138e36c.webp","hi":null,"p":37000},{"id":"129/103","n":129,"d":"129","ko":"뮤 EX","en":"Mew ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/129_103-8c98ab61.webp","hi":null,"p":70000},{"id":"130/103","n":130,"d":"130","ko":"님피아 ex","en":"Sylveon ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/130_103-af18a2a7.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_130_i60w4r3l.png","p":41000},{"id":"131/103","n":131,"d":"131","ko":"팬텀 EX","en":"Gengar ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/131_103-8cd47f67.webp","hi":null,"p":51000},{"id":"132/103","n":132,"d":"132","ko":"지라치 ex","en":"Jirachi ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/132_103-30defbf3.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_132_m2z8txae.png","p":34000},{"id":"133/103","n":133,"d":"133","ko":"보만다 EX","en":"Salamence ex","r":"SAR","sec":"sar","img":"https://cdn.collectory.cc/cards/jp/M6a/133_103-a86d1bf4.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_133_3shs8zkm.png","p":10000},{"id":"134/103","n":134,"d":"134","ko":"뮤츠 EX","en":"Mewtwo ex","r":"FUR","sec":"fur","img":"https://cdn.collectory.cc/cards/kr/M6a/134_103_ko-0950a7b4.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_134_o71unn9k.png","p":57000},{"id":"135/103","n":135,"d":"135","ko":"뮤 EX","en":"Mew ex","r":"FUR","sec":"fur","img":"https://cdn.collectory.cc/cards/kr/M6a/135_103_ko-22aad4ed.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_135_g2i0sfi4.png","p":75000},{"id":"136/103","n":136,"d":"136","ko":"피카츄","en":"Pikachu","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/136_103-30285830.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_136_ed4rm53k.png","p":0},{"id":"137/103","n":137,"d":"137","ko":"리자몽","en":"Charizard","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/kr/M6a/137_103_ko-7d2d39dd.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_137_ov1ta9dw.png","p":100000},{"id":"138/103","n":138,"d":"138","ko":"이슬","en":"Misty","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/138_103-1e88361c.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_138_27pxj1k3.png","p":9000},{"id":"139/103","n":139,"d":"139","ko":"민화의 푸린","en":"Erika's Jigglypuff","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/139_103-1be698a7.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_139_cjvkon6h.png","p":5000},{"id":"140/103","n":140,"d":"140","ko":"포푸니","en":"Sneasel","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/140_103-9904e531.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_140_9ql7o1gu.png","p":3000},{"id":"141/103","n":141,"d":"141","ko":"빛나는 세레비","en":"Cal Celebi","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/141_103-9a342700.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_141_a40xqoy2.png","p":6000},{"id":"142/103","n":142,"d":"142","ko":"루기아","en":"Lugia","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/kr/M6a/142_103_ko-c3d5ea3c.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_142_a3jxu2i6.png","p":67000},{"id":"143/103","n":143,"d":"143","ko":"델케티","en":"Delcatty","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/143_103-2e6e61e4.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_143_tkv9pnr9.png","p":3000},{"id":"144/103","n":144,"d":"144","ko":"다크 마기라스","en":"Dark Tyranitar","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/144_103-8977770a.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_144_o4ld91ij.png","p":0},{"id":"145/103","n":145,"d":"145","ko":"핫삼 EX","en":"Scizor ex","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/145_103-5e0f4e7f.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_145_1i3qu19p.png","p":7000},{"id":"146/103","n":146,"d":"146","ko":"메타그로스","en":"Metagross Delta Species","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/146_103-2b0dc257.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_146_7q1ri4wz.png","p":2500},{"id":"147/103","n":147,"d":"147","ko":"펄기아","en":"Palkia LV.X","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/147_103-5835f8a2.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_147_hultri51.png","p":0},{"id":"148/103","n":148,"d":"148","ko":"유크시","en":"Uxie","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/148_103-abbaa8ab.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_148_dd49ioj9.png","p":4500},{"id":"149/103","n":149,"d":"149","ko":"크로뱃","en":"Crobat G","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/149_103-a28e27af.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_149_qtbgchsx.png","p":5000},{"id":"150/103","n":150,"d":"150","ko":"팬텀","en":"Gengar","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/150_103-28602322.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_150_afjdkhy2.png","p":37000},{"id":"151/103","n":151,"d":"151","ko":"다크라이&크레세리아 LEGEND","en":"Cresselia & Darkrai LEGEND","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/151_103-39aa2fa2.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_151152_49uhte7p.png","p":0},{"id":"152/103","n":152,"d":"152","ko":"다크라이&크레세리아 LEGEND","en":"Cresselia & Darkrai LEGEND","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/152_103-21500f65.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_151152_49uhte7p.png","p":0},{"id":"153/103","n":153,"d":"153","ko":"엔","en":"N","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/153_103-c9db16f0.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_153_his8neod.png","p":0},{"id":"154/103","n":154,"d":"154","ko":"레쿠쟈 ex","en":"Rayquaza EX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/154_103-8e054656.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_154_qr5wtsjv.png","p":11000},{"id":"155/103","n":155,"d":"155","ko":"게노세크트 ex","en":"Genesect EX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/155_103-4d411897.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_155_nv863iwf.png","p":4000},{"id":"156/103","n":156,"d":"156","ko":"M 가디안 EX","en":"M Gardevoir EX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/156_103-08da798a.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_156_u09dho0m.png","p":8000},{"id":"157/103","n":157,"d":"157","ko":"개굴닌자 BREAK","en":"Greninja BREAK","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/157_103-128956fe.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_157_d6pq8jnu.png","p":14000},{"id":"158/103","n":158,"d":"158","ko":"솔가레오 GX","en":"Solgaleo GX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/158_103-9319587a.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_158_an7yc6hm.png","p":0},{"id":"159/103","n":159,"d":"159","ko":"매시붕 GX","en":"Buzzwole GX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/159_103-d339d672.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_159_u1b7a1nt.png","p":5500},{"id":"160/103","n":160,"d":"160","ko":"피카츄&제크로무 GX","en":"Pikachu & Zekrom GX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/kr/M6a/160_103_ko-0304b90e.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_160_rrj8zrtn.png","p":32000},{"id":"161/103","n":161,"d":"161","ko":"자시안 V","en":"Zacian V","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/161_103-d59840c9.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_161_kqjwcejr.png","p":2500},{"id":"162/103","n":162,"d":"162","ko":"라이코","en":"Raikou","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/162_103-d648141d.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_162_rlm9pae6.png","p":9000},{"id":"163/103","n":163,"d":"163","ko":"뮤 VMAX","en":"Mew VMAX","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/kr/M6a/163_103_ko-2e3221df.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_163_s6x8ovr8.png","p":23000},{"id":"164/103","n":164,"d":"164","ko":"아르세우스 VSTAR","en":"Arceus VSTAR","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/jp/M6a/164_103-1571421f.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_164_0ntdncsf.png","p":0},{"id":"165/103","n":165,"d":"165","ko":"잉어킹","en":"Magikarp","r":"CC","sec":"cc","img":"https://cdn.collectory.cc/cards/kr/M6a/165_103_ko-8b47aa7f.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_165_kdj1zvxj.png","p":4000},{"id":"GRA","n":900,"d":"GRA","ko":"기본 풀 에너지","en":"Basic Grass Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/GRA_ko-eba6508d.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_gra_sdh4y5x9.png","p":0},{"id":"FIR","n":901,"d":"FIR","ko":"기본 불꽃 에너지","en":"Basic Fire Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/FIR_ko-23895b3e.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_fir_iwqrmi3p.png","p":0},{"id":"WAT","n":902,"d":"WAT","ko":"기본 물 에너지","en":"Basic Water Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/WAT_ko-cace14e0.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_wat_iwxcrcpp.png","p":0},{"id":"LIG","n":903,"d":"LIG","ko":"기본 번개 에너지","en":"Basic Lightning Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/LIG_ko-7d04ea26.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_lig_lhcirpr5.png","p":0},{"id":"PSY","n":904,"d":"PSY","ko":"기본 초 에너지","en":"Basic Psychic Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/PSY_ko-85a41f9b.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_psy_5il9ipen.png","p":0},{"id":"FIG","n":905,"d":"FIG","ko":"기본 격투 에너지","en":"Basic Fighting Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/FIG_ko-c82aecc4.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_fig_0845m8jp.png","p":0},{"id":"DAR","n":906,"d":"DAR","ko":"기본 악 에너지","en":"Basic Darkness Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/DAR_ko-c9b3a337.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_dar_2jvwz3ej.png","p":0},{"id":"MET","n":907,"d":"MET","ko":"기본 강철 에너지","en":"Basic Metal Energy","r":"E","sec":"base","img":"https://cdn.collectory.cc/cards/kr/M6a/MET_ko-16601366.webp","hi":"https://www.pokemonstore.co.kr/assets/pokemon-30-th/images/m6a_met_i6fvaloo.png","p":0},{"id":"R/RGB","n":966,"d":"R","ko":"뮤","en":"Mew","r":"RGB","sec":"rgb","img":null,"hi":null,"p":0},{"id":"G/RGB","n":967,"d":"G","ko":"뮤","en":"Mew","r":"RGB","sec":"rgb","img":null,"hi":null,"p":0},{"id":"B/RGB","n":968,"d":"B","ko":"뮤","en":"Mew","r":"RGB","sec":"rgb","img":null,"hi":null,"p":0}];
+
+const SECTIONS = [
+  {id:"pika", label:"피카츄 30종", desc:"017–046 · 일러스트레이터 30인의 홀로 피카츄"},
+  {id:"rr",   label:"RR",          desc:"더블 레어 · 009 015 047 048 055 057 059 076 081 088"},
+  {id:"ar",   label:"AR",          desc:"104–123 · 아트 레어"},
+  {id:"sar",  label:"SAR",         desc:"124–133 · 스페셜 아트 레어"},
+  {id:"fur",  label:"FUR",         desc:"134–135 · 퓨처리스틱 레어 (신규 등급)"},
+  {id:"cc",   label:"재록",        desc:"136–165 · Classic Collection 복각"},
+  {id:"rgb",  label:"RGB 뮤",      desc:"시크릿 · 적·녹·청 3종"},
+  {id:"base", label:"일반 수록",   desc:"레어도 표기 없는 카드 + 기본 에너지 8종", opt:true},
+];
+const RLABEL = {N:"일반", E:"에너지", H:"홀로", RR:"RR", AR:"AR", SAR:"SAR", FUR:"FUR", CC:"재록", RGB:"RGB"};
+
+const KEY = "pkm-m6a-checklist-v1";
+const PREF = "pkm-m6a-pref-v1";
+let state = load();
+function load(){
+  try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.own) return {own:new Set(s.own)}; }catch(e){}
+  return {own:new Set()};
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify({own:[...state.own]})); }
+let pref = (()=>{ try{ return JSON.parse(localStorage.getItem(PREF))||{}; }catch(e){ return {}; } })();
+function savePref(){ localStorage.setItem(PREF, JSON.stringify(pref)); }
+
+const won = n => n.toLocaleString("ko-KR");
+let filterSec = "all", filterSt = "all", query = "", showBase = !!pref.showBase;
+
+const main = document.getElementById("main");
+const secChips = document.getElementById("secChips");
+const byId = Object.fromEntries(CARDS.map(c=>[c.id,c]));
+
+/* ---- build once ---- */
+secChips.innerHTML = `<button class="chip on" data-sec="all">전체 <b id="c-all"></b></button>` +
+  SECTIONS.map(s=>`<button class="chip" data-sec="${s.id}" data-opt="${s.opt?1:0}">${s.label} <b id="c-${s.id}"></b></button>`).join("");
+
+main.innerHTML = SECTIONS.map(s=>`
+  <section id="s-${s.id}" data-opt="${s.opt?1:0}">
+    <div class="sec-head">
+      <h2>${s.label}</h2><span class="desc">${s.desc}</span>
+      <span class="cnt" id="cnt-${s.id}"></span>
+    </div>
+    <div class="grid" id="g-${s.id}"></div>
+    <div class="empty" id="e-${s.id}" hidden>조건에 맞는 카드가 없습니다.</div>
+  </section>`).join("");
+
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+for(const s of SECTIONS){
+  document.getElementById("g-"+s.id).innerHTML =
+    CARDS.filter(c=>c.sec===s.id).map(c=>`
+      <div class="card" data-id="${esc(c.id)}">
+        <div class="thumb">
+          ${c.img
+            ? `<img loading="lazy" src="${esc(c.img)}" alt="${esc(c.ko)} ${esc(c.d)}">`
+            : `<div class="noimg">이미지<br>미공개</div>`}
+          <span class="no">${esc(c.d)}</span>
+          <span class="rar r-${c.r}">${RLABEL[c.r]}</span>
+          ${c.img?`<button class="zoom" title="크게 보기">&#128269;</button>`:``}
+          <span class="tick">&#10003;</span>
+        </div>
+        <div class="nm">${esc(c.ko)}</div>
+        <div class="en">${esc(c.en)}</div>
+        <div class="pr">${c.p?`<b>${won(c.p)}</b>원`:`시세 정보 없음`}</div>
+      </div>`).join("");
+}
+
+/* ---- render ---- */
+function activeCards(){ return showBase ? CARDS : CARDS.filter(c=>c.sec!=="base"); }
+function render(){
+  const q = query.trim().toLowerCase();
+  for(const s of SECTIONS){
+    const sec = document.getElementById("s-"+s.id);
+    const off = s.opt && !showBase;
+    let shown = 0, own = 0, tot = 0;
+    for(const el of document.getElementById("g-"+s.id).children){
+      const c = byId[el.dataset.id], has = state.own.has(c.id);
+      tot++; if(has) own++;
+      el.classList.toggle("have", has);
+      let ok = true;
+      if(filterSt==="have" && !has) ok = false;
+      if(filterSt==="none" && has) ok = false;
+      if(q && !(c.ko.toLowerCase().includes(q) || c.en.toLowerCase().includes(q)
+                || c.d.toLowerCase().includes(q) || c.id.toLowerCase().includes(q)
+                || c.r.toLowerCase()===q || RLABEL[c.r]===q)) ok = false;
+      el.hidden = !ok;
+      if(ok) shown++;
+    }
+    sec.hidden = off || (filterSec!=="all" && filterSec!==s.id);
+    document.getElementById("e-"+s.id).hidden = shown>0;
+    document.getElementById("cnt-"+s.id).textContent = `${own} / ${tot}`;
+    document.getElementById("c-"+s.id).textContent = `${own}/${tot}`;
+    const chip = secChips.querySelector(`[data-sec="${s.id}"]`);
+    if(chip) chip.hidden = off;
+  }
+  const act = activeCards();
+  const total = act.filter(c=>state.own.has(c.id)).length;
+  document.getElementById("own").textContent = total;
+  document.getElementById("tot").textContent = act.length;
+  document.getElementById("c-all").textContent = `${total}/${act.length}`;
+  document.getElementById("bar").style.width = (total/act.length*100)+"%";
+}
+
+/* ---- events ---- */
+main.addEventListener("click", e=>{
+  const card = e.target.closest(".card");
+  if(!card) return;
+  const c = byId[card.dataset.id];
+  if(e.target.closest(".zoom")){
+    document.getElementById("lbimg").src = c.hi || c.img;
+    document.getElementById("lb").showModal(); return;
+  }
+  state.own.has(c.id)?state.own.delete(c.id):state.own.add(c.id);
+  save(); render();
+});
+document.getElementById("lb").addEventListener("click", e=>e.currentTarget.close());
+
+secChips.addEventListener("click", e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  filterSec=b.dataset.sec;
+  [...secChips.children].forEach(c=>c.classList.toggle("on",c===b));
+  render();
+});
+document.querySelectorAll("[data-st]").forEach(b=>b.addEventListener("click",()=>{
+  filterSt=b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+}));
+document.getElementById("stAll").classList.add("on");
+document.getElementById("q").addEventListener("input", e=>{ query=e.target.value; render(); });
+
+const baseTgl = document.getElementById("baseTgl");
+baseTgl.checked = showBase;
+baseTgl.addEventListener("change", e=>{
+  showBase = e.target.checked; pref.showBase = showBase; savePref();
+  if(!showBase && filterSec==="base"){ filterSec="all"; [...secChips.children].forEach((c,i)=>c.classList.toggle("on",i===0)); }
+  render();
+});
+const priceTgl = document.getElementById("priceTgl");
+priceTgl.checked = pref.showPrice !== false;
+document.body.classList.toggle("price-mode", priceTgl.checked);
+priceTgl.addEventListener("change", e=>{
+  pref.showPrice = e.target.checked; savePref();
+  document.body.classList.toggle("price-mode", e.target.checked);
+});
+
+document.getElementById("rstBtn").addEventListener("click", ()=>{
+  if(confirm("체크한 내용을 모두 지울까요?")){ state={own:new Set()}; save(); render(); }
+});
+document.getElementById("prnBtn").addEventListener("click", ()=>window.print());
+document.getElementById("expBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify({set:"M6a", own:[...state.own].sort()},null,1)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "pokemon-m6a-30th-checklist.json"; a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById("impBtn").addEventListener("click", ()=>document.getElementById("impFile").click());
+document.getElementById("impFile").addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try{
+      const d = JSON.parse(rd.result);
+      state = {own:new Set((d.own||[]).filter(id=>byId[id]))};
+      save(); render();
+    }catch(err){ alert("파일을 읽을 수 없습니다."); }
+  };
+  rd.readAsText(f);
+  e.target.value = "";
+});
+
+/* ---- 링크(URL)로 체크 상태 백업 / 복원 ---- */
+const KEYS = CARDS.map(c=>c.id);
+function b64e(a){ let s=""; for(const b of a) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(t){ t=t.replace(/-/g,"+").replace(/_/g,"/");
+  const s=atob(t), a=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+function pack(set){ const a=new Uint8Array(Math.ceil(KEYS.length/8));
+  KEYS.forEach((k,i)=>{ if(set.has(k)) a[i>>3]|=1<<(i&7); }); return b64e(a); }
+function unpack(str){ const a=b64d(str), s=new Set();
+  KEYS.forEach((k,i)=>{ if((a[i>>3]||0)&(1<<(i&7))) s.add(k); }); return s; }
+
+document.getElementById("lnkBtn").addEventListener("click", async ()=>{
+  const url = location.href.split("#")[0] + "#s=1." + pack(state.own);
+  try{
+    await navigator.clipboard.writeText(url);
+    alert(`체크 상태(${state.own.size}장)가 담긴 링크를 복사했습니다.\n다른 기기에서 이 링크를 열면 그대로 복원됩니다.`);
+  }catch(e){ prompt("아래 링크를 복사해서 다른 기기에서 여세요", url); }
+});
+
+(function applyHash(){
+  const m = location.hash.match(/^#s=1\.([^.]*)$/);
+  if(!m) return;
+  try{
+    const o = unpack(m[1]);
+    const same = o.size===state.own.size && [...o].every(x=>state.own.has(x));
+    if(!same){
+      if(confirm(`링크에 담긴 체크 상태(${o.size}장)를 불러올까요?\n이 브라우저에 저장된 현재 상태(${state.own.size}장)는 덮어써집니다.`)){
+        state = {own:o}; save();
+      }
+    }
+  }catch(e){}
+  history.replaceState(null,"",location.href.split("#")[0]);
+})();
+
+render();
+</script>
+</body>
+</html>
